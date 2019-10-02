@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="16dp"
+android:paddingTop="16dp"
+android:background="@color/color3"
+tools:context=".FindedWeatherData">
+
+<TextView
+    android:id="@+id/weather"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="20dp"
+    android:text="   POGODA"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginBottom="40dp"
+    android:background="@drawable/background_edit_text"
+    android:drawableStart="@drawable/ic_crop_square_black_24dp"
+    />
+<TextView
+    android:id="@+id/placename"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:text=""
+    android:textSize="20dp"
+    android:layout_below="@+id/weather"
+    android:layout_alignRight="@+id/weather"/>
+
+<ImageView
+    android:id="@+id/photo"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:src="@drawable/ic_wb_sunny_black_24dp"/>
+</RelativeLayout>

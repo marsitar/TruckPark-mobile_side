@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TruckPark</string>
+    <string name="log">ZALOGUJ</string>
+    <string name="login">Login</string>
+    <string name="password">Hasło</string>
+    <string name="checkpo">SPRAWDŹ POŁOŻENIE</string>
+    <string name="navigation">NAWIGACJA</string>
+    <string name="navigation2">  NAWIGACJA</string>
+    <string name="wherestop">GDZIE ZJECHAĆ</string>
+    <string name="findmop">WYSZUKAJ MOP</string>
+    <string name="findmop2">  WYSZUKAJ MOP</string>
+    <string name="wheather">POGODA</string>
+    <string name="findWeather">WYSZUKAJ POGODĘ</string>
+    <string name="findWeatherHint">Wpisz miasto...</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="choosemop">Wybierz MOP</string>
+    <string name="findroute">WYSZUKAJ TRASĘ</string>
+    <string name="from">Skąd?</string>
+    <string name="to">Dokąd?</string>
+    <string name="findmop2_mopdata">DANE MOP</string>
+    <string name="findmop2_roaddata">DANE DROGI</string>
+    <string name="findmop2_numberofplaces">LICZBA MIEJSC</string>
+    <string name="findmop2_facilitiessafety">UDOGODNIENIA I BEZPIECZEŃSTWO</string>
+    <string name="ownerdata">DANE OBSLUGUJĄCEGO</string>
+    <string name="title_activity_maps_navigation">Map</string>
+    <string name="title_activity_maps_pulloff">Map</string>
+
+</resources>

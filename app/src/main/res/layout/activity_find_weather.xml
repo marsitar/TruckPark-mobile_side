@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingBottom="16dp"
+android:paddingTop="16dp"
+android:background="@color/color3"
+tools:context=".FindWeather">
+
+<TextView
+    android:id="@+id/weather"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="20dp"
+    android:text="   POGODA"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginBottom="40dp"
+    android:background="@drawable/background_edit_text"
+    android:drawableStart="@drawable/ic_crop_square_black_24dp"
+    />
+<Button
+    android:id="@+id/findway"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/weather"
+    android:layout_marginBottom="15dp"
+    android:layout_centerHorizontal="true"
+    android:background="@color/color2"
+    android:elevation="100dp"
+    android:paddingLeft="50dp"
+    android:paddingTop="16dp"
+    android:paddingRight="50dp"
+    android:paddingBottom="16dp"
+    android:shadowDx="10"
+    android:shadowDy="10"
+    android:shadowRadius="3"
+    android:text="@string/findWeather"
+    android:textColor="@color/color0"
+    android:onClick="onFindedWeatherDat" />
+<EditText
+    android:id="@+id/edittext"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/findway"
+    android:layout_centerHorizontal="true"
+    android:hint="@string/findWeatherHint"
+    android:inputType="text"
+    android:textSize="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/background_edit_text"
+    android:drawableLeft="@drawable/ic_search_black_24dp"
+    />
+
+<ImageView
+    android:id="@+id/photo"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:src="@drawable/ic_wb_sunny_black_24dp"/>
+</RelativeLayout>
