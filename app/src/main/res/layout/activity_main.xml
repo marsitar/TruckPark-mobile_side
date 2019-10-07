@@ -10,7 +10,7 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:background="@color/color3"
-    tools:context=".MainActivity">
+    tools:context=".view.login.LoginActivity">
 
 
     <Button

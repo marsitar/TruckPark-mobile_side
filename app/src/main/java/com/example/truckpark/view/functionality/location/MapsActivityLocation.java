@@ -1,9 +1,11 @@
-package com.example.truckpark;
+package com.example.truckpark.view.functionality.location;
 
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 
+import com.example.truckpark.R;
+import com.example.truckpark.service.LocationDeviceService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -12,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivityLocation extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap mMap;
 
@@ -29,8 +31,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
-            LocationDeviceService.mCurrLocationMarker = MapsActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Marker in Sydney"));
-            MapsActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()),15));
+            LocationDeviceService.mCurrLocationMarker = MapsActivityLocation.mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Marker in Sydney"));
+            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()),15));
         }
     }
 

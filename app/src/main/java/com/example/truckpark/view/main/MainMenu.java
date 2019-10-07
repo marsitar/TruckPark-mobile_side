@@ -1,4 +1,4 @@
-package com.example.truckpark;
+package com.example.truckpark.view.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,15 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.truckpark.view.functionality.mop.FindMop;
+import com.example.truckpark.view.functionality.weather.FindWeather;
+import com.example.truckpark.view.functionality.location.MapsActivityLocation;
+import com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff;
+import com.example.truckpark.view.functionality.navigation.NavigationMenu;
+import com.example.truckpark.R;
+import com.example.truckpark.service.LocationDeviceService;
 
 public class MainMenu extends AppCompatActivity {
 
-    private LocationDeviceService locationDevice;
+    public LocationDeviceService locationDevice;
     private boolean bound = false;
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -36,7 +41,6 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        //watchMileage();
     }
 
     @Override
@@ -54,27 +58,9 @@ public class MainMenu extends AppCompatActivity {
             bound=false;
         }
     }
-    /*
-    private void watchMileage() {
-       final TextView distanceView = (TextView)findViewById(R.id.distance);
-       final Handler handler = new Handler();
-       handler.post(new Runnable() {
-           @Override
-           public void run() {
-               double distance=0.0;
-               if (locationDevice != null){
-                   //distance = locationDevice.getDistance();
-                   distance = locationDevice.getLatitiude();
-               }
-               distanceView.setText(Double.toString(distance));
-               handler.postDelayed(this,5000);
-           }
-       });
-    }
-    */
 
     public void onCheckPo(View view){
-        Intent checkPo = new Intent(this,MapsActivity.class);
+        Intent checkPo = new Intent(this, MapsActivityLocation.class);
         startActivity(checkPo);
     }
 
@@ -89,7 +75,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void onFindMo(View view){
-        Intent FindMo = new Intent(this,FindMop.class);
+        Intent FindMo = new Intent(this, FindMop.class);
         startActivity(FindMo);
     }
 

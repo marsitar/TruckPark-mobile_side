@@ -1,4 +1,4 @@
-package com.example.truckpark;
+package com.example.truckpark.view.functionality.mop;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import com.example.truckpark.R;
 
 public class FindMop extends AppCompatActivity {
 
@@ -40,10 +42,10 @@ public class FindMop extends AppCompatActivity {
     }
 
     public void onFindedMopDa(View view){
-        Intent FindedMopDa = new Intent(this,FindedMopData.class);
+        Intent FindedMopDa = new Intent(this, FoundMopData.class);
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
         String choosenMop = spinner.getSelectedItem().toString();
-        FindedMopDa.putExtra(FindedMopData.MOPNAME,choosenMop);
+        FindedMopDa.putExtra(FoundMopData.MOPNAME,choosenMop);
         startActivity(FindedMopDa);
     }
 }

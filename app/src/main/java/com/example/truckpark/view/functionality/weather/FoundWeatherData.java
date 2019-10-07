@@ -1,4 +1,4 @@
-package com.example.truckpark;
+package com.example.truckpark.view.functionality.weather;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class FindedWeatherData extends AppCompatActivity {
+import com.example.truckpark.R;
+
+public class FoundWeatherData extends AppCompatActivity {
     public static final String PLACEWEATHER = "placeweather";
 
     @Override

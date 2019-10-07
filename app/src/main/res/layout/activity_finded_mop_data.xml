@@ -8,7 +8,7 @@
     android:paddingBottom="16dp"
     android:paddingTop="16dp"
     android:background="@color/color3"
-    tools:context=".FindedMopData">
+    tools:context=".view.functionality.mop.FoundMopData">
 
     <TextView
         android:id="@+id/findmop3"

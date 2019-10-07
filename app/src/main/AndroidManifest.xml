@@ -33,51 +33,51 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivityPulloff"
+            android:name="com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff"
             android:label="@string/title_activity_maps_pulloff">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.MainMenu" />
+                android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
         <activity
-            android:name=".MapsActivityNavigation"
+            android:name="com.example.truckpark.view.functionality.navigation.MapsActivityNavigation"
             android:label="@string/title_activity_maps_navigation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.NavigationMenu" />
+                android:value="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
         </activity>
-        <activity android:name=".FindedWeatherData" />
-        <activity android:name=".FindWeather" />
-        <activity android:name=".NavigationMenu" />
-        <activity android:name=".FindedMopData">
+        <activity android:name="com.example.truckpark.view.functionality.weather.FoundWeatherData" />
+        <activity android:name="com.example.truckpark.view.functionality.weather.FindWeather" />
+        <activity android:name="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
+        <activity android:name="com.example.truckpark.view.functionality.mop.FoundMopData">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.FindMop" />
+                android:value="com.example.truckpark.view.functionality.mop.FindMop" />
         </activity>
-        <activity android:name=".FindMop">
+        <activity android:name="com.example.truckpark.view.functionality.mop.FindMop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.MainMenu" />
+                android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
 
         <service
-            android:name=".LocationDeviceService"
+            android:name="com.example.truckpark.service.LocationDeviceService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.example.truckpark.view.functionality.location.MapsActivityLocation"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.MainMenu" />
+                android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
-        <activity android:name=".MainMenu">
+        <activity android:name="com.example.truckpark.view.main.MainMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.MainActivity" />
+                android:value="com.example.truckpark.view.login.LoginActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.truckpark.view.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

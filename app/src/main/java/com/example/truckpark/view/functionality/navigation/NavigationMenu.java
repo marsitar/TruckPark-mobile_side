@@ -1,4 +1,4 @@
-package com.example.truckpark;
+package com.example.truckpark.view.functionality.navigation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.truckpark.R;
 
 public class NavigationMenu extends AppCompatActivity {
 
