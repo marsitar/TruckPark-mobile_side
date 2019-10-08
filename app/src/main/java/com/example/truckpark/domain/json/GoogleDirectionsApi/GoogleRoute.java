@@ -1,10 +1,10 @@
-package com.example.truckpark.domain.json.DirectionsApi;
+package com.example.truckpark.domain.json.GoogleDirectionsApi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class RouteGoogle {
+public class GoogleRoute {
 
     @JsonProperty("geocoded_waypoints")
     private List<GeocodedWayPoint> geocodedWayPoints;
@@ -15,10 +15,10 @@ public class RouteGoogle {
     @JsonProperty("status")
     private String status;
 
-    public RouteGoogle() {
+    public GoogleRoute() {
     }
 
-    public RouteGoogle(List<GeocodedWayPoint> geocodedWayPoints, List<Route> routes, String status) {
+    public GoogleRoute(List<GeocodedWayPoint> geocodedWayPoints, List<Route> routes, String status) {
         this.geocodedWayPoints = geocodedWayPoints;
         this.routes = routes;
         this.status = status;
