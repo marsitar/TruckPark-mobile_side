@@ -3,6 +3,8 @@ package com.example.truckpark.domain.json.GoogleDirectionsApi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonIgnoreProperties({"traffic_speed_entry","via_waypoint"})
 public class Leg {
 
@@ -25,12 +27,12 @@ public class Leg {
     private LatLng startLocation;
 
     @JsonProperty("steps")
-    private Step steps;
+    private List<Step> steps;
 
     public Leg() {
     }
 
-    public Leg(Data distance, Data duration, String endAddress, LatLng endLocation, String startAddress, LatLng startLocation, Step steps) {
+    public Leg(Data distance, Data duration, String endAddress, LatLng endLocation, String startAddress, LatLng startLocation, List<Step> steps) {
         this.distance = distance;
         this.duration = duration;
         this.endAddress = endAddress;
@@ -88,11 +90,11 @@ public class Leg {
         this.startLocation = startLocation;
     }
 
-    public Step getSteps() {
+    public List<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(Step steps) {
+    public void setSteps(List<Step> steps) {
         this.steps = steps;
     }
 }

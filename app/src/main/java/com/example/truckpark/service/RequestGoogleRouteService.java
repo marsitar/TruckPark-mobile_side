@@ -29,7 +29,7 @@ public class RequestGoogleRouteService {
         buildedURL.append("origin=");
         buildedURL.append(origin);
         buildedURL.append("&");
-        buildedURL.append("destionation=");
+        buildedURL.append("destination=");
         buildedURL.append(destination);
         buildedURL.append("&");
         buildedURL.append("key=");
