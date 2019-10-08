@@ -6,12 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.truckpark.R;
+import com.example.truckpark.service.SimpleRouteService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.List;
 
 public class MapsActivityNavigation extends FragmentActivity implements OnMapReadyCallback {
 
@@ -30,6 +35,8 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         Intent intent =getIntent();
         String src = intent.getStringExtra(SRC);
         String dst = intent.getStringExtra(DST);
+
+
     }
 
 
@@ -44,11 +51,28 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Intent intent =getIntent();
+        String src = intent.getStringExtra(SRC);
+        String dst = intent.getStringExtra(DST);
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        SimpleRouteService simpleRouteService = new SimpleRouteService();
+        List<Double[]> routeCoordinates =  simpleRouteService.getSimpleRoute(src,dst);
+
+        // Instantiates a new Polyline object and adds points to define a rectangle
+        PolylineOptions rectOptions = new PolylineOptions();
+
+        routeCoordinates.forEach(coordinatesPair -> {
+            LatLng latLng = new LatLng(coordinatesPair[0],coordinatesPair[1]);
+            rectOptions.add(latLng);
+        });
+
+// Get back the mutable Polyline
+        Polyline polyline = mMap.addPolyline(rectOptions);
+
     }
 }

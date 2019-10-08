@@ -4,6 +4,7 @@ import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class RequestGoogleRouteService {
 
@@ -16,7 +17,7 @@ public class RequestGoogleRouteService {
         String url = buildUrl(origin,destination);
         GoogleRoute requestedGoogleRoute = null;
         try {
-            requestedGoogleRoute = mapperJsonToClass.readValue(url, GoogleRoute.class);
+            requestedGoogleRoute = mapperJsonToClass.readValue(new URL(url), GoogleRoute.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

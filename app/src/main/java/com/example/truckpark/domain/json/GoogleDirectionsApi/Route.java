@@ -4,6 +4,7 @@ package com.example.truckpark.domain.json.GoogleDirectionsApi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties({"copyrights","summary","warnings","waypoint_order"})
@@ -13,7 +14,7 @@ public class Route {
     private Bounds bounds;
 
     @JsonProperty("legs")
-    private List<Leg> legs;
+    private List<Leg> legs = new ArrayList<>();
 
     @JsonProperty("overview_polyline")
     private Polyline polyline;

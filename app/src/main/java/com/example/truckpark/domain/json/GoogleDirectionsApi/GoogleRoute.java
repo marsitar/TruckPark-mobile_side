@@ -2,15 +2,16 @@ package com.example.truckpark.domain.json.GoogleDirectionsApi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleRoute {
 
     @JsonProperty("geocoded_waypoints")
-    private List<GeocodedWayPoint> geocodedWayPoints;
+    private List<GeocodedWayPoint> geocodedWayPoints = new ArrayList<>();
 
     @JsonProperty("routes")
-    private List<Route> routes;
+    private List<Route> routes = new ArrayList<>();
 
     @JsonProperty("status")
     private String status;
