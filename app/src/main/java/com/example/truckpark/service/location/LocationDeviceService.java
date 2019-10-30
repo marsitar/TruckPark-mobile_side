@@ -1,4 +1,4 @@
-package com.example.truckpark.service;
+package com.example.truckpark.service.location;
 
 import android.app.Service;
 import android.content.Context;

@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.truckpark.R;
-import com.example.truckpark.service.SimpleRouteService;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.example.truckpark.service.route.SimpleRouteService;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -61,6 +59,7 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         SimpleRouteService simpleRouteService = new SimpleRouteService();
+
         List<Double[]> routeCoordinates =  simpleRouteService.getSimpleRoute(src, dst, getApplicationContext());
 
         // Instantiates a new Polyline object and adds points to define a rectangle

@@ -61,7 +61,7 @@
         </activity>
 
         <service
-            android:name="com.example.truckpark.service.LocationDeviceService"
+            android:name="com.example.truckpark.service.location.LocationDeviceService"
             android:enabled="true"
             android:exported="false" />
 

@@ -16,7 +16,7 @@ import com.example.truckpark.view.functionality.location.MapsActivityLocation;
 import com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff;
 import com.example.truckpark.view.functionality.navigation.NavigationMenu;
 import com.example.truckpark.R;
-import com.example.truckpark.service.LocationDeviceService;
+import com.example.truckpark.service.location.LocationDeviceService;
 
 public class MainMenu extends AppCompatActivity {
 
