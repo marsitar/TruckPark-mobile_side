@@ -61,7 +61,7 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         SimpleRouteService simpleRouteService = new SimpleRouteService();
-        List<Double[]> routeCoordinates =  simpleRouteService.getSimpleRoute(src,dst);
+        List<Double[]> routeCoordinates =  simpleRouteService.getSimpleRoute(src, dst, getApplicationContext());
 
         // Instantiates a new Polyline object and adds points to define a rectangle
         PolylineOptions rectOptions = new PolylineOptions();

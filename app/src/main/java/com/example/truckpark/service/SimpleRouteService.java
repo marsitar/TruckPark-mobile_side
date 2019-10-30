@@ -1,5 +1,7 @@
 package com.example.truckpark.service;
 
+import android.content.Context;
+
 import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
 import com.example.truckpark.domain.json.GoogleDirectionsApi.LatLng;
 import com.example.truckpark.domain.json.GoogleDirectionsApi.Step;
@@ -9,11 +11,11 @@ import java.util.List;
 
 public class SimpleRouteService {
 
-    public List<Double[]> getSimpleRoute(String origin, String destination){
+    public List<Double[]> getSimpleRoute(String origin, String destination, Context context){
 
         List<Double[]> points = new ArrayList<>();
 
-        RequestGoogleRouteService requestGoogleRouteService = new RequestGoogleRouteService();
+        RequestGoogleRouteService requestGoogleRouteService = new RequestGoogleRouteService(context);
         GoogleRoute googleRoute = requestGoogleRouteService.getGoogleRoute(origin, destination);
         List<Step> steps= googleRoute.getRoutes().get(0).getLegs().get(0).getSteps();
 
