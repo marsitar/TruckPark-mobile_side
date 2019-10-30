@@ -1,4 +1,6 @@
-package com.example.truckpark.service;
+package com.example.truckpark.service.route;
+
+import android.content.Context;
 
 import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
 import com.example.truckpark.service.properties.PropertyService;
@@ -9,13 +11,13 @@ import java.net.URL;
 
 public class RequestGoogleRouteService {
 
-    private static final String APIKEY;
-    private static final String URI;
+    private final String APIKEY;
+    private final String URI;
 
-    static {
-        PropertyService propertyService = new PropertyService("/assets/google-maps.properties");
-        APIKEY=propertyService.getProperty("APIKEY");
-        URI=propertyService.getProperty("URI");
+    RequestGoogleRouteService(Context context){
+        PropertyService propertyService = new PropertyService("google-maps.properties");
+        APIKEY=propertyService.getProperty("APIKEY", context);
+        URI=propertyService.getProperty("URI", context);
     }
 
     public GoogleRoute getGoogleRoute(String origin, String destination){

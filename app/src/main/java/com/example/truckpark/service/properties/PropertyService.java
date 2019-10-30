@@ -1,7 +1,11 @@
 package com.example.truckpark.service.properties;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
+
 import java.io.IOException;
-import java.util.Objects;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyService {
@@ -10,24 +14,18 @@ public class PropertyService {
 
     public PropertyService(String propertyFileName) {
         this.propertyFileName=propertyFileName;
-        properties = new Properties();
+        this.properties = new Properties();
     }
 
-    {
-        prepareProperties();
-    }
+    public String getProperty(String propertyKey, Context context) {
 
-    private void prepareProperties() {
         try {
-            properties.load(Objects.requireNonNull(Thread.currentThread()
-                    .getContextClassLoader().getResource(propertyFileName))
-                    .openStream());
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open(propertyFileName);
+            properties.load(inputStream);
         } catch (IOException e) {
 
         }
-    }
-
-    public String getProperty(String property) {
-        return properties.getProperty(property);
+        return properties.getProperty(propertyKey);
     }
 }
