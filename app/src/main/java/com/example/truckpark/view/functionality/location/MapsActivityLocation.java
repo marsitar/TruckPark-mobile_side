@@ -31,7 +31,7 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
-            LocationDeviceService.mCurrLocationMarker = MapsActivityLocation.mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Marker in Sydney"));
+            LocationDeviceService.mCurrLocationMarker = MapsActivityLocation.mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Truck Position"));
             MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()),15));
         }
     }

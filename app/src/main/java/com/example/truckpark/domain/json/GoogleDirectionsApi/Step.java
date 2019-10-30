@@ -1,7 +1,9 @@
 package com.example.truckpark.domain.json.GoogleDirectionsApi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties({"maneuver"})
 public class Step {
 
     @JsonProperty("distance")

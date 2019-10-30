@@ -4,13 +4,19 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 
 import com.example.truckpark.R;
+import com.example.truckpark.service.location.LocationDeviceService;
 import com.example.truckpark.service.route.SimpleRouteService;
+import com.example.truckpark.view.functionality.location.MapsActivityLocation;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -38,15 +44,6 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Intent intent =getIntent();
@@ -54,24 +51,34 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         String dst = intent.getStringExtra(DST);
         mMap = googleMap;
 
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         SimpleRouteService simpleRouteService = new SimpleRouteService();
+
+        //THINK ABOUT IT LATER,async attitute would be better here in future
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ///////////////////////////////////////////////////////////////////////////////////////////
 
         List<Double[]> routeCoordinates =  simpleRouteService.getSimpleRoute(src, dst, getApplicationContext());
 
-        // Instantiates a new Polyline object and adds points to define a rectangle
         PolylineOptions rectOptions = new PolylineOptions();
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         routeCoordinates.forEach(coordinatesPair -> {
             LatLng latLng = new LatLng(coordinatesPair[0],coordinatesPair[1]);
+            builder.include(latLng);
             rectOptions.add(latLng);
         });
 
-// Get back the mutable Polyline
+        LatLngBounds latLngBounds = builder.build();
+
         Polyline polyline = mMap.addPolyline(rectOptions);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,20));
+        
+        if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
+            LocationDeviceService.mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Truck Position"));
+        }
 
     }
 }
