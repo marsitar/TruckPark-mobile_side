@@ -1,6 +1,7 @@
 package com.example.truckpark.service;
 
 import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
+import com.example.truckpark.service.properties.PropertyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -8,8 +9,14 @@ import java.net.URL;
 
 public class RequestGoogleRouteService {
 
-    private static final String APIKEY = "AIzaSyCNNt4ExpvKv0uHmFSwDtJ-Y3d3XtviRqg";
-    private static final String URI = "https://maps.googleapis.com/maps/api/directions/json?";
+    private static final String APIKEY;
+    private static final String URI;
+
+    static {
+        PropertyService propertyService = new PropertyService("/assets/google-maps.properties");
+        APIKEY=propertyService.getProperty("APIKEY");
+        URI=propertyService.getProperty("URI");
+    }
 
     public GoogleRoute getGoogleRoute(String origin, String destination){
 
