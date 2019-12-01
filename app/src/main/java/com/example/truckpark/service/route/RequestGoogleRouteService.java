@@ -3,7 +3,7 @@ package com.example.truckpark.service.route;
 import android.content.Context;
 
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
-import com.example.truckpark.properties.PropertyService;
+import com.example.truckpark.properties.PropertyManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class RequestGoogleRouteService {
     private final String URI;
 
     RequestGoogleRouteService(Context context){
-        PropertyService propertyService = new PropertyService("google-maps.properties");
-        APIKEY=propertyService.getProperty("APIKEY", context);
-        URI=propertyService.getProperty("URI", context);
+        PropertyManager propertyManager = new PropertyManager("google-maps.properties");
+        APIKEY= propertyManager.getProperty("APIKEY", context);
+        URI= propertyManager.getProperty("URI", context);
     }
 
     public GoogleRoute getGoogleRoute(String origin, String destination){

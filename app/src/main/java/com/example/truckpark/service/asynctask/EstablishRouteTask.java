@@ -1,4 +1,4 @@
-package com.example.truckpark.service.asynctasks;
+package com.example.truckpark.service.asynctask;
 
 import android.os.AsyncTask;
 
