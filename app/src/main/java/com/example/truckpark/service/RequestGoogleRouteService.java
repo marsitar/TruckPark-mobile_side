@@ -1,7 +1,7 @@
 package com.example.truckpark.service;
 
-import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
-import com.example.truckpark.service.properties.PropertyService;
+import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
+import com.example.truckpark.properties.PropertyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;

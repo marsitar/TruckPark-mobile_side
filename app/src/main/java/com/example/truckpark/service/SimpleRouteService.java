@@ -1,8 +1,8 @@
 package com.example.truckpark.service;
 
-import com.example.truckpark.domain.json.GoogleDirectionsApi.GoogleRoute;
-import com.example.truckpark.domain.json.GoogleDirectionsApi.LatLng;
-import com.example.truckpark.domain.json.GoogleDirectionsApi.Step;
+import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
+import com.example.truckpark.domain.json.googledirectionsapi.LatLng;
+import com.example.truckpark.domain.json.googledirectionsapi.Step;
 
 import java.util.ArrayList;
 import java.util.List;

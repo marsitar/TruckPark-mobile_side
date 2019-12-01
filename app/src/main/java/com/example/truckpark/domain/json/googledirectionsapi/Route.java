@@ -1,4 +1,4 @@
-package com.example.truckpark.domain.json.GoogleDirectionsApi;
+package com.example.truckpark.domain.json.googledirectionsapi;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

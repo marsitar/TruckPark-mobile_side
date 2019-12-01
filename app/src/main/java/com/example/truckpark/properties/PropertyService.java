@@ -1,4 +1,4 @@
-package com.example.truckpark.service.properties;
+package com.example.truckpark.properties;
 
 import java.io.IOException;
 import java.util.Objects;
