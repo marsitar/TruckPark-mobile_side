@@ -43,7 +43,7 @@ public class FoundMopData extends AppCompatActivity {
 
         TextView mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        
+
 
         String organization = String.format("☐ ODDZIAL: %s\n", mop.getExtendedMopData().getOrganization());
         String place = String.format("☐ MIEJSCOWOSC: %s\n", mop.getPlace());

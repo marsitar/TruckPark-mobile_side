@@ -14,7 +14,9 @@ import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.service.mopdata.RequestMopDataService;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FindMop extends AppCompatActivity {
 
@@ -32,10 +34,14 @@ public class FindMop extends AppCompatActivity {
 
         RequestMopDataService requestMopDataService = new RequestMopDataService(this);
 
-        List<Mop> mopList = requestMopDataService.getAllMopsData();
+        List<Mop> mopList = requestMopDataService.getAllMopsData()
+                .stream()
+                .sorted(Comparator.comparing(Mop::getPlace))
+                .collect(Collectors.toList());
+
         String[] mopsLabels = mopList
                 .stream()
-                .map(mop -> String.format("%s=>%s", mop.getPlace(), mop.getExtendedMopData().getDirection()))
+                .map(mop -> String.format("%s => %s", mop.getPlace(), mop.getExtendedMopData().getDirection()))
                 .toArray(String[]::new);
 
         final Long[] mopsIds = mopList
