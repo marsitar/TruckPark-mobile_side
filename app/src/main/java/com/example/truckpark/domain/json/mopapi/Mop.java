@@ -16,7 +16,7 @@ public class Mop {
     @JsonProperty("place")
     private String place;
 
-    @JsonProperty("coordinate")
+    @JsonProperty("coordinateDTO")
     private Coordinate coordinate;
 
     @JsonProperty("roadNumber")
@@ -26,18 +26,18 @@ public class Mop {
     private Integer truckPlaces;
 
     @JsonProperty("occupiedTruckPlaces")
-    private String occupiedTruckPlaces;
+    private Integer occupiedTruckPlaces;
 
     @JsonProperty("extendedId")
     private String extendedId;
 
-    @JsonProperty("extendedMopData")
+    @JsonProperty("extendedMopDataDTO")
     private ExtendedMopData extendedMopData;
 
     public Mop() {
     }
 
-    public Mop(Long id, String identificationName, String category, String place, Coordinate coordinate, String roadNumber, Integer truckPlaces, String occupiedTruckPlaces, String extendedId, ExtendedMopData extendedMopData) {
+    public Mop(Long id, String identificationName, String category, String place, Coordinate coordinate, String roadNumber, Integer truckPlaces, Integer occupiedTruckPlaces, String extendedId, ExtendedMopData extendedMopData) {
         this.id = id;
         this.identificationName = identificationName;
         this.category = category;
@@ -106,11 +106,11 @@ public class Mop {
         this.truckPlaces = truckPlaces;
     }
 
-    public String getOccupiedTruckPlaces() {
+    public Integer getOccupiedTruckPlaces() {
         return occupiedTruckPlaces;
     }
 
-    public void setOccupiedTruckPlaces(String occupiedTruckPlaces) {
+    public void setOccupiedTruckPlaces(Integer occupiedTruckPlaces) {
         this.occupiedTruckPlaces = occupiedTruckPlaces;
     }
 

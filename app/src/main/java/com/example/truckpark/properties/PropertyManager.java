@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PropertyService {
+public class PropertyManager {
     private final String propertyFileName;
     private final Properties properties;
 
-    public PropertyService(String propertyFileName) {
+    public PropertyManager(String propertyFileName) {
         this.propertyFileName=propertyFileName;
         this.properties = new Properties();
     }
