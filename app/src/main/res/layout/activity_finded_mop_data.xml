@@ -36,7 +36,8 @@
             android:layout_below="@+id/findmop3"
             android:text="@string/findmop2_mopdata"
             android:layout_weight="33"
-            android:background="@drawable/button_weathers"/>
+            android:background="@drawable/button_weathers"
+            android:onClick="printMopData"/>
         <Button
             android:id="@+id/b2"
             android:layout_width="wrap_content"
@@ -45,7 +46,8 @@
             android:layout_toRightOf="@+id/b1"
             android:text="@string/findmop2_roaddata"
             android:layout_weight="33"
-            android:background="@drawable/button_weathers"/>
+            android:background="@drawable/button_weathers"
+            android:onClick="printRoadData"/>
         <Button
             android:id="@+id/b3"
             android:layout_width="wrap_content"
@@ -54,7 +56,8 @@
             android:layout_toRightOf="@+id/b2"
             android:text="@string/findmop2_numberofplaces"
             android:layout_weight="33"
-            android:background="@drawable/button_weathers"/>
+            android:background="@drawable/button_weathers"
+            android:onClick="printPlaceNumber"/>
     </LinearLayout>
 
     <LinearLayout
@@ -72,6 +75,7 @@
             android:id="@+id/bAddDelete"
             android:text="@string/findmop2_facilitiessafety"
             android:background="@drawable/button_weathers"
+            android:onClick="printFacilitiesAndSecurity"
             />
         <Button
             android:layout_toRightOf="@+id/bAddDelete"
@@ -82,6 +86,7 @@
             android:id="@+id/bAddDelete2"
             android:text="@string/ownerdata"
             android:background="@drawable/button_weathers"
+            android:onClick="printOrganizationData"
             />
     </LinearLayout>
 
@@ -91,9 +96,22 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:text=""
-        android:textSize="20dp"
+        android:textSize="25dp"
         android:layout_below="@+id/linear2"
         android:layout_alignRight="@+id/findmop3"/>
+
+    <TextView
+        android:id="@+id/mopcontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text=""
+        android:textSize="20dp"
+        android:padding="3dp"
+        android:textColor="@color/black"
+        android:background="@color/color0"
+        android:layout_below="@+id/mopname"
+        />
 
     <ImageView
         android:id="@+id/photo"

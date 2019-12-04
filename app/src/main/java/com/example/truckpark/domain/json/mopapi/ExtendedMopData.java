@@ -13,6 +13,9 @@ public class ExtendedMopData {
     @JsonProperty("roadClass")
     private String roadClass;
 
+    @JsonProperty("direction")
+    private String direction;
+
     @JsonProperty("passengerPlaces")
     private Integer passengerPlaces;
 
@@ -67,10 +70,11 @@ public class ExtendedMopData {
     public ExtendedMopData() {
     }
 
-    public ExtendedMopData(Long id, String organization, String roadClass, Integer passengerPlaces, Integer coachPlaces, Boolean isGuarded, Boolean isFenced, Boolean isSecurityCamera, Boolean isPetroleum, Boolean isDangerousCargo, Boolean isRestaurant, Boolean isPlaceToStay, Boolean isToilet, Boolean isCarwash, Boolean isWorkshop, Boolean isLighting, Boolean isElectricCharger, String organizationInCharge, String organizationInChargePhone, String organizationInChargeEmail) {
+    public ExtendedMopData(Long id, String organization, String roadClass, String direction, Integer passengerPlaces, Integer coachPlaces, Boolean isGuarded, Boolean isFenced, Boolean isSecurityCamera, Boolean isPetroleum, Boolean isDangerousCargo, Boolean isRestaurant, Boolean isPlaceToStay, Boolean isToilet, Boolean isCarwash, Boolean isWorkshop, Boolean isLighting, Boolean isElectricCharger, String organizationInCharge, String organizationInChargePhone, String organizationInChargeEmail) {
         this.id = id;
         this.organization = organization;
         this.roadClass = roadClass;
+        this.direction = direction;
         this.passengerPlaces = passengerPlaces;
         this.coachPlaces = coachPlaces;
         this.isGuarded = isGuarded;
@@ -112,6 +116,14 @@ public class ExtendedMopData {
 
     public void setRoadClass(String roadClass) {
         this.roadClass = roadClass;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     public Integer getPassengerPlaces() {
@@ -256,6 +268,7 @@ public class ExtendedMopData {
                 "id=" + id +
                 ", organization='" + organization + '\'' +
                 ", roadClass='" + roadClass + '\'' +
+                ", direction='" + direction + '\'' +
                 ", passengerPlaces=" + passengerPlaces +
                 ", coachPlaces=" + coachPlaces +
                 ", isGuarded=" + isGuarded +
