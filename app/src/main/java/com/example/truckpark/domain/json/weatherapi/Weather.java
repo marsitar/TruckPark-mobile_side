@@ -3,14 +3,14 @@ package com.example.truckpark.domain.json.weatherapi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@JsonIgnoreProperties(value = {"coord", "weather", "base", "main", "visibility", "wind", "clouds", "dt", "sys", "id", "name", "cod"})
+@JsonIgnoreProperties(value = {"coord", "base", "dt", "sys", "timezone", "id", "name", "cod"})
 public class Weather {
 
     @JsonProperty("weather")
-    private Set<Phenomenon> weathers = new HashSet<>();
+    private List<Phenomenon> weathers = new ArrayList<>();
 
     @JsonProperty("main")
     private MainWeatherData mainWeatherData;
@@ -21,17 +21,17 @@ public class Weather {
     @JsonProperty("wind")
     private Wind wind;
 
-    @JsonProperty("clauds")
+    @JsonProperty("clouds")
     private Cloud cloud;
 
     public Weather() {
     }
 
-    public Set<Phenomenon> getWeathers() {
+    public List<Phenomenon> getWeathers() {
         return weathers;
     }
 
-    public void setWeathers(Set<Phenomenon> weathers) {
+    public void setWeathers(List<Phenomenon> weathers) {
         this.weathers = weathers;
     }
 

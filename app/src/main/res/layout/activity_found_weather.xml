@@ -32,6 +32,19 @@ tools:context=".view.functionality.weather.FoundWeatherData">
     android:layout_below="@+id/weather"
     android:layout_alignRight="@+id/weather"/>
 
+    <TextView
+        android:id="@+id/weathercontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text=""
+        android:textSize="20dp"
+        android:padding="3dp"
+        android:textColor="@color/black"
+        android:background="@color/color0"
+        android:layout_below="@+id/placename"
+        />
+
 <ImageView
     android:id="@+id/photo"
     android:layout_width="150dp"
