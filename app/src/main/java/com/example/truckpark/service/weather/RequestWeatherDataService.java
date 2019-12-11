@@ -57,6 +57,9 @@ public class RequestWeatherDataService {
         buildedURL.append("&");
         buildedURL.append("APPID=");
         buildedURL.append(APIKEY);
+        buildedURL.append("&");
+        buildedURL.append("units=");
+        buildedURL.append("metric");
 
         return buildedURL.toString();
     }

@@ -1,7 +1,5 @@
 package com.example.truckpark.view.functionality.weather;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -9,12 +7,19 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.truckpark.R;
+import com.example.truckpark.domain.json.weatherapi.Cloud;
+import com.example.truckpark.domain.json.weatherapi.MainWeatherData;
 import com.example.truckpark.domain.json.weatherapi.Phenomenon;
 import com.example.truckpark.domain.json.weatherapi.Weather;
+import com.example.truckpark.domain.json.weatherapi.Wind;
 import com.example.truckpark.service.weather.RequestWeatherDataService;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FoundWeatherData extends AppCompatActivity {
     public static final String PLACEWEATHER = "placeweather";
@@ -23,7 +28,7 @@ public class FoundWeatherData extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_weather);
-        Intent intent =getIntent();
+        Intent intent = getIntent();
         String messageText = intent.getStringExtra(PLACEWEATHER);
 
         //THINK ABOUT IT LATER,async attitute would be better here in future
@@ -36,18 +41,43 @@ public class FoundWeatherData extends AppCompatActivity {
 
         TextView weatherContent = (TextView) findViewById(R.id.weathercontent);
 
-        String temp = String.format("☐ TEMPERATURA: %f\n", weather.getMainWeatherData().getTemp());
-        String phenomena = String.format("☐ OPADY: %s\n", Optional.of(weather).map(Weather::getWeathers).orElse(null).stream().findFirst().map(Phenomenon::getMain).orElse("brak"));
-        String visibility = String.format("☐ WIDOCZNOSC: %d\n", weather.getVisibility());
-        String pressure = String.format("CISNIENIE: %d\n", weather.getMainWeatherData().getPressure());
-        String windSpeed = String.format("☐ PREDKOSC WIATRU: %d X\n", weather.getWind().getSpeed());
-        String clouds = String.format("☐ ZACHMURZENIE: %s X\n", weather.getCloud().getAll());
+        String temp = String.format("☐ TEMPERATURA: %.1f°C\n", Optional.ofNullable(weather)
+                .map(Weather::getMainWeatherData)
+                .map(MainWeatherData::getTemp)
+                .orElse(null));
+
+        String phenomena = String.format("☐ ZJAWISKA ATMOSFERYCZNE: %s\n", Optional.ofNullable(weather)
+                .map(Weather::getWeathers)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(Phenomenon::getMain)
+                .collect(Collectors.joining(", ")));
+
+        String visibility = String.format("☐ WIDOCZNOSC: %d km\n", Optional.ofNullable(weather)
+                .map(Weather::getVisibility)
+                .map(visabilityInMeters -> Integer.valueOf(visabilityInMeters/1000))
+                .orElse(null));
+
+        String pressure = String.format("☐ CISNIENIE: %d hPa\n", Optional.ofNullable(weather)
+                .map(Weather::getMainWeatherData)
+                .map(MainWeatherData::getPressure)
+                .orElse(null));
+
+        String windSpeed = String.format("☐ PREDKOSC WIATRU: %d m/s\n", Optional.ofNullable(weather)
+                .map(Weather::getWind)
+                .map(Wind::getSpeed)
+                .orElse(null));
+
+        String clouds = String.format("☐ ZACHMURZENIE: %s%%\n", Optional.ofNullable(weather)
+                .map(Weather::getCloud)
+                .map(Cloud::getAll)
+                .orElse(null));
 
         SpannableStringBuilder tempBold = getSpannableStringBuilder(temp, 0, 14);
-        SpannableStringBuilder phenomenaBold = getSpannableStringBuilder(phenomena, 0, 8);
+        SpannableStringBuilder phenomenaBold = getSpannableStringBuilder(phenomena, 0, 25);
         SpannableStringBuilder visibilityBold = getSpannableStringBuilder(visibility, 0, 13);
-        SpannableStringBuilder pressureBold = getSpannableStringBuilder(pressure, 0, 10);
-        SpannableStringBuilder windSpeedBold = getSpannableStringBuilder(windSpeed, 0, 17);
+        SpannableStringBuilder pressureBold = getSpannableStringBuilder(pressure, 0, 12);
+        SpannableStringBuilder windSpeedBold = getSpannableStringBuilder(windSpeed, 0, 18);
         SpannableStringBuilder cloudsBold = getSpannableStringBuilder(clouds, 0, 15);
 
         weatherContent.setText(tempBold
@@ -58,9 +88,10 @@ public class FoundWeatherData extends AppCompatActivity {
                 .append(cloudsBold));
 
 
-
-        TextView mopName = (TextView)findViewById(R.id.placename);
-        mopName.setText(messageText);
+        TextView mopName = (TextView) findViewById(R.id.placename);
+        mopName.setText(Optional.ofNullable(weather)
+                            .map(Weather::getName)
+                            .orElse(null));
     }
 
     private SpannableStringBuilder getSpannableStringBuilder(String stringToBeBold, int start, int end) {

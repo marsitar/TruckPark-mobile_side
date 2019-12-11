@@ -1,7 +1,9 @@
 package com.example.truckpark.domain.json.weatherapi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(value = {"feels_like"})
 public class MainWeatherData {
 
     @JsonProperty("temp")

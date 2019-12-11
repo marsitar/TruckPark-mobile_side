@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(value = {"coord", "base", "dt", "sys", "timezone", "id", "name", "cod"})
+@JsonIgnoreProperties(value = {"coord", "base", "dt", "sys", "timezone", "id", "cod"})
 public class Weather {
 
     @JsonProperty("weather")
@@ -23,6 +23,9 @@ public class Weather {
 
     @JsonProperty("clouds")
     private Cloud cloud;
+
+    @JsonProperty("name")
+    private String name;
 
     public Weather() {
     }
@@ -65,5 +68,13 @@ public class Weather {
 
     public void setCloud(Cloud cloud) {
         this.cloud = cloud;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
