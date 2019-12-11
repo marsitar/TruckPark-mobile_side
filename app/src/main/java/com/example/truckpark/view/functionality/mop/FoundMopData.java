@@ -24,7 +24,7 @@ public class FoundMopData extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finded_mop_data);
+        setContentView(R.layout.activity_found_mop_data);
         Intent intent = getIntent();
 
         String messageText = intent.getStringExtra(MOPNAME);
