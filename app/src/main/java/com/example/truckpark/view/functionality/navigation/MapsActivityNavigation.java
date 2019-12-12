@@ -75,10 +75,11 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         Polyline polyline = mMap.addPolyline(rectOptions);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,20));
+
         
-        if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
-            LocationDeviceService.mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Truck Position"));
-        }
+//        if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
+//            LocationDeviceService.mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Truck Position"));
+//        }
 
     }
 }
