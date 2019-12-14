@@ -52,6 +52,24 @@ public class LocationDeviceService extends Service {
                             isFirstTime = false;
                         } else {
                             MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+                            //////////////////////////////////////////////////////////////////
+                            ///////////Wait for an multithreading approach
+                            //////////////////////////////////////////////////////////////////
+//                            List<Mop> allMops = MapsActivityLocation.requestMopDataService.getAllMopsData();
+//
+////                            MapsActivityLocation.allMops.clear();
+//
+//                            allMops.forEach(mop -> MapsActivityLocation.markersList.add(new MarkerOptions()
+//                                    .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+//                                    .title(mop.getPlace())
+//                                    .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d",mop.getOccupiedTruckPlaces()))));
+//
+//                            MapsActivityLocation.mMap.clear();
+//
+//                            MapsActivityLocation.markersList.forEach(marker -> MapsActivityLocation.mMap.addMarker(marker));
+
                         }
                     }
                 }
@@ -76,7 +94,7 @@ public class LocationDeviceService extends Service {
 
         LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, listener);
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1, listener);
 
     }
 
