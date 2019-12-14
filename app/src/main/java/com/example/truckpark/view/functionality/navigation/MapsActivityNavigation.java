@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -95,6 +96,7 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         allMops.forEach(mop -> markersList.add(new MarkerOptions()
                 .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
                 .title(mop.getPlace())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
                 .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
 
         markersList.forEach(marker -> mMap.addMarker(marker));
