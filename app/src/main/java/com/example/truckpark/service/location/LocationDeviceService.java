@@ -13,18 +13,17 @@ import android.os.IBinder;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class LocationDeviceService extends Service {
+
     public final IBinder binder = new LocationDeviceBinder();
     public static double distanceInMeters;
     public static Location lastLocation = null;
 
     static protected double lattitude;
     static protected double longitude;
-    static public Marker mCurrLocationMarker;
+    private Boolean isFirstTime = true;
 
     public LocationDeviceService() {
     }
@@ -33,6 +32,7 @@ public class LocationDeviceService extends Service {
     @Override
     public void onCreate() {
         LocationListener listener = new LocationListener() {
+
             @Override
             public void onLocationChanged(Location location) {
                 if (lastLocation == null) {
@@ -47,12 +47,30 @@ public class LocationDeviceService extends Service {
 
                     LatLng latLng = new LatLng(lattitude, longitude);
                     if (MapsActivityLocation.mMap != null) {
-                        if (mCurrLocationMarker != null) {
-                            mCurrLocationMarker.setPosition(latLng);
+                        if (isFirstTime) {
+                            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                            isFirstTime = false;
                         } else {
-                            mCurrLocationMarker = MapsActivityLocation.mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
+                            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+                            //////////////////////////////////////////////////////////////////
+                            ///////////Wait for an multithreading approach
+                            //////////////////////////////////////////////////////////////////
+//                            List<Mop> allMops = MapsActivityLocation.requestMopDataService.getAllMopsData();
+//
+////                            MapsActivityLocation.allMops.clear();
+//
+//                            allMops.forEach(mop -> MapsActivityLocation.markersList.add(new MarkerOptions()
+//                                    .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+//                                    .title(mop.getPlace())
+//                                    .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d",mop.getOccupiedTruckPlaces()))));
+//
+//                            MapsActivityLocation.mMap.clear();
+//
+//                            MapsActivityLocation.markersList.forEach(marker -> MapsActivityLocation.mMap.addMarker(marker));
+
                         }
-                        MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     }
                 }
 
@@ -73,8 +91,11 @@ public class LocationDeviceService extends Service {
 
             }
         };
+
         LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, listener);
+
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1, listener);
+
     }
 
     public class LocationDeviceBinder extends Binder {

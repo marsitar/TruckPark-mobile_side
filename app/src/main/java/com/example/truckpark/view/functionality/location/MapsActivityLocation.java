@@ -1,22 +1,32 @@
 package com.example.truckpark.view.functionality.location;
 
+import android.os.Bundle;
+import android.os.StrictMode;
+
 import androidx.fragment.app.FragmentActivity;
 
-import android.os.Bundle;
-
 import com.example.truckpark.R;
+import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.service.location.LocationDeviceService;
+import com.example.truckpark.service.mopdata.RequestMopDataService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapsActivityLocation extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap mMap;
+    private List<Mop> allMops;
+    private RequestMopDataService requestMopDataService;
+    private List<MarkerOptions> markersList = new ArrayList<>();
 
 
     @Override
@@ -25,21 +35,42 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //THINK ABOUT IT LATER,async attitute would be better here in future
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        requestMopDataService = new RequestMopDataService(this);
+        this.allMops = requestMopDataService.getAllMopsData();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (LocationDeviceService.lastLocation != null && LocationDeviceService.mCurrLocationMarker==null){
-            LocationDeviceService.mCurrLocationMarker = MapsActivityLocation.mMap.addMarker(new MarkerOptions().position(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude())).title("Truck Position"));
-            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()),15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
+        mMap.setMyLocationEnabled(true);
+        if (LocationDeviceService.lastLocation != null) {
+            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()), 15));
         }
+
+        addMarkersToMap();
+
+    }
+
+    private void addMarkersToMap() {
+        allMops.forEach(mop -> markersList.add(new MarkerOptions()
+                .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+                .title(mop.getPlace())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
+                .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
+
+        markersList.forEach(marker -> mMap.addMarker(marker));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        this.mMap=null;
-        LocationDeviceService.mCurrLocationMarker=null;
+        this.mMap = null;
     }
 }

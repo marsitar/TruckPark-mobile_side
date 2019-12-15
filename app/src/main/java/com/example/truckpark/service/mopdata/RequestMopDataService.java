@@ -32,7 +32,6 @@ public class RequestMopDataService {
         try {
             Mop[] mopsArrayData = mapperJsonToClass.readValue(new URL(url), Mop[].class);
             mopsData = Arrays.asList(mopsArrayData);
-            String test = null;
         } catch (JsonParseException e) {
             e.printStackTrace();
         } catch (JsonMappingException e) {

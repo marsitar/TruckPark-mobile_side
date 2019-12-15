@@ -1,20 +1,31 @@
 package com.example.truckpark.view.functionality.pulloff;
 
+import android.os.Bundle;
+import android.os.StrictMode;
+
 import androidx.fragment.app.FragmentActivity;
 
-import android.os.Bundle;
-
 import com.example.truckpark.R;
+import com.example.truckpark.domain.json.mopapi.Mop;
+import com.example.truckpark.service.mopdata.RequestMopDataService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    public static GoogleMap mMap;
+
+    private List<Mop> allMops;
+    private RequestMopDataService requestMopDataService;
+    private List<MarkerOptions> markersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,14 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        //THINK ABOUT IT LATER,async attitute would be better here in future
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        requestMopDataService = new RequestMopDataService(this);
+        this.allMops = requestMopDataService.getAllMopsData();
     }
 
 
@@ -40,9 +59,20 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
+
+        mMap.setMyLocationEnabled(true);
+
+        addMarkersToMap();
+    }
+
+    private void addMarkersToMap() {
+        allMops.forEach(mop -> markersList.add(new MarkerOptions()
+                .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+                .title(mop.getPlace())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
+                .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
+
+        markersList.forEach(marker -> mMap.addMarker(marker));
     }
 }

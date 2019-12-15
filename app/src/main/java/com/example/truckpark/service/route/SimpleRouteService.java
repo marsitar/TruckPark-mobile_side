@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
 import com.example.truckpark.domain.json.googledirectionsapi.LatLng;
 import com.example.truckpark.domain.json.googledirectionsapi.Step;
+import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,19 @@ public class SimpleRouteService {
                 Double[] coordinates = new Double[2];
                 coordinates[0] = step.getStartLocation().getLat();
                 coordinates[1] = step.getStartLocation().getLng();
+
                 points.add(coordinates);
+
+                List<com.google.android.gms.maps.model.LatLng> insideStepPolylinePoints = PolyUtil.decode(step.getPolyline().getPoints());
+
+                insideStepPolylinePoints.forEach(point -> {
+                    Double[] coordinatesInsidePolygone = new Double[2];
+                    coordinatesInsidePolygone[0] = point.latitude;
+                    coordinatesInsidePolygone[1] = point.longitude;
+                    points.add(coordinatesInsidePolygone);
+                });
+
+
                 });
         LatLng endPoint = steps.get(steps.size()-1).getEndLocation();
         points.add(new Double[]{endPoint.getLat(),endPoint.getLng()});
