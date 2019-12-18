@@ -5,22 +5,13 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.StrictMode;
-import android.util.Log;
-
-import com.example.truckpark.domain.json.driverdataapi.Driver;
-import com.example.truckpark.domain.json.driverdataapi.Truck;
-import com.example.truckpark.domain.json.driverdataapi.TruckDriverWay;
-import com.example.truckpark.domain.json.positionapi.Coordinate;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class SendTruckDriverPositionAndDataService extends Service {
 
@@ -57,7 +48,7 @@ public class SendTruckDriverPositionAndDataService extends Service {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                conn.setRequestProperty("Accept","application/json");
+                conn.setRequestProperty("Accept", "application/json");
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
 
