@@ -1,5 +1,6 @@
 package com.example.truckpark.domain.json.mopapi;
 
+import com.example.truckpark.domain.json.positionapi.Coordinate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Mop {

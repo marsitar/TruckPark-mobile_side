@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.truckpark"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -34,4 +34,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
+    implementation 'org.json:json:20190722'
 }
