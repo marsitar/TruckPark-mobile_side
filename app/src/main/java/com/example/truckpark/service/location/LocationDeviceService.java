@@ -21,8 +21,8 @@ public class LocationDeviceService extends Service {
     public static double distanceInMeters;
     public static Location lastLocation = null;
 
-    static protected double lattitude;
-    static protected double longitude;
+    static public double latitude;
+    static public double longitude;
     private Boolean isFirstTime = true;
 
     public LocationDeviceService() {
@@ -42,10 +42,10 @@ public class LocationDeviceService extends Service {
                 lastLocation = location;
 
                 if (location != null) {
-                    lattitude = location.getLatitude();
+                    latitude = location.getLatitude();
                     longitude = location.getLongitude();
 
-                    LatLng latLng = new LatLng(lattitude, longitude);
+                    LatLng latLng = new LatLng(latitude, longitude);
                     if (MapsActivityLocation.mMap != null) {
                         if (isFirstTime) {
                             MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));

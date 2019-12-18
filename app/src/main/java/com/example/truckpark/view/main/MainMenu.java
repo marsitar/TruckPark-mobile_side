@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 
+import com.example.truckpark.service.positionsender.SendTruckDriverPositionAndDataService;
 import com.example.truckpark.view.functionality.mop.FindMop;
 import com.example.truckpark.view.functionality.weather.FindWeather;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
@@ -21,7 +22,11 @@ import com.example.truckpark.service.location.LocationDeviceService;
 public class MainMenu extends AppCompatActivity {
 
     public LocationDeviceService locationDevice;
+    public SendTruckDriverPositionAndDataService sendTruckDriverPositionAndDataService;
+
     private boolean bound = false;
+
+    private boolean senderBound = false;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -37,6 +42,21 @@ public class MainMenu extends AppCompatActivity {
         }
     };
 
+    private ServiceConnection secondServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder sendTruckDriverPositionAndDataBinder = (SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder) binder;
+            sendTruckDriverPositionAndDataService = sendTruckDriverPositionAndDataBinder.getSendTruckDriverPositionAndData();
+            senderBound=true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            senderBound=false;
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +68,10 @@ public class MainMenu extends AppCompatActivity {
         super.onStart();
         Intent intent= new Intent(this, LocationDeviceService.class);
         bindService(intent,connection, Context.BIND_AUTO_CREATE);
+
+
+        Intent secIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
+        bindService(secIntent, secondServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -56,6 +80,11 @@ public class MainMenu extends AppCompatActivity {
         if (bound){
             unbindService(connection);
             bound=false;
+        }
+
+        if (senderBound){
+            unbindService(secondServiceConnection);
+            senderBound=false;
         }
     }
 

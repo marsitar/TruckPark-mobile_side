@@ -1,4 +1,4 @@
-package com.example.truckpark.domain.json.mopapi;
+package com.example.truckpark.domain.json.positionapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,6 +14,11 @@ public class Coordinate {
     private Double y;
 
     public Coordinate() {
+    }
+
+    public Coordinate(Double x, Double y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Coordinate(Long id, Double x, Double y) {

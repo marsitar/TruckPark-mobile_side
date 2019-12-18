@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +20,10 @@
         android:roundIcon="@drawable/truck_white"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <service
+            android:name=".service.positionsender.SendTruckDriverPositionAndDataService"
+            android:enabled="true"
+            android:exported="true"></service>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,51 +37,51 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff"
+            android:name=".view.functionality.pulloff.MapsActivityPulloff"
             android:label="@string/title_activity_maps_pulloff">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
         <activity
-            android:name="com.example.truckpark.view.functionality.navigation.MapsActivityNavigation"
+            android:name=".view.functionality.navigation.MapsActivityNavigation"
             android:label="@string/title_activity_maps_navigation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
         </activity>
-        <activity android:name="com.example.truckpark.view.functionality.weather.FoundWeatherData" />
-        <activity android:name="com.example.truckpark.view.functionality.weather.FindWeather" />
-        <activity android:name="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
-        <activity android:name="com.example.truckpark.view.functionality.mop.FoundMopData">
+        <activity android:name=".view.functionality.weather.FoundWeatherData" />
+        <activity android:name=".view.functionality.weather.FindWeather" />
+        <activity android:name=".view.functionality.navigation.NavigationMenu" />
+        <activity android:name=".view.functionality.mop.FoundMopData">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.functionality.mop.FindMop" />
         </activity>
-        <activity android:name="com.example.truckpark.view.functionality.mop.FindMop">
+        <activity android:name=".view.functionality.mop.FindMop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
 
         <service
-            android:name="com.example.truckpark.service.location.LocationDeviceService"
+            android:name=".service.location.LocationDeviceService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name="com.example.truckpark.view.functionality.location.MapsActivityLocation"
+            android:name=".view.functionality.location.MapsActivityLocation"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.main.MainMenu" />
         </activity>
-        <activity android:name="com.example.truckpark.view.main.MainMenu">
+        <activity android:name=".view.main.MainMenu">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.truckpark.view.login.LoginActivity" />
         </activity>
-        <activity android:name="com.example.truckpark.view.login.LoginActivity">
+        <activity android:name=".view.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
