@@ -24,10 +24,10 @@ public class SendTruckDriverPositionAndDataService extends Service {
 
     private final IBinder binder = new SendTruckDriverPositionAndDataBinder();
 
-    public SendTruckDriverPositionAndDataService(Context context) {
+    public SendTruckDriverPositionAndDataService() {
         PropertyManager propertyManager = new PropertyManager("truckparkserver.properties");
-        APIKEY= propertyManager.getProperty("APIKEY", context);
-        URI= propertyManager.getProperty("URI", context);
+        APIKEY= propertyManager.getProperty("APIKEY", this);
+        URI= propertyManager.getProperty("URI", this);
     }
 
     public class SendTruckDriverPositionAndDataBinder extends Binder {

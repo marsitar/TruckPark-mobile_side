@@ -21,38 +21,38 @@ import com.example.truckpark.service.location.LocationDeviceService;
 
 public class MainMenu extends AppCompatActivity {
 
-    public LocationDeviceService locationDevice;
+    public LocationDeviceService locationDeviceService;
     public SendTruckDriverPositionAndDataService sendTruckDriverPositionAndDataService;
 
-    private boolean bound = false;
+    private boolean locationDeviceServiceBound = false;
 
-    private boolean senderBound = false;
+    private boolean sendTruckDriverPositionAndDataServiceBound = false;
 
-    private ServiceConnection connection = new ServiceConnection() {
+    private ServiceConnection locationDeviceServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             LocationDeviceService.LocationDeviceBinder locationDeviceBinder = (LocationDeviceService.LocationDeviceBinder) binder;
-            locationDevice = locationDeviceBinder.getLocationDevice();
-            bound=true;
+            locationDeviceService = locationDeviceBinder.getLocationDevice();
+            locationDeviceServiceBound=true;
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound=false;
+        public void onServiceDisconnected(ComponentName componentName) {
+            locationDeviceServiceBound=false;
         }
     };
 
-    private ServiceConnection secondServiceConnection = new ServiceConnection() {
+    private ServiceConnection sendTruckDriverPositionAndDataServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder sendTruckDriverPositionAndDataBinder = (SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder) binder;
             sendTruckDriverPositionAndDataService = sendTruckDriverPositionAndDataBinder.getSendTruckDriverPositionAndData();
-            senderBound=true;
+            sendTruckDriverPositionAndDataServiceBound=true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            senderBound=false;
+            sendTruckDriverPositionAndDataServiceBound=false;
         }
     };
 
@@ -65,26 +65,29 @@ public class MainMenu extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
         super.onStart();
-        Intent intent= new Intent(this, LocationDeviceService.class);
-        bindService(intent,connection, Context.BIND_AUTO_CREATE);
 
+        Intent LocationDeviceServiceIntent= new Intent(this, LocationDeviceService.class);
+        bindService(LocationDeviceServiceIntent,locationDeviceServiceConnection, Context.BIND_AUTO_CREATE);
 
-        Intent secIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
-        bindService(secIntent, secondServiceConnection, Context.BIND_AUTO_CREATE);
+        Intent sendTruckDriverPositionAndDataServiceIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
+        bindService(sendTruckDriverPositionAndDataServiceIntent, sendTruckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
+
         super.onStop();
-        if (bound){
-            unbindService(connection);
-            bound=false;
+
+        if (locationDeviceServiceBound){
+            unbindService(locationDeviceServiceConnection);
+            locationDeviceServiceBound=false;
         }
 
-        if (senderBound){
-            unbindService(secondServiceConnection);
-            senderBound=false;
+        if (sendTruckDriverPositionAndDataServiceBound){
+            unbindService(sendTruckDriverPositionAndDataServiceConnection);
+            sendTruckDriverPositionAndDataServiceBound=false;
         }
     }
 
