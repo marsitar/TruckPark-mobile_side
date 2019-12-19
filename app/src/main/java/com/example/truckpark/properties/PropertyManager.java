@@ -3,7 +3,6 @@ package com.example.truckpark.properties;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,7 +12,7 @@ public class PropertyManager {
     private final Properties properties;
 
     public PropertyManager(String propertyFileName) {
-        this.propertyFileName=propertyFileName;
+        this.propertyFileName = propertyFileName;
         this.properties = new Properties();
     }
 

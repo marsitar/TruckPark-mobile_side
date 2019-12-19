@@ -1,7 +1,6 @@
 package com.example.truckpark.service.positionsender;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -19,15 +18,13 @@ import java.time.LocalDateTime;
 
 public class SendTruckDriverPositionAndDataService extends Service {
 
-    private final String APIKEY;
-    private final String URI;
+    private String URI;
+    private final PropertyManager propertyManager;
 
     private final IBinder binder = new SendTruckDriverPositionAndDataBinder();
 
     public SendTruckDriverPositionAndDataService() {
-        PropertyManager propertyManager = new PropertyManager("truckparkserver.properties");
-        APIKEY= propertyManager.getProperty("APIKEY", this);
-        URI= propertyManager.getProperty("URI", this);
+        propertyManager = new PropertyManager("truckparkserver.properties");
     }
 
     public class SendTruckDriverPositionAndDataBinder extends Binder {
@@ -38,6 +35,9 @@ public class SendTruckDriverPositionAndDataService extends Service {
 
     @Override
     public void onCreate() {
+
+        URI = propertyManager.getProperty("URI", SendTruckDriverPositionAndDataService.this);
+
         sendPost();
     }
 
@@ -50,37 +50,37 @@ public class SendTruckDriverPositionAndDataService extends Service {
         Thread thread = new Thread(() -> {
             try {
 
-                String httpAdress = buildUrl();
-                URL url = new URL(httpAdress);
+                String httpAddress = buildUrl();
+                URL url = new URL(httpAddress);
                 HttpURLConnection connectionToRest = getHttpURLConnection(url);
 
                 JSONObject truckDriverWayJSON = createTruckDriverWayJson();
                 DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
                 String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
                 jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
+
                 String.valueOf(connectionToRest.getResponseCode());
 
                 jsonOutputStream.flush();
                 connectionToRest.disconnect();
-
-            } catch (IOException ioexception) {
-                ioexception.printStackTrace();
             } catch (JSONException jsone) {
                 jsone.printStackTrace();
+            } catch (IOException ioexception) {
+                ioexception.printStackTrace();
             }
         });
         thread.start();
     }
 
-    private String buildUrl(){
-        StringBuilder buildedURL = new StringBuilder();
-        buildedURL.append(URI);
-        buildedURL.append("/");
-        buildedURL.append("truckdriverways");
-        buildedURL.append("/");
-        buildedURL.append("truckdriverway");
+    private String buildUrl() {
+        StringBuilder builtURL = new StringBuilder();
+        builtURL.append(URI);
+        builtURL.append("/");
+        builtURL.append("truckdriverways");
+        builtURL.append("/");
+        builtURL.append("truckdriverway");
 
-        return buildedURL.toString();
+        return builtURL.toString();
     }
 
     private HttpURLConnection getHttpURLConnection(URL url) throws IOException {

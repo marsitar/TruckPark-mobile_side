@@ -20,7 +20,7 @@ public class RequestWeatherDataService {
     public RequestWeatherDataService(Context context) {
 
         PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
-        APIKEY= propertyManager.getProperty("APIKEY", context);
+        APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
 
     }
@@ -49,19 +49,19 @@ public class RequestWeatherDataService {
 
     private String buildUrl(String cityName) {
 
-        StringBuilder buildedURL = new StringBuilder();
+        StringBuilder builtURL = new StringBuilder();
 
-        buildedURL.append(URI);
-        buildedURL.append("q=");
-        buildedURL.append(cityName);
-        buildedURL.append("&");
-        buildedURL.append("APPID=");
-        buildedURL.append(APIKEY);
-        buildedURL.append("&");
-        buildedURL.append("units=");
-        buildedURL.append("metric");
+        builtURL.append(URI);
+        builtURL.append("q=");
+        builtURL.append(cityName);
+        builtURL.append("&");
+        builtURL.append("APPID=");
+        builtURL.append(APIKEY);
+        builtURL.append("&");
+        builtURL.append("units=");
+        builtURL.append("metric");
 
-        return buildedURL.toString();
+        return builtURL.toString();
     }
 
 }

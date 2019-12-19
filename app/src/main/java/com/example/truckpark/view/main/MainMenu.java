@@ -1,7 +1,5 @@
 package com.example.truckpark.view.main;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +8,16 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 
-import com.example.truckpark.service.positionsender.SendTruckDriverPositionAndDataService;
-import com.example.truckpark.view.functionality.mop.FindMop;
-import com.example.truckpark.view.functionality.weather.FindWeather;
-import com.example.truckpark.view.functionality.location.MapsActivityLocation;
-import com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff;
-import com.example.truckpark.view.functionality.navigation.NavigationMenu;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.truckpark.R;
 import com.example.truckpark.service.location.LocationDeviceService;
+import com.example.truckpark.service.positionsender.SendTruckDriverPositionAndDataService;
+import com.example.truckpark.view.functionality.location.MapsActivityLocation;
+import com.example.truckpark.view.functionality.mop.FindMop;
+import com.example.truckpark.view.functionality.navigation.NavigationMenu;
+import com.example.truckpark.view.functionality.pulloff.MapsActivityPulloff;
+import com.example.truckpark.view.functionality.weather.FindWeather;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -33,12 +33,12 @@ public class MainMenu extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             LocationDeviceService.LocationDeviceBinder locationDeviceBinder = (LocationDeviceService.LocationDeviceBinder) binder;
             locationDeviceService = locationDeviceBinder.getLocationDevice();
-            locationDeviceServiceBound=true;
+            locationDeviceServiceBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            locationDeviceServiceBound=false;
+            locationDeviceServiceBound = false;
         }
     };
 
@@ -47,12 +47,12 @@ public class MainMenu extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder sendTruckDriverPositionAndDataBinder = (SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder) binder;
             sendTruckDriverPositionAndDataService = sendTruckDriverPositionAndDataBinder.getSendTruckDriverPositionAndData();
-            sendTruckDriverPositionAndDataServiceBound=true;
+            sendTruckDriverPositionAndDataServiceBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            sendTruckDriverPositionAndDataServiceBound=false;
+            sendTruckDriverPositionAndDataServiceBound = false;
         }
     };
 
@@ -68,8 +68,8 @@ public class MainMenu extends AppCompatActivity {
 
         super.onStart();
 
-        Intent LocationDeviceServiceIntent= new Intent(this, LocationDeviceService.class);
-        bindService(LocationDeviceServiceIntent,locationDeviceServiceConnection, Context.BIND_AUTO_CREATE);
+        Intent LocationDeviceServiceIntent = new Intent(this, LocationDeviceService.class);
+        bindService(LocationDeviceServiceIntent, locationDeviceServiceConnection, Context.BIND_AUTO_CREATE);
 
         Intent sendTruckDriverPositionAndDataServiceIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
         bindService(sendTruckDriverPositionAndDataServiceIntent, sendTruckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
@@ -80,38 +80,38 @@ public class MainMenu extends AppCompatActivity {
 
         super.onStop();
 
-        if (locationDeviceServiceBound){
+        if (locationDeviceServiceBound) {
             unbindService(locationDeviceServiceConnection);
-            locationDeviceServiceBound=false;
+            locationDeviceServiceBound = false;
         }
 
-        if (sendTruckDriverPositionAndDataServiceBound){
+        if (sendTruckDriverPositionAndDataServiceBound) {
             unbindService(sendTruckDriverPositionAndDataServiceConnection);
-            sendTruckDriverPositionAndDataServiceBound=false;
+            sendTruckDriverPositionAndDataServiceBound = false;
         }
     }
 
-    public void onCheckPo(View view){
+    public void onCheckPo(View view) {
         Intent checkPo = new Intent(this, MapsActivityLocation.class);
         startActivity(checkPo);
     }
 
-    public void onNavigatioMen(View view){
+    public void onNavigatioMen(View view) {
         Intent onNavigatioMen = new Intent(this, NavigationMenu.class);
         startActivity(onNavigatioMen);
     }
 
-    public void onMapsActivityPullof(View view){
+    public void onMapsActivityPullof(View view) {
         Intent onMapsActivityPullof = new Intent(this, MapsActivityPulloff.class);
         startActivity(onMapsActivityPullof);
     }
 
-    public void onFindMo(View view){
+    public void onFindMo(View view) {
         Intent FindMo = new Intent(this, FindMop.class);
         startActivity(FindMo);
     }
 
-    public void onFindWeathe(View view){
+    public void onFindWeathe(View view) {
         Intent onFindWeathe = new Intent(this, FindWeather.class);
         startActivity(onFindWeathe);
     }

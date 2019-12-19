@@ -14,16 +14,18 @@ public class RequestGoogleRouteService {
     private final String APIKEY;
     private final String URI;
 
-    RequestGoogleRouteService(Context context){
+    RequestGoogleRouteService(Context context) {
+
         PropertyManager propertyManager = new PropertyManager("google-maps.properties");
-        APIKEY= propertyManager.getProperty("APIKEY", context);
-        URI= propertyManager.getProperty("URI", context);
+        APIKEY = propertyManager.getProperty("APIKEY", context);
+        URI = propertyManager.getProperty("URI", context);
+
     }
 
-    public GoogleRoute getGoogleRoute(String origin, String destination){
+    public GoogleRoute getGoogleRoute(String origin, String destination) {
 
         ObjectMapper mapperJsonToClass = new ObjectMapper();
-        String url = buildUrl(origin,destination);
+        String url = buildUrl(origin, destination);
         GoogleRoute requestedGoogleRoute = null;
         try {
             requestedGoogleRoute = mapperJsonToClass.readValue(new URL(url), GoogleRoute.class);
@@ -33,18 +35,20 @@ public class RequestGoogleRouteService {
         return requestedGoogleRoute;
     }
 
-    private String buildUrl(String origin, String destination){
-        StringBuilder buildedURL = new StringBuilder();
-        buildedURL.append(URI);
-        buildedURL.append("origin=");
-        buildedURL.append(origin);
-        buildedURL.append("&");
-        buildedURL.append("destination=");
-        buildedURL.append(destination);
-        buildedURL.append("&");
-        buildedURL.append("key=");
-        buildedURL.append(APIKEY);
+    private String buildUrl(String origin, String destination) {
 
-        return buildedURL.toString();
+        StringBuilder builtURL = new StringBuilder();
+
+        builtURL.append(URI);
+        builtURL.append("origin=");
+        builtURL.append(origin);
+        builtURL.append("&");
+        builtURL.append("destination=");
+        builtURL.append(destination);
+        builtURL.append("&");
+        builtURL.append("key=");
+        builtURL.append(APIKEY);
+
+        return builtURL.toString();
     }
 }

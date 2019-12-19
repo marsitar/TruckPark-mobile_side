@@ -67,29 +67,29 @@ public class RequestMopDataService {
 
     private String buildUrl(String category) {
 
-        StringBuilder buildedURL = new StringBuilder();
+        StringBuilder builtURL = new StringBuilder();
 
-        buildedURL.append(URI);
-        buildedURL.append("/");
-        buildedURL.append(category);
-        buildedURL.append("/");
-        buildedURL.append("all");
+        builtURL.append(URI);
+        builtURL.append("/");
+        builtURL.append(category);
+        builtURL.append("/");
+        builtURL.append("all");
 
-        return buildedURL.toString();
+        return builtURL.toString();
     }
 
     private String buildUrl(String category, String id) {
 
-        StringBuilder buildedURL = new StringBuilder();
+        StringBuilder builtURL = new StringBuilder();
 
-        buildedURL.append(URI);
-        buildedURL.append("/");
-        buildedURL.append(category);
-        buildedURL.append("/");
-        buildedURL.append("mop");
-        buildedURL.append("/");
-        buildedURL.append(id);
+        builtURL.append(URI);
+        builtURL.append("/");
+        builtURL.append(category);
+        builtURL.append("/");
+        builtURL.append("mop");
+        builtURL.append("/");
+        builtURL.append(id);
 
-        return buildedURL.toString();
+        return builtURL.toString();
     }
 }

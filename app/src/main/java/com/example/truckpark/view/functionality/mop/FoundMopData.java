@@ -11,11 +11,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.domain.json.mopapi.ExtendedMopData;
 import com.example.truckpark.domain.json.mopapi.Mop;
+import com.example.truckpark.domain.json.positionapi.Coordinate;
 import com.example.truckpark.service.mopdata.RequestMopDataService;
 
+import java.util.Optional;
+
 public class FoundMopData extends AppCompatActivity {
-    public static final String MOPNAME = "mopname";
+
     public static final String MOPID = "mopid";
     private String mopId;
     private Mop mop;
@@ -26,8 +30,6 @@ public class FoundMopData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_mop_data);
         Intent intent = getIntent();
-
-        String messageText = intent.getStringExtra(MOPNAME);
 
         this.mopId = intent.getStringExtra(MOPID);
 
@@ -43,39 +45,49 @@ public class FoundMopData extends AppCompatActivity {
 
         TextView mopContent = (TextView) findViewById(R.id.mopcontent);
 
-
-
-        String organization = String.format("☐ ODDZIAL: %s\n", mop.getExtendedMopData().getOrganization());
-        String place = String.format("☐ MIEJSCOWOSC: %s\n", mop.getPlace());
-        String identificationData = String.format("☐ DANE IDENTYFIKACYJNE: %s\n", mop.getIdentificationName());
-        String category = String.format("☐ KATEGORIA: %s\n", mop.getCategory());
-        String coordinates = String.format("☐ WSPOLRZEDNE: %f X\n %f Y", mop.getCoordinate().getX(), mop.getCoordinate().getY());
-
-        SpannableStringBuilder organizationBold = getSpannableStringBuilder(organization, 0, 9);
-        SpannableStringBuilder placeBold = getSpannableStringBuilder(place, 0, 13);
-        SpannableStringBuilder identificationDataBold = getSpannableStringBuilder(identificationData, 0, 22);
-        SpannableStringBuilder categoryBold = getSpannableStringBuilder(category, 0, 12);
-        SpannableStringBuilder coordinatesBold = getSpannableStringBuilder(coordinates, 0, 12);
-
-        mopContent.setText(organizationBold
-                .append(placeBold)
-                .append(identificationDataBold)
-                .append(categoryBold)
-                .append(coordinatesBold));
-
+        printMopData();
 
     }
 
     public void printMopData(View view) {
+        printMopData();
+    }
+
+    public void printMopData() {
         RequestMopDataService requestMopDataService = new RequestMopDataService(this);
         mop = requestMopDataService.getMopById(this.mopId);
         mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        String organization = String.format("☐ ODDZIAL: %s\n", mop.getExtendedMopData().getOrganization());
-        String place = String.format("☐ MIEJSCOWOSC: %s\n", mop.getPlace());
-        String identificationData = String.format("☐ DANE IDENTYFIKACYJNE: %s\n", mop.getIdentificationName());
-        String category = String.format("☐ KATEGORIA: %s\n", mop.getCategory());
-        String coordinates = String.format("☐ WSPOLRZEDNE: %f X\n %f Y", mop.getCoordinate().getX(), mop.getCoordinate().getY());
+        String organizationText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getOrganization)
+                .orElse(null);
+        String organization = String.format("☐ ODDZIAL: %s\n", organizationText);
+
+        String placeText = Optional.ofNullable(mop)
+                .map(Mop::getPlace)
+                .orElse(null);
+        String place = String.format("☐ MIEJSCOWOSC: %s\n", placeText);
+
+        String identificationDataText = Optional.ofNullable(mop)
+                .map(Mop::getIdentificationName)
+                .orElse(null);
+        String identificationData = String.format("☐ DANE IDENTYFIKACYJNE: %s\n", identificationDataText);
+
+        String categoryText = Optional.ofNullable(mop)
+                .map(Mop::getCategory)
+                .orElse(null);
+        String category = String.format("☐ KATEGORIA: %s\n", categoryText);
+
+        Double coordinateX = Optional.ofNullable(mop)
+                .map(Mop::getCoordinate)
+                .map(Coordinate::getX)
+                .orElse(null);
+        Double coordinateY = Optional.ofNullable(mop)
+                .map(Mop::getCoordinate)
+                .map(Coordinate::getY)
+                .orElse(null);
+        String coordinates = String.format("☐ WSPOLRZEDNE: %f X\n %f Y", coordinateX, coordinateY);
 
         SpannableStringBuilder organizationBold = getSpannableStringBuilder(organization, 0, 9);
         SpannableStringBuilder placeBold = getSpannableStringBuilder(place, 0, 13);
@@ -97,9 +109,22 @@ public class FoundMopData extends AppCompatActivity {
         mopContent = (TextView) findViewById(R.id.mopcontent);
 
 
-        String roadClass = String.format("☐ KLASA TECHNICZNA: %s\n", mop.getExtendedMopData().getRoadClass());
-        String roadNumber = String.format("☐ NUMER: %s\n", mop.getRoadNumber());
-        String direction = String.format("☐ KIERUNEK: %s\n", mop.getExtendedMopData().getDirection());
+        String roadClassText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getRoadClass)
+                .orElse(null);
+        String roadClass = String.format("☐ KLASA TECHNICZNA: %s\n", roadClassText);
+
+        String roadNumberText = Optional.ofNullable(mop)
+                .map(Mop::getRoadNumber)
+                .orElse(null);
+        String roadNumber = String.format("☐ NUMER: %s\n", roadNumberText);
+
+        String directionText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getDirection)
+                .orElse(null);
+        String direction = String.format("☐ KIERUNEK: %s\n", directionText);
 
         SpannableStringBuilder roadClassBold = getSpannableStringBuilder(roadClass, 0, 19);
         SpannableStringBuilder roadNumberBold = getSpannableStringBuilder(roadNumber, 0, 8);
@@ -116,10 +141,27 @@ public class FoundMopData extends AppCompatActivity {
         mop = requestMopDataService.getMopById(this.mopId);
         mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        String truckPlaces = String.format("☐ MIEJSCA CIEZAROWE OGOLEM: %d\n", mop.getTruckPlaces());
-        String freeTruckPlaces = String.format("☐ WOLNE MIEJSCA CIEZAROWE: %d\n\n", mop.getTruckPlaces() - mop.getOccupiedTruckPlaces());
-        String passengerPlaces = String.format("☐ MIEJSCA OSOBOWE OGOLEM: %d\n\n", mop.getExtendedMopData().getPassengerPlaces());
-        String coachPlaces = String.format("☐ MIEJSCA AUTOBUSOWE: %d", mop.getExtendedMopData().getCoachPlaces());
+        Integer truckPlacesNumber = Optional.ofNullable(mop)
+                .map(Mop::getTruckPlaces)
+                .orElse(null);
+        String truckPlaces = String.format("☐ MIEJSCA CIEZAROWE OGOLEM: %d\n", truckPlacesNumber);
+
+        Integer occupiedTruckPlaces = Optional.ofNullable(mop)
+                .map(Mop::getOccupiedTruckPlaces)
+                .orElse(null);
+        String freeTruckPlaces = String.format("☐ WOLNE MIEJSCA CIEZAROWE: %d\n\n", truckPlacesNumber - occupiedTruckPlaces);
+
+        Integer passengerPlacesNumber = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getPassengerPlaces)
+                .orElse(null);
+        String passengerPlaces = String.format("☐ MIEJSCA OSOBOWE OGOLEM: %d\n\n", passengerPlacesNumber);
+
+        Integer coachPlacesNumber = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getCoachPlaces)
+                .orElse(null);
+        String coachPlaces = String.format("☐ MIEJSCA AUTOBUSOWE: %d", coachPlacesNumber);
 
         SpannableStringBuilder truckPlacesBold = getSpannableStringBuilder(truckPlaces, 0, 27);
         SpannableStringBuilder freeTruckPlacesBold = getSpannableStringBuilder(freeTruckPlaces, 0, 25);
@@ -138,18 +180,77 @@ public class FoundMopData extends AppCompatActivity {
         mop = requestMopDataService.getMopById(this.mopId);
         mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        String isGuarded = String.format("☐ STRZEZONY: %s\n", mop.getExtendedMopData().getGuarded().booleanValue() ? "✔" : "✗");
-        String isFenced = String.format("☐ OGRODZONY: %s\n", mop.getExtendedMopData().getFenced().booleanValue() ? "✔" : "✗");
-        String isSecurityCamera = String.format("☐ MONITORING WIDEO: %s\n", mop.getExtendedMopData().getSecurityCamera().booleanValue() ? "✔" : "✗");
-        String isPetroleum = String.format("☐ STACJA BENZYNOWA: %s\n", mop.getExtendedMopData().getPetroleum().booleanValue() ? "✔" : "✗");
-        String isRestaurant = String.format("☐ RESTAURACJA: %s\n", mop.getExtendedMopData().getRestaurant().booleanValue() ? "✔" : "✗");
-        String isPlaceToStay = String.format("☐ MIEJSCA NOCLEGOWE: %s\n", mop.getExtendedMopData().getPlaceToStay().booleanValue() ? "✔" : "✗");
-        String isToilet = String.format("☐ TOALETA: %s\n", mop.getExtendedMopData().getToilet().booleanValue() ? "✔" : "✗");
-        String isCarwash = String.format("☐ MYJNIA SAMOCHODOWA: %s\n", mop.getExtendedMopData().getCarwash().booleanValue() ? "✔" : "✗");
-        String isWorkshop = String.format("☐ WARSZTAT: %s\n", mop.getExtendedMopData().getWorkshop().booleanValue() ? "✔" : "✗");
-        String isLighting = String.format("☐ OSWIETLENIE: %s\n", mop.getExtendedMopData().getLighting().booleanValue() ? "✔" : "✗");
-        String isElectricCharger = String.format("☐ LADOWARKA ELEKTRYCZNA: %s\n", mop.getExtendedMopData().getElectricCharger().booleanValue() ? "✔" : "✗");
-        String isDangerousCargo = String.format("☐ NIEBEZPIECZNE LADUNKI: %s\n", mop.getExtendedMopData().getDangerousCargo().booleanValue() ? "✔" : "✗");
+        Boolean isGuardedBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getGuarded)
+                .orElse(false);
+        String isGuarded = String.format("☐ STRZEZONY: %s\n", isGuardedBoolean ? "✔" : "✗");
+
+        Boolean isFencedBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getFenced)
+                .orElse(false);
+        String isFenced = String.format("☐ OGRODZONY: %s\n", isFencedBoolean ? "✔" : "✗");
+
+        Boolean isMonitoringBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getSecurityCamera)
+                .orElse(false);
+        String isSecurityCamera = String.format("☐ MONITORING WIDEO: %s\n", isMonitoringBoolean ? "✔" : "✗");
+
+        Boolean isPetroleumBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getPetroleum)
+                .orElse(false);
+        String isPetroleum = String.format("☐ STACJA BENZYNOWA: %s\n", isPetroleumBoolean ? "✔" : "✗");
+
+        boolean isRestaurantBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getRestaurant)
+                .orElse(false);
+        String isRestaurant = String.format("☐ RESTAURACJA: %s\n", isRestaurantBoolean ? "✔" : "✗");
+
+        boolean isPlaceToStayBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getPlaceToStay)
+                .orElse(false);
+        String isPlaceToStay = String.format("☐ MIEJSCA NOCLEGOWE: %s\n", isPlaceToStayBoolean ? "✔" : "✗");
+
+        boolean isToiletBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getToilet)
+                .orElse(false);
+        String isToilet = String.format("☐ TOALETA: %s\n", isToiletBoolean ? "✔" : "✗");
+
+        boolean isCarwashBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getCarwash)
+                .orElse(false);
+        String isCarwash = String.format("☐ MYJNIA SAMOCHODOWA: %s\n", isCarwashBoolean ? "✔" : "✗");
+
+        boolean isWorkshopBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getWorkshop)
+                .orElse(false);
+        String isWorkshop = String.format("☐ WARSZTAT: %s\n", isWorkshopBoolean ? "✔" : "✗");
+
+        boolean isLightingBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getLighting)
+                .orElse(false);
+        String isLighting = String.format("☐ OSWIETLENIE: %s\n", isLightingBoolean ? "✔" : "✗");
+
+        boolean isElectricChargerBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getElectricCharger)
+                .orElse(false);
+        String isElectricCharger = String.format("☐ LADOWARKA ELEKTRYCZNA: %s\n", isElectricChargerBoolean ? "✔" : "✗");
+
+        boolean isDangerousCargoBoolean = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getDangerousCargo)
+                .orElse(false);
+        String isDangerousCargo = String.format("☐ NIEBEZPIECZNE LADUNKI: %s\n", isDangerousCargoBoolean ? "✔" : "✗");
 
         SpannableStringBuilder isGuardedBold = getSpannableStringBuilder(isGuarded, 0, 12);
         SpannableStringBuilder isFencedBold = getSpannableStringBuilder(isFenced, 0, 12);
@@ -184,9 +285,24 @@ public class FoundMopData extends AppCompatActivity {
         mop = requestMopDataService.getMopById(this.mopId);
         mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        String organizationInCharge = String.format("☐ IMIE I NAZWISKO/NAZWA: %s\n", mop.getExtendedMopData().getOrganizationInCharge());
-        String organizationInChargePhone = String.format("☐ NUMER TELEFONU: %s\n", mop.getExtendedMopData().getOrganizationInChargePhone());
-        String organizationInChargeEmail = String.format("☐ ADRES EMAIL: %s\n", mop.getExtendedMopData().getOrganizationInChargeEmail());
+        String organizationInChargeText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getOrganizationInCharge)
+                .orElse(null);
+        String organizationInCharge = String.format("☐ IMIE I NAZWISKO/NAZWA: %s\n", organizationInChargeText);
+
+
+        String organizationInChargePhoneText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getOrganizationInChargePhone)
+                .orElse(null);
+        String organizationInChargePhone = String.format("☐ NUMER TELEFONU: %s\n", organizationInChargePhoneText);
+
+        String organizationInChargeEmailText = Optional.ofNullable(mop)
+                .map(Mop::getExtendedMopData)
+                .map(ExtendedMopData::getOrganizationInChargeEmail)
+                .orElse(null);
+        String organizationInChargeEmail = String.format("☐ ADRES EMAIL: %s\n", organizationInChargeEmailText);
 
         SpannableStringBuilder organizationInChargeBold = getSpannableStringBuilder(organizationInCharge, 0, 24);
         SpannableStringBuilder organizationInChargePhoneBold = getSpannableStringBuilder(organizationInChargePhone, 0, 17);
