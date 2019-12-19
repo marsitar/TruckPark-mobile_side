@@ -5,15 +5,28 @@ import java.util.List;
 
 public final class CurrentRoute {
 
+    private static volatile CurrentRoute CURRENT_ROUTE;
+
+    private List<Double[]> routeCoordinates = new ArrayList<>();
+
     private CurrentRoute(){}
 
-    public static List<Double[]> routeCoordinates = new ArrayList<>();
+    public static CurrentRoute getCurrentStateInstance() {
+        if(CURRENT_ROUTE == null) {
+            synchronized (CurrentRoute.class) {
+                if (CURRENT_ROUTE == null) {
+                    CURRENT_ROUTE = new CurrentRoute();
+                }
+            }
+        }
+        return CURRENT_ROUTE;
+    }
 
-    public static List<Double[]> getRouteCoordinates() {
+    public List<Double[]> getRouteCoordinates() {
         return routeCoordinates;
     }
 
-    public static void setRouteCoordinates(List<Double[]> routeCoordinates) {
-        CurrentRoute.routeCoordinates = routeCoordinates;
+    public void setRouteCoordinates(List<Double[]> routeCoordinates) {
+        this.routeCoordinates = routeCoordinates;
     }
 }

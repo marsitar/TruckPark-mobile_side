@@ -2,24 +2,36 @@ package com.example.truckpark.repository;
 
 public final class CurrentPosition {
 
-    private static double currentX;
-    private static double currentY;
+    private static volatile CurrentPosition CURRENT_POSITION;
+    private double currentX;
+    private double currentY;
 
     private CurrentPosition(){}
 
-    public static double getCurrentX() {
+    public static CurrentPosition getCurrentPositionInstance() {
+        if(CURRENT_POSITION == null) {
+            synchronized (CurrentPosition.class) {
+                if (CURRENT_POSITION == null) {
+                    CURRENT_POSITION = new CurrentPosition();
+                }
+            }
+        }
+        return CURRENT_POSITION;
+    }
+
+    public double getCurrentX() {
         return currentX;
     }
 
-    public static void setCurrentX(double currentX) {
-        CurrentPosition.currentX = currentX;
+    public void setCurrentX(double currentX) {
+        this.currentX = currentX;
     }
 
-    public static double getCurrentY() {
+    public double getCurrentY() {
         return currentY;
     }
 
-    public static void setCurrentY(double currentY) {
-        CurrentPosition.currentY = currentY;
+    public void setCurrentY(double currentY) {
+        this.currentY = currentY;
     }
 }
