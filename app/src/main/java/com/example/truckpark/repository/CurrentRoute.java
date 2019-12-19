@@ -3,7 +3,9 @@ package com.example.truckpark.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrentRoute {
+public final class CurrentRoute {
+
+    private CurrentRoute(){}
 
     public static List<Double[]> routeCoordinates = new ArrayList<>();
 
