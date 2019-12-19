@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SimpleRouteService {
 
-    public List<Double[]> getSimpleRoute(String origin, String destination, Context context){
+    public List<Double[]> getSimpleRoute(String origin, String destination, Context context) {
 
         List<Double[]> points = new ArrayList<>();
 
@@ -20,7 +20,7 @@ public class SimpleRouteService {
 
         GoogleRoute googleRoute = requestGoogleRouteService.getGoogleRoute(origin, destination);
 
-        List<Step> steps= googleRoute.getRoutes().get(0).getLegs().get(0).getSteps();
+        List<Step> steps = googleRoute.getRoutes().get(0).getLegs().get(0).getSteps();
 
         fillPointsList(points, steps);
 
@@ -28,25 +28,26 @@ public class SimpleRouteService {
     }
 
     private void fillPointsList(List<Double[]> points, List<Step> steps) {
+
         steps.forEach(step -> {
-                Double[] coordinates = new Double[2];
-                coordinates[0] = step.getStartLocation().getLat();
-                coordinates[1] = step.getStartLocation().getLng();
+            Double[] coordinates = new Double[2];
+            coordinates[0] = step.getStartLocation().getLat();
+            coordinates[1] = step.getStartLocation().getLng();
 
-                points.add(coordinates);
+            points.add(coordinates);
 
-                List<com.google.android.gms.maps.model.LatLng> insideStepPolylinePoints = PolyUtil.decode(step.getPolyline().getPoints());
+            List<com.google.android.gms.maps.model.LatLng> insideStepPolylinePoints = PolyUtil.decode(step.getPolyline().getPoints());
 
-                insideStepPolylinePoints.forEach(point -> {
-                    Double[] coordinatesInsidePolygone = new Double[2];
-                    coordinatesInsidePolygone[0] = point.latitude;
-                    coordinatesInsidePolygone[1] = point.longitude;
-                    points.add(coordinatesInsidePolygone);
-                });
+            insideStepPolylinePoints.forEach(point -> {
+                Double[] coordinatesInsidePolygone = new Double[2];
+                coordinatesInsidePolygone[0] = point.latitude;
+                coordinatesInsidePolygone[1] = point.longitude;
+                points.add(coordinatesInsidePolygone);
+            });
 
+        });
 
-                });
-        LatLng endPoint = steps.get(steps.size()-1).getEndLocation();
-        points.add(new Double[]{endPoint.getLat(),endPoint.getLng()});
+        LatLng endPoint = steps.get(steps.size() - 1).getEndLocation();
+        points.add(new Double[]{endPoint.getLat(), endPoint.getLng()});
     }
 }

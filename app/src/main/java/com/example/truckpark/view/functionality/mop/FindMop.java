@@ -50,10 +50,8 @@ public class FindMop extends AppCompatActivity {
                 .toArray(Long[]::new);
 
 
-        // Get reference of widgets from XML layout
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
-        // Initializing an ArrayAdapter
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, R.layout.search_spinner_item, mopsLabels
         );
@@ -76,11 +74,13 @@ public class FindMop extends AppCompatActivity {
     }
 
     public void onFindedMopDa(View view) {
+
         Intent FindedMopDa = new Intent(this, FoundMopData.class);
+
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        String choosenMop = spinner.getSelectedItem().toString();
-        FindedMopDa.putExtra(FoundMopData.MOPNAME, choosenMop);
+
         FindedMopDa.putExtra(FoundMopData.MOPID, mopId.toString());
+
         startActivity(FindedMopDa);
     }
 }

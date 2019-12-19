@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class MapsActivityLocation extends FragmentActivity implements OnMapReadyCallback {
@@ -42,7 +43,10 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         requestMopDataService = new RequestMopDataService(this);
-        this.allMops = requestMopDataService.getAllMopsData();
+
+        this.allMops = Optional.ofNullable(requestMopDataService)
+                .map(RequestMopDataService::getAllMopsData)
+                .orElse(null);
     }
 
     @Override
