@@ -7,7 +7,7 @@ public final class CurrentRoute {
 
     private static volatile CurrentRoute CURRENT_ROUTE;
 
-    private List<Double[]> routeCoordinates = new ArrayList<>();
+    private volatile List<Double[]> routeCoordinates = new ArrayList<>();
 
     private CurrentRoute(){}
 
@@ -22,11 +22,11 @@ public final class CurrentRoute {
         return CURRENT_ROUTE;
     }
 
-    public List<Double[]> getRouteCoordinates() {
+    public synchronized List<Double[]> getRouteCoordinates() {
         return routeCoordinates;
     }
 
-    public void setRouteCoordinates(List<Double[]> routeCoordinates) {
+    public synchronized void setRouteCoordinates(List<Double[]> routeCoordinates) {
         this.routeCoordinates = routeCoordinates;
     }
 }

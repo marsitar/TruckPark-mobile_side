@@ -3,8 +3,8 @@ package com.example.truckpark.repository;
 public final class CurrentPosition {
 
     private static volatile CurrentPosition CURRENT_POSITION;
-    private double currentX;
-    private double currentY;
+    private volatile double currentX;
+    private volatile double currentY;
 
     private CurrentPosition(){}
 
@@ -19,19 +19,19 @@ public final class CurrentPosition {
         return CURRENT_POSITION;
     }
 
-    public double getCurrentX() {
+    public synchronized double getCurrentX() {
         return currentX;
     }
 
-    public void setCurrentX(double currentX) {
+    public synchronized void setCurrentX(double currentX) {
         this.currentX = currentX;
     }
 
-    public double getCurrentY() {
+    public synchronized double getCurrentY() {
         return currentY;
     }
 
-    public void setCurrentY(double currentY) {
+    public synchronized void setCurrentY(double currentY) {
         this.currentY = currentY;
     }
 }

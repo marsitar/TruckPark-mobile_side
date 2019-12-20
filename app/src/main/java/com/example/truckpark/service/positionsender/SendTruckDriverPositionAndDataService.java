@@ -49,24 +49,29 @@ public class SendTruckDriverPositionAndDataService extends Service {
     public void sendPost() {
         Thread thread = new Thread(() -> {
             try {
+                while (true) {
+                    String httpAddress = buildUrl();
+                    URL url = new URL(httpAddress);
+                    HttpURLConnection connectionToRest = getHttpURLConnection(url);
 
-                String httpAddress = buildUrl();
-                URL url = new URL(httpAddress);
-                HttpURLConnection connectionToRest = getHttpURLConnection(url);
+                    JSONObject truckDriverWayJSON = createTruckDriverWayJson();
+                    DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
+                    String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
+                    jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
 
-                JSONObject truckDriverWayJSON = createTruckDriverWayJson();
-                DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
-                String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
-                jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
+                    String.valueOf(connectionToRest.getResponseCode());
 
-                String.valueOf(connectionToRest.getResponseCode());
+                    jsonOutputStream.flush();
+                    connectionToRest.disconnect();
 
-                jsonOutputStream.flush();
-                connectionToRest.disconnect();
+                    Thread.sleep(10000);
+                }
             } catch (JSONException jsone) {
                 jsone.printStackTrace();
             } catch (IOException ioexception) {
                 ioexception.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
         thread.start();

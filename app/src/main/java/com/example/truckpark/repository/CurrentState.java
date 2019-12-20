@@ -3,7 +3,7 @@ package com.example.truckpark.repository;
 public final class CurrentState {
 
     private static volatile CurrentState CURRENT_STATE;
-    private boolean isPositionIsBeingSent = false;
+    private volatile boolean isPositionIsBeingSent = false;
 
     private CurrentState(){}
 
@@ -18,11 +18,11 @@ public final class CurrentState {
         return CURRENT_STATE;
     }
 
-    public boolean isPositionIsBeingSent() {
+    public synchronized boolean isPositionIsBeingSent() {
         return isPositionIsBeingSent;
     }
 
-    public void setPositionIsBeingSent(boolean positionIsBeingSent) {
+    public synchronized void setPositionIsBeingSent(boolean positionIsBeingSent) {
         isPositionIsBeingSent = positionIsBeingSent;
     }
 }

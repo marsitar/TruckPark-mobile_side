@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.repository.CurrentState;
 import com.example.truckpark.service.location.LocationDeviceService;
 import com.example.truckpark.service.positionsender.SendTruckDriverPositionAndDataService;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
@@ -71,8 +72,12 @@ public class MainMenu extends AppCompatActivity {
         Intent LocationDeviceServiceIntent = new Intent(this, LocationDeviceService.class);
         bindService(LocationDeviceServiceIntent, locationDeviceServiceConnection, Context.BIND_AUTO_CREATE);
 
-        Intent sendTruckDriverPositionAndDataServiceIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
-        bindService(sendTruckDriverPositionAndDataServiceIntent, sendTruckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
+        if (!CurrentState.getCurrentStateInstance().isPositionIsBeingSent()){
+            Intent sendTruckDriverPositionAndDataServiceIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
+            bindService(sendTruckDriverPositionAndDataServiceIntent, sendTruckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
+            CurrentState.getCurrentStateInstance().setPositionIsBeingSent(true);
+        }
+
     }
 
     @Override
