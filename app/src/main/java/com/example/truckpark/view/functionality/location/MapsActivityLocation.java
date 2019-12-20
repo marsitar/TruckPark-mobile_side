@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
-import com.example.truckpark.service.location.LocationDeviceService;
+import com.example.truckpark.repository.CurrentPosition;
 import com.example.truckpark.service.mopdata.RequestMopDataService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,18 +51,26 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
         mMap.setMyLocationEnabled(true);
-        if (LocationDeviceService.lastLocation != null) {
-            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(LocationDeviceService.lastLocation.getLatitude(), LocationDeviceService.lastLocation.getLongitude()), 15));
+
+        if(CurrentPosition.getCurrentPositionInstance().isLocationOn()) {
+            MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentX(),
+                            CurrentPosition.getCurrentPositionInstance().getCurrentX()),
+                    15)
+            );
         }
+
 
         addMarkersToMap();
 
     }
 
     private void addMarkersToMap() {
+
         allMops.forEach(mop -> markersList.add(new MarkerOptions()
                 .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
                 .title(mop.getPlace())
@@ -70,6 +78,7 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
                 .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
 
         markersList.forEach(marker -> mMap.addMarker(marker));
+
     }
 
     @Override

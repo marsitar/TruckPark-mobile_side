@@ -5,11 +5,13 @@ public final class CurrentPosition {
     private static volatile CurrentPosition CURRENT_POSITION;
     private volatile double currentX;
     private volatile double currentY;
+    private volatile boolean isLocationOn = false;
 
-    private CurrentPosition(){}
+    private CurrentPosition() {
+    }
 
     public static CurrentPosition getCurrentPositionInstance() {
-        if(CURRENT_POSITION == null) {
+        if (CURRENT_POSITION == null) {
             synchronized (CurrentPosition.class) {
                 if (CURRENT_POSITION == null) {
                     CURRENT_POSITION = new CurrentPosition();
@@ -33,5 +35,13 @@ public final class CurrentPosition {
 
     public synchronized void setCurrentY(double currentY) {
         this.currentY = currentY;
+    }
+
+    public boolean isLocationOn() {
+        return isLocationOn;
+    }
+
+    public void setLocationOn(boolean locationOn) {
+        isLocationOn = locationOn;
     }
 }
