@@ -36,33 +36,12 @@ public class LocationDeviceService extends Service {
             @Override
             public void onLocationChanged(Location location) {
 
-                Optional.ofNullable(location)
-                        .map(Location::getLatitude)
-                        .ifPresent(latitude ->
-                                CurrentPosition
-                                        .getCurrentPositionInstance()
-                                        .setCurrentX(latitude));
-
-                Optional.ofNullable(location)
-                        .map(Location::getLongitude)
-                        .ifPresent(longitude ->
-                                CurrentPosition
-                                        .getCurrentPositionInstance()
-                                        .setCurrentY(longitude));
+                setCurrentPositionInRepository(location);
 
                 LatLng latLng = new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentX()
                         , CurrentPosition.getCurrentPositionInstance().getCurrentY());
 
-                if (MapsActivityLocation.mMap != null) {
-                    if (isFirstTime) {
-                        CurrentPosition.getCurrentPositionInstance().setLocationOn(true);
-                        MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                        isFirstTime = false;
-                    } else {
-                        MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                    }
-                }
+                moveCameraOnMapViews(latLng);
 
             }
 
@@ -88,6 +67,35 @@ public class LocationDeviceService extends Service {
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, listener);
         }
 
+    }
+
+    private void setCurrentPositionInRepository(Location location) {
+        Optional.ofNullable(location)
+                .map(Location::getLatitude)
+                .ifPresent(latitude ->
+                        CurrentPosition
+                                .getCurrentPositionInstance()
+                                .setCurrentX(latitude));
+
+        Optional.ofNullable(location)
+                .map(Location::getLongitude)
+                .ifPresent(longitude ->
+                        CurrentPosition
+                                .getCurrentPositionInstance()
+                                .setCurrentY(longitude));
+    }
+
+    private void moveCameraOnMapViews(LatLng latLng) {
+        if (MapsActivityLocation.mMap != null) {
+            if (isFirstTime) {
+                CurrentPosition.getCurrentPositionInstance().setLocationOn(true);
+                MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                isFirstTime = false;
+            } else {
+                MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            }
+        }
     }
 
     public class LocationDeviceBinder extends Binder {
