@@ -3,6 +3,7 @@ package com.example.truckpark.service.positionsender;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 
 import com.example.truckpark.properties.PropertyManager;
@@ -47,34 +48,30 @@ public class SendTruckDriverPositionAndDataService extends Service {
     }
 
     public void sendPost() {
-        Thread thread = new Thread(() -> {
-            try {
-                while (true) {
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
                     String httpAddress = buildUrl();
                     URL url = new URL(httpAddress);
                     HttpURLConnection connectionToRest = getHttpURLConnection(url);
-
                     JSONObject truckDriverWayJSON = createTruckDriverWayJson();
-                    DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
-                    String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
-                    jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
 
-                    String.valueOf(connectionToRest.getResponseCode());
+                    PositionSenderAsyncTask positionSenderAsyncTask = new PositionSenderAsyncTask(connectionToRest, truckDriverWayJSON);
+                    positionSenderAsyncTask.execute();
 
-                    jsonOutputStream.flush();
-                    connectionToRest.disconnect();
-
-                    Thread.sleep(10000);
+                } catch (JSONException jsone) {
+                    jsone.printStackTrace();
+                } catch (IOException ioexception) {
+                    ioexception.printStackTrace();
                 }
-            } catch (JSONException jsone) {
-                jsone.printStackTrace();
-            } catch (IOException ioexception) {
-                ioexception.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+                handler.postDelayed(this, 10000);
             }
         });
-        thread.start();
+
     }
 
     private String buildUrl() {

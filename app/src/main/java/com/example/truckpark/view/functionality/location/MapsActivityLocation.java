@@ -1,8 +1,11 @@
 package com.example.truckpark.view.functionality.location;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.truckpark.R;
@@ -28,11 +31,14 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
     private List<Mop> allMops;
     private RequestMopDataService requestMopDataService;
     private List<MarkerOptions> markersList = new ArrayList<>();
+    private int counter=0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -64,9 +70,29 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
             );
         }
 
-
         addMarkersToMap();
+        clearAndAddMarkers();
 
+    }
+
+    private void clearAndAddMarkers() {
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mMap != null){
+                    mMap.clear();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    addMarkersToMap();
+                }
+
+                handler.postDelayed(this, 5000);
+            }
+        });
     }
 
     private void addMarkersToMap() {
@@ -75,7 +101,10 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
                 .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
                 .title(mop.getPlace())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
-                .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
+                .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", Optional.ofNullable(mop)
+                                                                                    .map(Mop::getOccupiedTruckPlaces)
+                                                                                    .orElse(null)
+                ))));
 
         markersList.forEach(marker -> mMap.addMarker(marker));
 

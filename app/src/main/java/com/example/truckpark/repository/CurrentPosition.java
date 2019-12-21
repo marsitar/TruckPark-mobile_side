@@ -37,11 +37,11 @@ public final class CurrentPosition {
         this.currentY = currentY;
     }
 
-    public boolean isLocationOn() {
+    public synchronized boolean isLocationOn() {
         return isLocationOn;
     }
 
-    public void setLocationOn(boolean locationOn) {
+    public synchronized void setLocationOn(boolean locationOn) {
         isLocationOn = locationOn;
     }
 }
