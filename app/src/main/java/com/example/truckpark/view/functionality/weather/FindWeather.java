@@ -18,7 +18,7 @@ public class FindWeather extends AppCompatActivity {
     }
     public void onFindedWeatherDat(View view) {
         Intent FindedWeatherDat = new Intent(this, FoundWeatherData.class);
-        TextView textViewPlace =(TextView)findViewById(R.id.edittext);
+        TextView textViewPlace =findViewById(R.id.edittext);
         String text=textViewPlace.getText().toString();
         FindedWeatherDat.putExtra(FoundWeatherData.PLACEWEATHER,text);
         startActivity(FindedWeatherDat);

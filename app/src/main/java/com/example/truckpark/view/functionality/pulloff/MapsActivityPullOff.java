@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap googleMap;
 
@@ -38,11 +38,11 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        MapsActivityPulloff.googleMap = googleMap;
+        MapsActivityPullOff.googleMap = googleMap;
 
-        MapsActivityPulloff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
+        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
 
-        MapsActivityPulloff.googleMap.setMyLocationEnabled(true);
+        MapsActivityPullOff.googleMap.setMyLocationEnabled(true);
 
         clearAndAddMarkers();
     }

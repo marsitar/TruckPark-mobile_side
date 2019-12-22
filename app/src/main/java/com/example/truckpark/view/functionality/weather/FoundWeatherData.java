@@ -15,7 +15,7 @@ import com.example.truckpark.domain.json.weatherapi.MainWeatherData;
 import com.example.truckpark.domain.json.weatherapi.Phenomenon;
 import com.example.truckpark.domain.json.weatherapi.Weather;
 import com.example.truckpark.domain.json.weatherapi.Wind;
-import com.example.truckpark.service.weather.RequestWeatherDataService;
+import com.example.truckpark.service.weather.WeatherDataService;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -29,17 +29,11 @@ public class FoundWeatherData extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found_weather);
         Intent intent = getIntent();
-        String messageText = intent.getStringExtra(PLACEWEATHER);
 
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
+        WeatherDataService weatherDataService = new WeatherDataService(this);
+        Weather weather = weatherDataService.getWeatherByCityName(intent.getStringExtra(PLACEWEATHER));
 
-        RequestWeatherDataService requestWeatherDataService = new RequestWeatherDataService(this);
-        Weather weather = requestWeatherDataService.getWeatherByCityName(intent.getStringExtra(PLACEWEATHER));
-
-        TextView weatherContent = (TextView) findViewById(R.id.weathercontent);
+        TextView weatherContent = findViewById(R.id.weathercontent);
 
         String temp = String.format("☐ TEMPERATURA: %.1f°C\n", Optional.ofNullable(weather)
                 .map(Weather::getMainWeatherData)
@@ -88,7 +82,7 @@ public class FoundWeatherData extends AppCompatActivity {
                 .append(cloudsBold));
 
 
-        TextView mopName = (TextView) findViewById(R.id.placename);
+        TextView mopName = findViewById(R.id.placename);
         mopName.setText(Optional.ofNullable(weather)
                             .map(Weather::getName)
                             .orElse(null));

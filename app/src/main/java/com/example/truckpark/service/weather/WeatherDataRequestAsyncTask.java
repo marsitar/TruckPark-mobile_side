@@ -1,9 +1,8 @@
 package com.example.truckpark.service.weather;
 
-import android.content.Context;
+import android.os.AsyncTask;
 
 import com.example.truckpark.domain.json.weatherapi.Weather;
-import com.example.truckpark.properties.PropertyManager;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,26 +11,25 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class RequestWeatherDataService {
+public class WeatherDataRequestAsyncTask extends AsyncTask<Void, Void, Weather> {
 
-    private final String APIKEY;
-    private final String URI;
+    private String URI;
+    private String APIKEY;
+    private String cityName;
 
-    public RequestWeatherDataService(Context context) {
-
-        PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
-        APIKEY = propertyManager.getProperty("APIKEY", context);
-        URI = propertyManager.getProperty("URI", context);
-
+    public WeatherDataRequestAsyncTask(String URI, String APIKEY, String cityName) {
+        this.URI = URI;
+        this.APIKEY = APIKEY;
+        this.cityName = cityName;
     }
 
-    public Weather getWeatherByCityName(String cityName) {
+    @Override
+    protected Weather doInBackground(Void... voids) {
 
         ObjectMapper mapperJsonToClass = new ObjectMapper();
         String url = buildUrl(cityName);
 
         Weather weather = null;
-
         try {
             weather = mapperJsonToClass.readValue(new URL(url), Weather.class);
         } catch (JsonParseException e) {
@@ -63,5 +61,4 @@ public class RequestWeatherDataService {
 
         return builtURL.toString();
     }
-
 }
