@@ -53,6 +53,16 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         String dst = intent.getStringExtra(DST);
         MapsActivityNavigation.googleMap = googleMap;
 
+        LatLngBounds latLngBounds = generateObjectToBePolylineAndLatLngBounds(src, dst);
+
+        MapsActivityNavigation.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 20));
+        MapsActivityNavigation.googleMap.setMyLocationEnabled(true);
+
+        clearAndAddMarkers();
+
+    }
+
+    private LatLngBounds generateObjectToBePolylineAndLatLngBounds(String src, String dst) {
         SimpleRouteService simpleRouteService = new SimpleRouteService();
 
         List<Double[]> routeCoordinates = simpleRouteService.getSimpleRoute(src, dst, getApplicationContext());
@@ -65,13 +75,7 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
             rectOptions.add(latLng);
         });
 
-        LatLngBounds latLngBounds = builder.build();
-
-        MapsActivityNavigation.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 20));
-        MapsActivityNavigation.googleMap.setMyLocationEnabled(true);
-
-        clearAndAddMarkers();
-
+        return builder.build();
     }
 
     private void clearAndAddMarkers() {
