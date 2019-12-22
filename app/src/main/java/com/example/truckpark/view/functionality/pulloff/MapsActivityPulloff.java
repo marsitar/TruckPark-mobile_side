@@ -1,6 +1,7 @@
 package com.example.truckpark.view.functionality.pulloff;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 
 import androidx.fragment.app.FragmentActivity;
@@ -30,31 +31,12 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_pulloff);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
-//        requestMopDataService = new RequestMopDataService(this);
-//        this.allMops = requestMopDataService.getAllMopsData();
         this.allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -63,7 +45,25 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
 
         mMap.setMyLocationEnabled(true);
 
-        addMarkersToMap();
+        clearAndAddMarkers();
+    }
+
+    private void clearAndAddMarkers() {
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (mMap != null) {
+                    mMap.clear();
+                    allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
+                    markersList = new ArrayList<>();
+                    addMarkersToMap();
+                }
+
+                handler.postDelayed(this, 5000);
+            }
+        });
     }
 
     private void addMarkersToMap() {
@@ -75,4 +75,5 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
 
         markersList.forEach(marker -> mMap.addMarker(marker));
     }
+
 }

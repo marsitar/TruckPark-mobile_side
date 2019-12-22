@@ -33,20 +33,16 @@ public class FoundMopData extends AppCompatActivity {
 
         this.mopId = intent.getStringExtra(MOPID);
 
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
         foundMop = CurrentMops.getCurrentMopsInstance().getCurrentMopsList()
             .stream()
-            .filter(mop -> mop.getId().equals(mopId))
+            .filter(mop -> mop.getId().equals(Long.parseLong(mopId)))
             .findFirst()
             .orElse(null);
-        TextView mopName = (TextView) findViewById(R.id.mopname);
+
+        TextView mopName = findViewById(R.id.mopname);
         mopName.setText(foundMop.getIdentificationName());
 
-        TextView mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
         printMopData();
 
@@ -57,9 +53,8 @@ public class FoundMopData extends AppCompatActivity {
     }
 
     public void printMopData() {
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-//        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+
+        mopContent = findViewById(R.id.mopcontent);
 
         String organizationText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
@@ -107,9 +102,7 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printRoadData(View view) {
 
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-//        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
 
         String roadClassText = Optional.ofNullable(foundMop)
@@ -140,9 +133,7 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printPlaceNumber(View view) {
 
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-//        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
         Integer truckPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getTruckPlaces)
@@ -179,9 +170,7 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printFacilitiesAndSecurity(View view) {
 
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-//        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
         Boolean isGuardedBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
@@ -284,9 +273,7 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printOrganizationData(View view) {
 
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-//        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
         String organizationInChargeText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)

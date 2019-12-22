@@ -2,6 +2,7 @@ package com.example.truckpark.view.functionality.navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 
 import androidx.fragment.app.FragmentActivity;
@@ -31,28 +32,21 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
     public static final String DST = "dst";
 
     private List<Mop> allMops;
-//    private RequestMopDataService requestMopDataService;
     private List<MarkerOptions> markersList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_navigation);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
-        String src = intent.getStringExtra(SRC);
-        String dst = intent.getStringExtra(DST);
-
 
         //THINK ABOUT IT LATER,async attitute would be better here in future
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
-//        requestMopDataService = new RequestMopDataService(this);
-//        this.allMops = requestMopDataService.getAllMopsData();
+
         this.allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
     }
 
@@ -88,9 +82,26 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
 
         mMap.setMyLocationEnabled(true);
 
-        addMarkersToMap();
+        clearAndAddMarkers();
 
+    }
 
+    private void clearAndAddMarkers() {
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (mMap != null) {
+                    mMap.clear();
+                    allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
+                    markersList = new ArrayList<>();
+                    addMarkersToMap();
+                }
+
+                handler.postDelayed(this, 5000);
+            }
+        });
     }
 
     private void addMarkersToMap() {

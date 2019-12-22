@@ -27,30 +27,17 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
 
     public static GoogleMap mMap;
     private List<Mop> allMops = new ArrayList<>();
-//    private RequestMopDataService requestMopDataService;
     private List<MarkerOptions> markersList = new ArrayList<>();
-    private int counter = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-//        requestMopDataService = new RequestMopDataService(this);
-
-//        this.allMops = Optional.ofNullable(requestMopDataService)
-//                .map(RequestMopDataService::getAllMopsData)
-//                .orElse(null);
     }
 
     @Override
@@ -68,7 +55,6 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
             );
         }
 
-//        addMarkersToMap();
         clearAndAddMarkers();
 
     }
@@ -103,7 +89,7 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
                 ))));
 
         markersList.forEach(marker -> mMap.addMarker(marker));
-        String dupa = null;
+
     }
 
     @Override

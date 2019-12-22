@@ -24,15 +24,17 @@ public class FindMop extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_mop);
 
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
+        while (CurrentMops.getCurrentMopsInstance().getCurrentMopsList().size() == 0) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         List<Mop> mopList = CurrentMops.getCurrentMopsInstance().getCurrentMopsList()
                 .stream()
@@ -50,9 +52,9 @@ public class FindMop extends AppCompatActivity {
                 .toArray(Long[]::new);
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = findViewById(R.id.spinner);
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
                 this, R.layout.search_spinner_item, mopsLabels
         );
 
@@ -73,14 +75,13 @@ public class FindMop extends AppCompatActivity {
         });
     }
 
-    public void onFindedMopDa(View view) {
+    public void onFoundMopDa(View view) {
 
-        Intent FindedMopDa = new Intent(this, FoundMopData.class);
+        Intent foundMopDa = new Intent(this, FoundMopData.class);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        foundMopDa.putExtra(FoundMopData.MOPID, mopId.toString());
 
-        FindedMopDa.putExtra(FoundMopData.MOPID, mopId.toString());
-
-        startActivity(FindedMopDa);
+        startActivity(foundMopDa);
     }
+
 }
