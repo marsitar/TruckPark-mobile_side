@@ -21,7 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".service.positionsender.SendTruckDriverPositionAndDataService"
+            android:name=".service.positionsender.TruckDriverPositionAndDataService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".service.mopdata.MopDataService"
             android:enabled="true"
             android:exported="true"></service>
         <!--
@@ -37,7 +41,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.functionality.pulloff.MapsActivityPulloff"
+            android:name=".view.functionality.pulloff.MapsActivityPullOff"
             android:label="@string/title_activity_maps_pulloff">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

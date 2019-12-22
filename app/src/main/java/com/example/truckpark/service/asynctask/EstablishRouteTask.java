@@ -15,7 +15,7 @@ public class EstablishRouteTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPreExecute() {
-//        wywolujaceActivity.showDialog(MainActivity.PLEASE_WAIT_DIALOG);
+
     }
 
     @Override

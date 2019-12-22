@@ -14,7 +14,7 @@ import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.ExtendedMopData;
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.domain.json.positionapi.Coordinate;
-import com.example.truckpark.service.mopdata.RequestMopDataService;
+import com.example.truckpark.repository.CurrentMops;
 
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public class FoundMopData extends AppCompatActivity {
 
     public static final String MOPID = "mopid";
     private String mopId;
-    private Mop mop;
+    private Mop foundMop;
     private TextView mopContent;
 
     @Override
@@ -33,17 +33,16 @@ public class FoundMopData extends AppCompatActivity {
 
         this.mopId = intent.getStringExtra(MOPID);
 
-        //THINK ABOUT IT LATER,async attitute would be better here in future
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        ///////////////////////////////////////////////////////////////////////////////////////////
+        foundMop = CurrentMops.getCurrentMopsInstance().getCurrentMopsList()
+            .stream()
+            .filter(mop -> mop.getId().equals(Long.parseLong(mopId)))
+            .findFirst()
+            .orElse(null);
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        Mop mop = requestMopDataService.getMopById(mopId);
-        TextView mopName = (TextView) findViewById(R.id.mopname);
-        mopName.setText(mop.getIdentificationName());
+        TextView mopName = findViewById(R.id.mopname);
+        mopName.setText(foundMop.getIdentificationName());
 
-        TextView mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
         printMopData();
 
@@ -54,36 +53,35 @@ public class FoundMopData extends AppCompatActivity {
     }
 
     public void printMopData() {
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
 
-        String organizationText = Optional.ofNullable(mop)
+        mopContent = findViewById(R.id.mopcontent);
+
+        String organizationText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganization)
                 .orElse(null);
         String organization = String.format("☐ ODDZIAL: %s\n", organizationText);
 
-        String placeText = Optional.ofNullable(mop)
+        String placeText = Optional.ofNullable(foundMop)
                 .map(Mop::getPlace)
                 .orElse(null);
         String place = String.format("☐ MIEJSCOWOSC: %s\n", placeText);
 
-        String identificationDataText = Optional.ofNullable(mop)
+        String identificationDataText = Optional.ofNullable(foundMop)
                 .map(Mop::getIdentificationName)
                 .orElse(null);
         String identificationData = String.format("☐ DANE IDENTYFIKACYJNE: %s\n", identificationDataText);
 
-        String categoryText = Optional.ofNullable(mop)
+        String categoryText = Optional.ofNullable(foundMop)
                 .map(Mop::getCategory)
                 .orElse(null);
         String category = String.format("☐ KATEGORIA: %s\n", categoryText);
 
-        Double coordinateX = Optional.ofNullable(mop)
+        Double coordinateX = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
                 .map(Coordinate::getX)
                 .orElse(null);
-        Double coordinateY = Optional.ofNullable(mop)
+        Double coordinateY = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
                 .map(Coordinate::getY)
                 .orElse(null);
@@ -104,23 +102,21 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printRoadData(View view) {
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
 
-        String roadClassText = Optional.ofNullable(mop)
+        String roadClassText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getRoadClass)
                 .orElse(null);
         String roadClass = String.format("☐ KLASA TECHNICZNA: %s\n", roadClassText);
 
-        String roadNumberText = Optional.ofNullable(mop)
+        String roadNumberText = Optional.ofNullable(foundMop)
                 .map(Mop::getRoadNumber)
                 .orElse(null);
         String roadNumber = String.format("☐ NUMER: %s\n", roadNumberText);
 
-        String directionText = Optional.ofNullable(mop)
+        String directionText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getDirection)
                 .orElse(null);
@@ -137,27 +133,25 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printPlaceNumber(View view) {
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
-        Integer truckPlacesNumber = Optional.ofNullable(mop)
+        Integer truckPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getTruckPlaces)
                 .orElse(null);
         String truckPlaces = String.format("☐ MIEJSCA CIEZAROWE OGOLEM: %d\n", truckPlacesNumber);
 
-        Integer occupiedTruckPlaces = Optional.ofNullable(mop)
+        Integer occupiedTruckPlaces = Optional.ofNullable(foundMop)
                 .map(Mop::getOccupiedTruckPlaces)
                 .orElse(null);
         String freeTruckPlaces = String.format("☐ WOLNE MIEJSCA CIEZAROWE: %d\n\n", truckPlacesNumber - occupiedTruckPlaces);
 
-        Integer passengerPlacesNumber = Optional.ofNullable(mop)
+        Integer passengerPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPassengerPlaces)
                 .orElse(null);
         String passengerPlaces = String.format("☐ MIEJSCA OSOBOWE OGOLEM: %d\n\n", passengerPlacesNumber);
 
-        Integer coachPlacesNumber = Optional.ofNullable(mop)
+        Integer coachPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getCoachPlaces)
                 .orElse(null);
@@ -176,77 +170,75 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printFacilitiesAndSecurity(View view) {
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
-        Boolean isGuardedBoolean = Optional.ofNullable(mop)
+        Boolean isGuardedBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getGuarded)
                 .orElse(false);
         String isGuarded = String.format("☐ STRZEZONY: %s\n", isGuardedBoolean ? "✔" : "✗");
 
-        Boolean isFencedBoolean = Optional.ofNullable(mop)
+        Boolean isFencedBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getFenced)
                 .orElse(false);
         String isFenced = String.format("☐ OGRODZONY: %s\n", isFencedBoolean ? "✔" : "✗");
 
-        Boolean isMonitoringBoolean = Optional.ofNullable(mop)
+        Boolean isMonitoringBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getSecurityCamera)
                 .orElse(false);
         String isSecurityCamera = String.format("☐ MONITORING WIDEO: %s\n", isMonitoringBoolean ? "✔" : "✗");
 
-        Boolean isPetroleumBoolean = Optional.ofNullable(mop)
+        Boolean isPetroleumBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPetroleum)
                 .orElse(false);
         String isPetroleum = String.format("☐ STACJA BENZYNOWA: %s\n", isPetroleumBoolean ? "✔" : "✗");
 
-        boolean isRestaurantBoolean = Optional.ofNullable(mop)
+        boolean isRestaurantBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getRestaurant)
                 .orElse(false);
         String isRestaurant = String.format("☐ RESTAURACJA: %s\n", isRestaurantBoolean ? "✔" : "✗");
 
-        boolean isPlaceToStayBoolean = Optional.ofNullable(mop)
+        boolean isPlaceToStayBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPlaceToStay)
                 .orElse(false);
         String isPlaceToStay = String.format("☐ MIEJSCA NOCLEGOWE: %s\n", isPlaceToStayBoolean ? "✔" : "✗");
 
-        boolean isToiletBoolean = Optional.ofNullable(mop)
+        boolean isToiletBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getToilet)
                 .orElse(false);
         String isToilet = String.format("☐ TOALETA: %s\n", isToiletBoolean ? "✔" : "✗");
 
-        boolean isCarwashBoolean = Optional.ofNullable(mop)
+        boolean isCarwashBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getCarwash)
                 .orElse(false);
         String isCarwash = String.format("☐ MYJNIA SAMOCHODOWA: %s\n", isCarwashBoolean ? "✔" : "✗");
 
-        boolean isWorkshopBoolean = Optional.ofNullable(mop)
+        boolean isWorkshopBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getWorkshop)
                 .orElse(false);
         String isWorkshop = String.format("☐ WARSZTAT: %s\n", isWorkshopBoolean ? "✔" : "✗");
 
-        boolean isLightingBoolean = Optional.ofNullable(mop)
+        boolean isLightingBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getLighting)
                 .orElse(false);
         String isLighting = String.format("☐ OSWIETLENIE: %s\n", isLightingBoolean ? "✔" : "✗");
 
-        boolean isElectricChargerBoolean = Optional.ofNullable(mop)
+        boolean isElectricChargerBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getElectricCharger)
                 .orElse(false);
         String isElectricCharger = String.format("☐ LADOWARKA ELEKTRYCZNA: %s\n", isElectricChargerBoolean ? "✔" : "✗");
 
-        boolean isDangerousCargoBoolean = Optional.ofNullable(mop)
+        boolean isDangerousCargoBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getDangerousCargo)
                 .orElse(false);
@@ -281,24 +273,22 @@ public class FoundMopData extends AppCompatActivity {
 
     public void printOrganizationData(View view) {
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
-        mop = requestMopDataService.getMopById(this.mopId);
-        mopContent = (TextView) findViewById(R.id.mopcontent);
+        mopContent = findViewById(R.id.mopcontent);
 
-        String organizationInChargeText = Optional.ofNullable(mop)
+        String organizationInChargeText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInCharge)
                 .orElse(null);
         String organizationInCharge = String.format("☐ IMIE I NAZWISKO/NAZWA: %s\n", organizationInChargeText);
 
 
-        String organizationInChargePhoneText = Optional.ofNullable(mop)
+        String organizationInChargePhoneText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInChargePhone)
                 .orElse(null);
         String organizationInChargePhone = String.format("☐ NUMER TELEFONU: %s\n", organizationInChargePhoneText);
 
-        String organizationInChargeEmailText = Optional.ofNullable(mop)
+        String organizationInChargeEmailText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInChargeEmail)
                 .orElse(null);

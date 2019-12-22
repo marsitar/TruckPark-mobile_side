@@ -1,29 +1,29 @@
 package com.example.truckpark.service.route;
 
-import android.content.Context;
+import android.os.AsyncTask;
 
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
-import com.example.truckpark.properties.PropertyManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URL;
 
-public class RequestGoogleRouteService {
+public class GoogleRouteRequestAsyncTask extends AsyncTask<Void, Void, GoogleRoute> {
 
-    private final String APIKEY;
-    private final String URI;
+    private String APIKEY;
+    private String URI;
+    private String origin;
+    private String destination;
 
-    RequestGoogleRouteService(Context context) {
-
-        PropertyManager propertyManager = new PropertyManager("google-maps.properties");
-        APIKEY = propertyManager.getProperty("APIKEY", context);
-        URI = propertyManager.getProperty("URI", context);
-
+    public GoogleRouteRequestAsyncTask(String APIKEY, String URI, String origin, String destination) {
+        this.APIKEY = APIKEY;
+        this.URI = URI;
+        this.origin = origin;
+        this.destination = destination;
     }
 
-    public GoogleRoute getGoogleRoute(String origin, String destination) {
-
+    @Override
+    protected GoogleRoute doInBackground(Void... voids) {
         ObjectMapper mapperJsonToClass = new ObjectMapper();
         String url = buildUrl(origin, destination);
         GoogleRoute requestedGoogleRoute = null;
@@ -51,4 +51,5 @@ public class RequestGoogleRouteService {
 
         return builtURL.toString();
     }
+
 }

@@ -16,9 +16,9 @@ public class SimpleRouteService {
 
         List<Double[]> points = new ArrayList<>();
 
-        RequestGoogleRouteService requestGoogleRouteService = new RequestGoogleRouteService(context);
+        GoogleRouteService googleRouteService = new GoogleRouteService(context);
 
-        GoogleRoute googleRoute = requestGoogleRouteService.getGoogleRoute(origin, destination);
+        GoogleRoute googleRoute = googleRouteService.getGoogleRoute(origin, destination);
 
         List<Step> steps = googleRoute.getRoutes().get(0).getLegs().get(0).getSteps();
 

@@ -40,7 +40,7 @@
         android:shadowRadius="3"
         android:text="@string/choosemop"
         android:textColor="@color/color0"
-        android:onClick="onFindedMopDa"/>
+        android:onClick="onFoundMopDa"/>
 
     <Spinner
         android:id="@+id/spinner"
