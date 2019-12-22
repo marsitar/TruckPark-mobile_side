@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
-import com.example.truckpark.service.mopdata.RequestMopDataService;
+import com.example.truckpark.repository.CurrentMops;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,9 +32,9 @@ public class FindMop extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         ///////////////////////////////////////////////////////////////////////////////////////////
 
-        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
+//        RequestMopDataService requestMopDataService = new RequestMopDataService(this);
 
-        List<Mop> mopList = requestMopDataService.getAllMopsData()
+        List<Mop> mopList = CurrentMops.getCurrentMopsInstance().getCurrentMopsList()
                 .stream()
                 .sorted(Comparator.comparing(Mop::getPlace))
                 .collect(Collectors.toList());

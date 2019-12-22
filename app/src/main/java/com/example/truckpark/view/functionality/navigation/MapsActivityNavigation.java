@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
-import com.example.truckpark.service.mopdata.RequestMopDataService;
+import com.example.truckpark.repository.CurrentMops;
 import com.example.truckpark.service.route.SimpleRouteService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,7 +31,7 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
     public static final String DST = "dst";
 
     private List<Mop> allMops;
-    private RequestMopDataService requestMopDataService;
+//    private RequestMopDataService requestMopDataService;
     private List<MarkerOptions> markersList = new ArrayList<>();
 
     @Override
@@ -51,8 +51,9 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ///////////////////////////////////////////////////////////////////////////////////////////
-        requestMopDataService = new RequestMopDataService(this);
-        this.allMops = requestMopDataService.getAllMopsData();
+//        requestMopDataService = new RequestMopDataService(this);
+//        this.allMops = requestMopDataService.getAllMopsData();
+        this.allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
     }
 
 

@@ -21,7 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".service.positionsender.SendTruckDriverPositionAndDataService"
+            android:name=".service.positionsender.TruckDriverPositionAndDataService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".service.mopdata.MopDataService"
             android:enabled="true"
             android:exported="true"></service>
         <!--

@@ -93,7 +93,6 @@ public class LocationDeviceService extends Service {
                 isFirstTime = false;
             } else {
                 MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
             }
         }
     }

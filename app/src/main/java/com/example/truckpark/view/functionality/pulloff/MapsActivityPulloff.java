@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
-import com.example.truckpark.service.mopdata.RequestMopDataService;
+import com.example.truckpark.repository.CurrentMops;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,7 +24,6 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
     public static GoogleMap mMap;
 
     private List<Mop> allMops;
-    private RequestMopDataService requestMopDataService;
     private List<MarkerOptions> markersList = new ArrayList<>();
 
     @Override
@@ -41,8 +40,9 @@ public class MapsActivityPulloff extends FragmentActivity implements OnMapReadyC
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ///////////////////////////////////////////////////////////////////////////////////////////
-        requestMopDataService = new RequestMopDataService(this);
-        this.allMops = requestMopDataService.getAllMopsData();
+//        requestMopDataService = new RequestMopDataService(this);
+//        this.allMops = requestMopDataService.getAllMopsData();
+        this.allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
     }
 
 

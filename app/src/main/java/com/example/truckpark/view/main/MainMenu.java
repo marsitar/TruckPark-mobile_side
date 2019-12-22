@@ -11,9 +11,11 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.repository.CurrentMops;
 import com.example.truckpark.repository.CurrentState;
 import com.example.truckpark.service.location.LocationDeviceService;
-import com.example.truckpark.service.positionsender.SendTruckDriverPositionAndDataService;
+import com.example.truckpark.service.mopdata.MopDataService;
+import com.example.truckpark.service.positionsender.TruckDriverPositionAndDataService;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
 import com.example.truckpark.view.functionality.mop.FindMop;
 import com.example.truckpark.view.functionality.navigation.NavigationMenu;
@@ -23,11 +25,12 @@ import com.example.truckpark.view.functionality.weather.FindWeather;
 public class MainMenu extends AppCompatActivity {
 
     public LocationDeviceService locationDeviceService;
-    public SendTruckDriverPositionAndDataService sendTruckDriverPositionAndDataService;
+    public TruckDriverPositionAndDataService truckDriverPositionAndDataService;
+    public MopDataService mopDataService;
 
     private boolean locationDeviceServiceBound = false;
-
-    private boolean sendTruckDriverPositionAndDataServiceBound = false;
+    private boolean truckDriverPositionAndDataServiceBound = false;
+    private boolean mopDataServiceBound = false;
 
     private ServiceConnection locationDeviceServiceConnection = new ServiceConnection() {
         @Override
@@ -43,17 +46,31 @@ public class MainMenu extends AppCompatActivity {
         }
     };
 
-    private ServiceConnection sendTruckDriverPositionAndDataServiceConnection = new ServiceConnection() {
+    private ServiceConnection truckDriverPositionAndDataServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
-            SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder sendTruckDriverPositionAndDataBinder = (SendTruckDriverPositionAndDataService.SendTruckDriverPositionAndDataBinder) binder;
-            sendTruckDriverPositionAndDataService = sendTruckDriverPositionAndDataBinder.getSendTruckDriverPositionAndData();
-            sendTruckDriverPositionAndDataServiceBound = true;
+            TruckDriverPositionAndDataService.TruckDriverPositionAndDataBinder truckDriverPositionAndDataBinder = (TruckDriverPositionAndDataService.TruckDriverPositionAndDataBinder) binder;
+            truckDriverPositionAndDataService = truckDriverPositionAndDataBinder.getTruckDriverPositionAndData();
+            truckDriverPositionAndDataServiceBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            sendTruckDriverPositionAndDataServiceBound = false;
+            truckDriverPositionAndDataServiceBound = false;
+        }
+    };
+
+    private ServiceConnection mopDataServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            MopDataService.MopDataBinder mopDataBinder = (MopDataService.MopDataBinder) binder;
+            mopDataService = mopDataBinder.getMopData();
+            mopDataServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mopDataServiceBound = false;
         }
     };
 
@@ -72,27 +89,46 @@ public class MainMenu extends AppCompatActivity {
         Intent LocationDeviceServiceIntent = new Intent(this, LocationDeviceService.class);
         bindService(LocationDeviceServiceIntent, locationDeviceServiceConnection, Context.BIND_AUTO_CREATE);
 
-        if (!CurrentState.getCurrentStateInstance().isPositionIsBeingSent()){
-            Intent sendTruckDriverPositionAndDataServiceIntent = new Intent(this, SendTruckDriverPositionAndDataService.class);
-            bindService(sendTruckDriverPositionAndDataServiceIntent, sendTruckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
+        if (!CurrentState.getCurrentStateInstance().isPositionIsBeingSent()) {
+            Intent truckDriverPositionAndDataServiceIntent = new Intent(this, TruckDriverPositionAndDataService.class);
+            bindService(truckDriverPositionAndDataServiceIntent, truckDriverPositionAndDataServiceConnection, Context.BIND_AUTO_CREATE);
             CurrentState.getCurrentStateInstance().setPositionIsBeingSent(true);
+        }
+
+        if (!CurrentMops.getCurrentMopsInstance().isMopsRequestingOn()) {
+            Intent mopDataServiceIntent = new Intent(this, MopDataService.class);
+            bindService(mopDataServiceIntent, mopDataServiceConnection, Context.BIND_AUTO_CREATE);
+            CurrentMops.getCurrentMopsInstance().setMopsRequestingOn(true);
         }
 
     }
 
     @Override
     protected void onStop() {
-
         super.onStop();
+        unboundAllServices();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        unboundAllServices();
+    }
+
+    private void unboundAllServices(){
         if (locationDeviceServiceBound) {
             unbindService(locationDeviceServiceConnection);
             locationDeviceServiceBound = false;
         }
 
-        if (sendTruckDriverPositionAndDataServiceBound) {
-            unbindService(sendTruckDriverPositionAndDataServiceConnection);
-            sendTruckDriverPositionAndDataServiceBound = false;
+        if (truckDriverPositionAndDataServiceBound) {
+            unbindService(truckDriverPositionAndDataServiceConnection);
+            truckDriverPositionAndDataServiceBound = false;
+        }
+
+        if (mopDataServiceBound) {
+            unbindService(mopDataServiceConnection);
+            mopDataServiceBound = false;
         }
     }
 
