@@ -86,13 +86,13 @@ public class LocationDeviceService extends Service {
     }
 
     private void moveCameraOnMapViews(LatLng latLng) {
-        if (MapsActivityLocation.mMap != null) {
+        if (MapsActivityLocation.googleMap != null) {
             if (isFirstTime) {
                 CurrentPosition.getCurrentPositionInstance().setLocationOn(true);
-                MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                MapsActivityLocation.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 isFirstTime = false;
             } else {
-                MapsActivityLocation.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                MapsActivityLocation.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }
     }

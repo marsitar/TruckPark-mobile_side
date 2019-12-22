@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.repository.CurrentMops;
+import com.example.truckpark.service.mopdata.MopDataMarkersManagementService;
 import com.example.truckpark.service.route.SimpleRouteService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +28,12 @@ import java.util.List;
 
 public class MapsActivityNavigation extends FragmentActivity implements OnMapReadyCallback {
 
-    public static GoogleMap mMap;
+    public static GoogleMap googleMap;
     public static final String SRC = "src";
     public static final String DST = "dst";
 
-    private List<Mop> allMops;
-    private List<MarkerOptions> markersList = new ArrayList<>();
+    private List<Mop> mops;
+    private List<MarkerOptions> markers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,12 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        Intent intent = getIntent();
 
         //THINK ABOUT IT LATER,async attitute would be better here in future
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        this.allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
+        this.mops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
     }
 
 
@@ -56,10 +56,9 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         Intent intent = getIntent();
         String src = intent.getStringExtra(SRC);
         String dst = intent.getStringExtra(DST);
-        mMap = googleMap;
+        MapsActivityNavigation.googleMap = googleMap;
 
         SimpleRouteService simpleRouteService = new SimpleRouteService();
-
 
         List<Double[]> routeCoordinates = simpleRouteService.getSimpleRoute(src, dst, getApplicationContext());
 
@@ -75,12 +74,12 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
 
         LatLngBounds latLngBounds = builder.build();
 
-        Polyline polyline = mMap.addPolyline(rectOptions);
+        Polyline polyline = MapsActivityNavigation.googleMap.addPolyline(rectOptions);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 20));
+        MapsActivityNavigation.googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 20));
 
 
-        mMap.setMyLocationEnabled(true);
+        MapsActivityNavigation.googleMap.setMyLocationEnabled(true);
 
         clearAndAddMarkers();
 
@@ -92,11 +91,14 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
             @Override
             public void run() {
 
-                if (mMap != null) {
-                    mMap.clear();
-                    allMops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
-                    markersList = new ArrayList<>();
-                    addMarkersToMap();
+                if (googleMap != null) {
+                    MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
+                    mopDataMarkersManagementService.removeMarkersFromMap(googleMap);
+
+                    mops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
+                    markers = new ArrayList<>();
+
+                    mopDataMarkersManagementService.addMarkersToMap(mops, markers, googleMap);
                 }
 
                 handler.postDelayed(this, 5000);
@@ -104,13 +106,4 @@ public class MapsActivityNavigation extends FragmentActivity implements OnMapRea
         });
     }
 
-    private void addMarkersToMap() {
-        allMops.forEach(mop -> markersList.add(new MarkerOptions()
-                .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
-                .title(mop.getPlace())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
-                .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
-
-        markersList.forEach(marker -> mMap.addMarker(marker));
-    }
 }
