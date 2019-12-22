@@ -2,6 +2,8 @@ package com.example.truckpark.service.positionsender;
 
 import android.os.AsyncTask;
 
+import com.example.truckpark.repository.CurrentPosition;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,15 +73,15 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         JSONObject coordinateJSON = new JSONObject();
 
         coordinateJSON.put("id", null);
-        coordinateJSON.put("x", 21.1);
-        coordinateJSON.put("y", 52.3);
+        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
+        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
 
         JSONObject truckDriverWayJSON = new JSONObject();
 
         truckDriverWayJSON.put("id", null);
         truckDriverWayJSON.put("resultTime", LocalDateTime.now());
-        truckDriverWayJSON.put("distance", 21.2);
-        truckDriverWayJSON.put("fuel", 2.54);
+        truckDriverWayJSON.put("distance", 0);
+        truckDriverWayJSON.put("fuel", 0);
         truckDriverWayJSON.put("driverId", 1);
         truckDriverWayJSON.put("truckId", 1);
         truckDriverWayJSON.put("coordinateDto", coordinateJSON);
