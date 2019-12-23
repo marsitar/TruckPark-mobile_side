@@ -1,6 +1,7 @@
 package com.example.truckpark.service.weather;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.truckpark.domain.json.weatherapi.Weather;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -16,6 +17,7 @@ public class WeatherDataRequestAsyncTask extends AsyncTask<Void, Void, Weather> 
     private String URI;
     private String APIKEY;
     private String cityName;
+    private String className = this.getClass().getSimpleName();
 
     public WeatherDataRequestAsyncTask(String URI, String APIKEY, String cityName) {
         this.URI = URI;
@@ -32,15 +34,15 @@ public class WeatherDataRequestAsyncTask extends AsyncTask<Void, Void, Weather> 
         Weather weather = null;
         try {
             weather = mapperJsonToClass.readValue(new URL(url), Weather.class);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JsonParseException | JsonMappingException jsonException) {
+            Log.e(className, "Problem with json (parsing or mapping).");
+        } catch (MalformedURLException malformedURLException) {
+            Log.e(className, "Problem with malformed URL.");
+        } catch (IOException ioexception) {
+            Log.e(className, "Problem with access to data.");
         }
+
+        Log.d(className, "Weather request has been successfully completed.");
 
         return weather;
     }

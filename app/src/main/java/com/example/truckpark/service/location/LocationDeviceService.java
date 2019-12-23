@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.example.truckpark.repository.CurrentPosition;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
@@ -24,6 +25,7 @@ public class LocationDeviceService extends Service {
 
     public final IBinder binder = new LocationDeviceBinder();
     private Boolean isFirstTime = true;
+    private String className = this.getClass().getSimpleName();
 
     public LocationDeviceService() {
     }
@@ -42,6 +44,8 @@ public class LocationDeviceService extends Service {
                         , CurrentPosition.getCurrentPositionInstance().getCurrentY());
 
                 moveCameraOnMapViews(latLng);
+
+                Log.v(this.getClass().getSimpleName(), "Location has been changed.");
 
             }
 
@@ -63,26 +67,33 @@ public class LocationDeviceService extends Service {
 
         LocationManager locManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, listener);
+            Log.i(className, "LocationManager has been enabled.");
         }
 
     }
 
     private void setCurrentPositionInRepository(Location location) {
+
         Optional.ofNullable(location)
                 .map(Location::getLatitude)
-                .ifPresent(latitude ->
-                        CurrentPosition
-                                .getCurrentPositionInstance()
-                                .setCurrentX(latitude));
+                .ifPresent(latitude -> {
+                    CurrentPosition
+                            .getCurrentPositionInstance()
+                            .setCurrentX(latitude);
+                    Log.d(className, String.format("New x coordinate = %f has been set in Repository.", latitude));
+                });
 
         Optional.ofNullable(location)
                 .map(Location::getLongitude)
-                .ifPresent(longitude ->
-                        CurrentPosition
-                                .getCurrentPositionInstance()
-                                .setCurrentY(longitude));
+                .ifPresent(longitude -> {
+                    CurrentPosition
+                            .getCurrentPositionInstance()
+                            .setCurrentY(longitude);
+                    Log.d(className, String.format("New y coordinate = %f has been set in Repository.", longitude));
+                });
+
     }
 
     private void moveCameraOnMapViews(LatLng latLng) {
@@ -91,20 +102,24 @@ public class LocationDeviceService extends Service {
                 CurrentPosition.getCurrentPositionInstance().setLocationOn(true);
                 MapsActivityLocation.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 isFirstTime = false;
+                Log.i(className, "Camera has been moved first time.");
             } else {
                 MapsActivityLocation.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                Log.d(className, "Camera has been moved next time.");
             }
         }
     }
 
     public class LocationDeviceBinder extends Binder {
         public LocationDeviceService getLocationDevice() {
+            Log.i(className, "LocationDeviceService is to be get.");
             return LocationDeviceService.this;
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i(className, "LocationDeviceService is to be bound.");
         return binder;
     }
 

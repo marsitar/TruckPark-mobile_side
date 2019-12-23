@@ -1,6 +1,9 @@
 package com.example.truckpark.service.positionsender;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import com.example.truckpark.repository.CurrentPosition;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private String URI;
+    private String className = this.getClass().getSimpleName();
 
     public TruckDriverPositionAndDataSenderAsyncTask(String URI) {
         this.URI = URI;
@@ -26,7 +30,8 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
             String httpAddress = buildUrl();
             URL url = new URL(httpAddress);
             HttpURLConnection connectionToRest = getHttpURLConnection(url);
-            JSONObject truckDriverWayJSON = createTruckDriverWayJson();
+
+            JSONObject truckDriverWayJSON = getFullTruckDriverWayJson();
             DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
             String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
             jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
@@ -35,10 +40,12 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
 
             jsonOutputStream.flush();
             connectionToRest.disconnect();
-        } catch (JSONException jsone) {
-            jsone.printStackTrace();
+
+            Log.i(className, "truckDriverWay successfully send to the server.");
+        } catch (JSONException jsonException) {
+            Log.e(className, "Problem with json.");
         } catch (IOException ioexception) {
-            ioexception.printStackTrace();
+            Log.e(className, "Problem with access to data.");
         }
 
         return null;
@@ -63,28 +70,49 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         conn.setRequestProperty("Accept", "application/json");
         conn.setDoOutput(true);
         conn.setDoInput(true);
+
+        Log.d(className, String.format("Connection: %s has been created.", conn.toString()));
+
         return conn;
     }
 
-    private JSONObject createTruckDriverWayJson() throws JSONException {
+    private JSONObject getFullTruckDriverWayJson() throws JSONException {
 
-        JSONObject coordinateJSON = new JSONObject();
+        JSONObject coordinateJSON = generateCoordinateJsonObject();
 
-        coordinateJSON.put("id", null);
-        coordinateJSON.put("x", 21.1);
-        coordinateJSON.put("y", 52.3);
+        JSONObject truckDriverWayJSON = generateTruckDriverJsonObject(coordinateJSON);
+
+        return truckDriverWayJSON;
+    }
+
+    private JSONObject generateTruckDriverJsonObject(JSONObject coordinateJSON) throws JSONException {
 
         JSONObject truckDriverWayJSON = new JSONObject();
 
         truckDriverWayJSON.put("id", null);
         truckDriverWayJSON.put("resultTime", LocalDateTime.now());
-        truckDriverWayJSON.put("distance", 21.2);
-        truckDriverWayJSON.put("fuel", 2.54);
+        truckDriverWayJSON.put("distance", 0);
+        truckDriverWayJSON.put("fuel", 0);
         truckDriverWayJSON.put("driverId", 1);
         truckDriverWayJSON.put("truckId", 1);
         truckDriverWayJSON.put("coordinateDto", coordinateJSON);
 
+        Log.v(className, String.format("Json with all truck driver way information- %s, has been generated.",truckDriverWayJSON.toString()));
+
         return truckDriverWayJSON;
+    }
+
+    private JSONObject generateCoordinateJsonObject() throws JSONException {
+
+        JSONObject coordinateJSON = new JSONObject();
+
+        coordinateJSON.put("id", null);
+        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
+        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+
+        Log.v(className, String.format("Json with coordinates- %s, has been generated.",coordinateJSON.toString()));
+
+        return coordinateJSON;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.truckpark.service.route;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
 import com.example.truckpark.domain.json.googledirectionsapi.LatLng;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleRouteService {
+
+    private String className = this.getClass().getSimpleName();
 
     public List<Double[]> getSimpleRoute(String origin, String destination, Context context) {
 
@@ -23,6 +26,8 @@ public class SimpleRouteService {
         List<Step> steps = googleRoute.getRoutes().get(0).getLegs().get(0).getSteps();
 
         fillPointsList(points, steps);
+
+        Log.d(className, "Points list has been filled with current data from GoogleMaps.");
 
         return points;
     }
@@ -39,10 +44,10 @@ public class SimpleRouteService {
             List<com.google.android.gms.maps.model.LatLng> insideStepPolylinePoints = PolyUtil.decode(step.getPolyline().getPoints());
 
             insideStepPolylinePoints.forEach(point -> {
-                Double[] coordinatesInsidePolygone = new Double[2];
-                coordinatesInsidePolygone[0] = point.latitude;
-                coordinatesInsidePolygone[1] = point.longitude;
-                points.add(coordinatesInsidePolygone);
+                Double[] coordinatesInsidePolygon = new Double[2];
+                coordinatesInsidePolygon[0] = point.latitude;
+                coordinatesInsidePolygon[1] = point.longitude;
+                points.add(coordinatesInsidePolygon);
             });
 
         });
