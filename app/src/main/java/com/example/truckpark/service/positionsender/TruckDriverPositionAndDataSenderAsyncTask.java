@@ -28,7 +28,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
             String httpAddress = buildUrl();
             URL url = new URL(httpAddress);
             HttpURLConnection connectionToRest = getHttpURLConnection(url);
-            JSONObject truckDriverWayJSON = createTruckDriverWayJson();
+            JSONObject truckDriverWayJSON = getFullTruckDriverWayJson();
             DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
             String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
             jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
@@ -68,13 +68,16 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         return conn;
     }
 
-    private JSONObject createTruckDriverWayJson() throws JSONException {
+    private JSONObject getFullTruckDriverWayJson() throws JSONException {
 
-        JSONObject coordinateJSON = new JSONObject();
+        JSONObject coordinateJSON = generateCoordinateJsonObject();
 
-        coordinateJSON.put("id", null);
-        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
-        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+        JSONObject truckDriverWayJSON = generateTruckDriverJsonObject(coordinateJSON);
+
+        return truckDriverWayJSON;
+    }
+
+    private JSONObject generateTruckDriverJsonObject(JSONObject coordinateJSON) throws JSONException {
 
         JSONObject truckDriverWayJSON = new JSONObject();
 
@@ -87,6 +90,17 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         truckDriverWayJSON.put("coordinateDto", coordinateJSON);
 
         return truckDriverWayJSON;
+    }
+
+    private JSONObject generateCoordinateJsonObject() throws JSONException {
+
+        JSONObject coordinateJSON = new JSONObject();
+
+        coordinateJSON.put("id", null);
+        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
+        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+
+        return coordinateJSON;
     }
 
 }
