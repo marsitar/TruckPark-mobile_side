@@ -1,6 +1,7 @@
 package com.example.truckpark.service.weather;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.truckpark.domain.json.weatherapi.Weather;
 import com.example.truckpark.properties.PropertyManager;
@@ -11,6 +12,7 @@ public class WeatherDataService {
 
     private final String APIKEY;
     private final String URI;
+    private String className = this.getClass().getSimpleName();
 
     public WeatherDataService(Context context) {
 
@@ -28,11 +30,13 @@ public class WeatherDataService {
         Weather weather = null;
         try {
             weather = weatherDataRequestAsyncTask.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (ExecutionException executionException) {
+            Log.e(className, "Problem with getting result of GoogleRoute request.");
+        } catch (InterruptedException interruptedException) {
+            Log.e(className, "Problem with interrupted connection during getting googleRoute data.");
         }
+
+        Log.d(className, "Weather request has been successfully completed.");
 
         return weather;
     }

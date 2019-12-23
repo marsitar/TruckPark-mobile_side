@@ -1,6 +1,7 @@
 package com.example.truckpark.service.route;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ public class GoogleRouteRequestAsyncTask extends AsyncTask<Void, Void, GoogleRou
     private String URI;
     private String origin;
     private String destination;
+    private String className = this.getClass().getSimpleName();
 
     public GoogleRouteRequestAsyncTask(String APIKEY, String URI, String origin, String destination) {
         this.APIKEY = APIKEY;
@@ -29,9 +31,12 @@ public class GoogleRouteRequestAsyncTask extends AsyncTask<Void, Void, GoogleRou
         GoogleRoute requestedGoogleRoute = null;
         try {
             requestedGoogleRoute = mapperJsonToClass.readValue(new URL(url), GoogleRoute.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioexception) {
+            Log.e(className, "Problem with access to data.");
         }
+
+        Log.d(className, "GoogleRoute request has been successfully completed");
+
         return requestedGoogleRoute;
     }
 

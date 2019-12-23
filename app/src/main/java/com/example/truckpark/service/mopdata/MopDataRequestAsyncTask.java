@@ -1,6 +1,7 @@
 package com.example.truckpark.service.mopdata;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.repository.CurrentMops;
@@ -18,6 +19,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private String URI;
     private String CATEGORY;
+    private String className = this.getClass().getSimpleName();
 
     public MopDataRequestAsyncTask(String URI, String CATEGORY) {
         this.URI = URI;
@@ -33,18 +35,17 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             Mop[] mopsArrayData = mapperJsonToClass.readValue(new URL(url), Mop[].class);
             mopsData = Arrays.asList(mopsArrayData);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (JsonParseException | JsonMappingException jsonException) {
+            Log.e(className, "Problem with json (parsing or mapping).");
+        } catch (MalformedURLException malformedURLException) {
+            Log.e(className, "Problem with malformed URL.");
+        } catch (IOException ioexception) {
+            Log.e(className, "Problem with access to data.");
         }
 
-        setCurrentMopsInRepository(mopsData);
+        Log.d(className, "Mops request has been successfully completed.");
 
+        setCurrentMopsInRepository(mopsData);
         return null;
     }
 
@@ -64,6 +65,8 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
     private void setCurrentMopsInRepository(List<Mop> mopsData) {
 
         CurrentMops.getCurrentMopsInstance().setCurrentMopsList(mopsData);
+
+        Log.d(className, "New mops has been set in repository.");
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.example.truckpark.properties.PropertyManager;
 
@@ -13,6 +14,7 @@ public class MopDataService extends Service {
     private final PropertyManager propertyManager;
     private String URI;
     private String CATEGORY;
+    private String className = this.getClass().getSimpleName();
 
     private final IBinder binder = new MopDataBinder();
 
@@ -24,6 +26,7 @@ public class MopDataService extends Service {
 
     public class MopDataBinder extends Binder {
         public MopDataService getMopData() {
+            Log.i(className, "MopDataService is to be get.");
             return MopDataService.this;
         }
     }
@@ -40,10 +43,13 @@ public class MopDataService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i(className, "MopDataService is to be bound.");
         return binder;
     }
 
     private void getCurrentMopsFromServer() {
+
+        Log.i(className, "Mops from server are to be periodically get from remote server.");
 
         final Handler handler = new Handler();
 

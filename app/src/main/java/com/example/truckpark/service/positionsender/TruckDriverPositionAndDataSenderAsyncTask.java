@@ -1,6 +1,7 @@
 package com.example.truckpark.service.positionsender;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.truckpark.repository.CurrentPosition;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private String URI;
+    private String className = this.getClass().getSimpleName();
 
     public TruckDriverPositionAndDataSenderAsyncTask(String URI) {
         this.URI = URI;
@@ -28,6 +30,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
             String httpAddress = buildUrl();
             URL url = new URL(httpAddress);
             HttpURLConnection connectionToRest = getHttpURLConnection(url);
+
             JSONObject truckDriverWayJSON = getFullTruckDriverWayJson();
             DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
             String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
@@ -37,10 +40,12 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
 
             jsonOutputStream.flush();
             connectionToRest.disconnect();
-        } catch (JSONException jsone) {
-            jsone.printStackTrace();
+
+            Log.i(className, "truckDriverWay successfully send to the server.");
+        } catch (JSONException jsonException) {
+            Log.e(className, "Problem with json.");
         } catch (IOException ioexception) {
-            ioexception.printStackTrace();
+            Log.e(className, "Problem with access to data.");
         }
 
         return null;
@@ -65,6 +70,9 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         conn.setRequestProperty("Accept", "application/json");
         conn.setDoOutput(true);
         conn.setDoInput(true);
+
+        Log.d(className, String.format("Connection: %s has been created.", conn.toString()));
+
         return conn;
     }
 
@@ -89,6 +97,8 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         truckDriverWayJSON.put("truckId", 1);
         truckDriverWayJSON.put("coordinateDto", coordinateJSON);
 
+        Log.v(className, String.format("Json with all truck driver way information- %s, has been generated.",truckDriverWayJSON.toString()));
+
         return truckDriverWayJSON;
     }
 
@@ -99,6 +109,8 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         coordinateJSON.put("id", null);
         coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
         coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+
+        Log.v(className, String.format("Json with coordinates- %s, has been generated.",coordinateJSON.toString()));
 
         return coordinateJSON;
     }
