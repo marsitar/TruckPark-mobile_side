@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 public class GoogleRouteService {
 
+    private final static String PROPERTY_FILE_NAME = "google-maps.properties";
     private final String APIKEY;
     private final String URI;
     private String className = this.getClass().getSimpleName();
 
     GoogleRouteService(Context context) {
 
-        PropertyManager propertyManager = new PropertyManager("google-maps.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
 

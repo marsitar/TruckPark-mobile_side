@@ -17,12 +17,12 @@ import static org.hamcrest.Matchers.nullValue;
 @RunWith(AndroidJUnit4.class)
 public class PropertyManagerTest {
 
+    private final static String PROPERTY_FILE_NAME = "openweathermap.properties";
     private static Context context;
 
     @BeforeClass
     public static void prepareDataForTests() {
         context = InstrumentationRegistry.getTargetContext();
-
     }
 
     @Test
@@ -43,7 +43,7 @@ public class PropertyManagerTest {
     }
 
     private String getURI(String uri) {
-        PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         return propertyManager.getProperty(uri, context);
     }
 

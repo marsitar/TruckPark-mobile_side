@@ -22,24 +22,25 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class WeatherDataRequestAsyncTaskTest {
 
+    private final static String PROPERTY_FILE_NAME = "openweathermap.properties";
     private static String APIKEY;
     private static String URI;
 
     @BeforeClass
     public static void prepareDataForTests() {
         Context context = InstrumentationRegistry.getTargetContext();
-        PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
     }
 
     @Test
-    public void buildURLGenerateCorrectValue() throws NoSuchMethodException, IllegalAccessException,
+    public void buildUrl_inputCorrectValue_assertIsEqual() throws NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
 
         WeatherDataRequestAsyncTask weatherDataRequestAsyncTask = new WeatherDataRequestAsyncTask(URI, APIKEY, "Gdansk");
 
-        String builtURLMethodResult = getURLfromMethod(weatherDataRequestAsyncTask, "Gdansk");
+        String builtURLMethodResult = getUrlFromMethod(weatherDataRequestAsyncTask, "Gdansk");
 
         String correctResult = "https://api.openweathermap.org/data/2.5/weather?q=Gdansk&APPID=4e9977b23cccfda61c1aea94fabff981&units=metric";
 
@@ -47,19 +48,19 @@ public class WeatherDataRequestAsyncTaskTest {
     }
 
     @Test
-    public void buildURLGenerateInCorrectValue() throws NoSuchMethodException, IllegalAccessException,
+    public void buildUrl_inputIncorrectValue_assertIsNotEqual() throws NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
 
         WeatherDataRequestAsyncTask weatherDataRequestAsyncTask = new WeatherDataRequestAsyncTask(URI, APIKEY, "Gdansk");
 
-        String builtURLMethodResult = getURLfromMethod(weatherDataRequestAsyncTask, "Gdynsk");
+        String builtURLMethodResult = getUrlFromMethod(weatherDataRequestAsyncTask, "Gdynsk");
 
         String correctResult = "https://api.openweathermap.org/data/2.5/weather?q=Gdansk&APPID=4e9977b23cccfda61c1aea94fabff981&units=metric";
 
         assertThat(correctResult,is(not(equalTo(builtURLMethodResult))));
     }
 
-    private String getURLfromMethod(WeatherDataRequestAsyncTask weatherDataRequestAsyncTask, String place) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    private String getUrlFromMethod(WeatherDataRequestAsyncTask weatherDataRequestAsyncTask, String place) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Class weatherDataRequestAsyncTaskClass = weatherDataRequestAsyncTask.getClass();
         Method buildURLMethod = weatherDataRequestAsyncTaskClass.getDeclaredMethod("buildUrl", String.class);
         buildURLMethod.setAccessible(true);

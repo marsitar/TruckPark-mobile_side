@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 public class WeatherDataService {
 
+    private final static String PROPERTY_FILE_NAME = "openweathermap.properties";
     private final String APIKEY;
     private final String URI;
     private String className = this.getClass().getSimpleName();
 
     public WeatherDataService(Context context) {
 
-        PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
 

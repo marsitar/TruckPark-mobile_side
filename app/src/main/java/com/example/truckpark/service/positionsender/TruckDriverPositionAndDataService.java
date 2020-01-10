@@ -11,6 +11,7 @@ import com.example.truckpark.properties.PropertyManager;
 
 public class TruckDriverPositionAndDataService extends Service {
 
+    private final static String PROPERTY_FILE_NAME = "truckparkserver.properties";
     private String URI;
     private final PropertyManager propertyManager;
     private String className = this.getClass().getSimpleName();
@@ -18,7 +19,7 @@ public class TruckDriverPositionAndDataService extends Service {
     private final IBinder binder = new TruckDriverPositionAndDataBinder();
 
     public TruckDriverPositionAndDataService() {
-        propertyManager = new PropertyManager("truckparkserver.properties");
+        propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
     }
 
     public class TruckDriverPositionAndDataBinder extends Binder {
