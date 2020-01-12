@@ -77,7 +77,7 @@ public class WeatherDataRequestAsyncTaskTest {
         //when
         String builtURLMethodResult = getUrlFromMethod(weatherDataRequestAsyncTask, "Gdansk");
         //then
-        assertThat(correctResult,equalTo(builtURLMethodResult));
+        assertThat(builtURLMethodResult,equalTo(correctResult));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class WeatherDataRequestAsyncTaskTest {
         //when
         String builtURLMethodResult = getUrlFromMethod(weatherDataRequestAsyncTask, "Gdynsk");
         //then
-        assertThat(correctResult,is(not(equalTo(builtURLMethodResult))));
+        assertThat(builtURLMethodResult,is(not(equalTo(correctResult))));
     }
 
     private String getUrlFromMethod(WeatherDataRequestAsyncTask weatherDataRequestAsyncTask, String place) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {

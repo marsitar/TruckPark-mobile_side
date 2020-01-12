@@ -32,7 +32,7 @@ public class PropertyManagerTest {
         //when
         String correctURI = "https://api.openweathermap.org/data/2.5/weather?";
         //then
-        assertThat(correctURI, equalTo(URI));
+        assertThat(URI, equalTo(correctURI));
     }
 
     @Test

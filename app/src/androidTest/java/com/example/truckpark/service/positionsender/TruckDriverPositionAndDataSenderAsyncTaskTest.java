@@ -44,7 +44,7 @@ public class TruckDriverPositionAndDataSenderAsyncTaskTest {
         //when
         String correctResult = "http://192.168.0.21:8080/rest/api/truckdriverways/truckdriverway";
         //then
-        assertThat(correctResult, is(equalTo(builtURLMethodResult)));
+        assertThat(builtURLMethodResult, is(equalTo(correctResult)));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TruckDriverPositionAndDataSenderAsyncTaskTest {
         //when
         String requestMethod = httpURLConnection.getRequestMethod();
         //then
-        assertThat(correctRequestMethod, is(equalTo(requestMethod)));
+        assertThat(requestMethod, is(equalTo(correctRequestMethod)));
     }
 
     @Test(expected = NoRouteToHostException.class)
