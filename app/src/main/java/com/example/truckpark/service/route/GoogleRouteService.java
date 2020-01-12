@@ -32,12 +32,12 @@ public class GoogleRouteService {
         try {
             requestedGoogleRoute = googleRouteRequestAsyncTask.get();
         } catch (ExecutionException executionException) {
-            Log.e(className, "Problem with getting result of GoogleRoute request.");
+            Log.e(className, String.format("Problem with getting result of GoogleRoute request. Origin=%s, destination=%s", origin, destination));
         } catch (InterruptedException interruptedException) {
-            Log.e(className, "Problem with interrupted connection during getting googleRoute data.");
+            Log.e(className, String.format("Problem with interrupted connection during getting googleRoute data. Origin=%s, destination=%s", origin, destination));
         }
 
-        Log.d(className, "GoogleRoute request has been successfully completed.");
+        Log.d(className, String.format("GoogleRoute request has been successfully completed. Origin=%s, destination=%s", origin, destination));
 
         return requestedGoogleRoute;
     }

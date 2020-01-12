@@ -27,7 +27,7 @@ public class SimpleRouteService {
 
         fillPointsList(points, steps);
 
-        Log.d(className, "Points list has been filled with current data from GoogleMaps.");
+        Log.d(className, String.format("Simple route has been created with current data from GoogleMaps. Origin=%s, destination=%s", origin, destination));
 
         return points;
     }
@@ -54,5 +54,7 @@ public class SimpleRouteService {
 
         LatLng endPoint = steps.get(steps.size() - 1).getEndLocation();
         points.add(new Double[]{endPoint.getLat(), endPoint.getLng()});
+
+        Log.d(className, String.format("Points list has been filled with current data from GoogleMaps. PointsList=%s", points.toArray()));
     }
 }

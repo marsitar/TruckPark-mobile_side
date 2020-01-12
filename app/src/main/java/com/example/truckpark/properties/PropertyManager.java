@@ -26,7 +26,7 @@ public class PropertyManager {
             InputStream inputStream = assetManager.open(propertyFileName);
             properties.load(inputStream);
         } catch (IOException e) {
-            Log.e(className, "Problem with access to data.");
+            Log.e(className, String.format("Problem with access to data. PropertyKey=%s", propertyKey));
         }
         return properties.getProperty(propertyKey);
     }

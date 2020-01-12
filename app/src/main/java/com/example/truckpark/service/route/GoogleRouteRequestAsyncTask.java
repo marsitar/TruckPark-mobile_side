@@ -32,10 +32,10 @@ public class GoogleRouteRequestAsyncTask extends AsyncTask<Void, Void, GoogleRou
         try {
             requestedGoogleRoute = mapperJsonToClass.readValue(new URL(url), GoogleRoute.class);
         } catch (IOException ioexception) {
-            Log.e(className, "Problem with access to data.");
+            Log.e(className, String.format("Problem with access to data. Requested url=%s", url));
         }
 
-        Log.d(className, "GoogleRoute request has been successfully completed");
+        Log.d(className, String.format("GoogleRoute request has been successfully completed. Requested url=%s", url));
 
         return requestedGoogleRoute;
     }

@@ -36,14 +36,14 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
             Mop[] mopsArrayData = mapperJsonToClass.readValue(new URL(url), Mop[].class);
             mopsData = Arrays.asList(mopsArrayData);
         } catch (JsonParseException | JsonMappingException jsonException) {
-            Log.e(className, "Problem with json (parsing or mapping).");
+            Log.e(className, String.format("Problem with json (parsing or mapping). Requested url=%s", url));
         } catch (MalformedURLException malformedURLException) {
-            Log.e(className, "Problem with malformed URL.");
+            Log.e(className, String.format("Problem with malformed URL. Requested url=%s", url));
         } catch (IOException ioexception) {
-            Log.e(className, "Problem with access to data.");
+            Log.e(className, String.format("Problem with access to data. Requested url=%s", url));
         }
 
-        Log.d(className, "Mops request has been successfully completed.");
+        Log.d(className, String.format("Mops request has been successfully completed. Requested url=%s", url));
 
         setCurrentMopsInRepository(mopsData);
         return null;
