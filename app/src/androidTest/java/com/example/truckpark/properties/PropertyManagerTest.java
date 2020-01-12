@@ -27,18 +27,19 @@ public class PropertyManagerTest {
 
     @Test
     public void getPropertyCheck_getKnownProperty_assertIsEqual(){
-
+        //given
         String URI = getURI("URI");
+        //when
         String correctURI = "https://api.openweathermap.org/data/2.5/weather?";
-
+        //then
         assertThat(correctURI, equalTo(URI));
     }
 
     @Test
     public void getPropertyCheck_getUnknownProperty_assertIsNull(){
-
+        //given
         String URI = getURI("URIA");
-
+        //then
         assertThat(URI , is(nullValue()));
     }
 

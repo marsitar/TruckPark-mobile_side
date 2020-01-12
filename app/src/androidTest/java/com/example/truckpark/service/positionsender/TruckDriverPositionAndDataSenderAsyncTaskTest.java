@@ -15,12 +15,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
+import java.net.NoRouteToHostException;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class TruckDriverPositionAndDataSenderAsyncTaskTest {
@@ -34,55 +34,56 @@ public class TruckDriverPositionAndDataSenderAsyncTaskTest {
         Context context = InstrumentationRegistry.getTargetContext();
         PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         URI = propertyManager.getProperty("URI", context);
-        truckDriverPositionAndDataSenderAsyncTask = new TruckDriverPositionAndDataSenderAsyncTask(PROPERTY_FILE_NAME);
+        truckDriverPositionAndDataSenderAsyncTask = new TruckDriverPositionAndDataSenderAsyncTask(URI);
     }
 
     @Test
     public void buildUrl_inputCorrectValue_assertIsEqual() throws IllegalArgumentException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-
+        //given
         String builtURLMethodResult = getUrlFromMethod(truckDriverPositionAndDataSenderAsyncTask);
-
+        //when
         String correctResult = "http://192.168.0.21:8080/rest/api/truckdriverways/truckdriverway";
-
-        assertThat(correctResult, is(not(equalTo(builtURLMethodResult))));
+        //then
+        assertThat(correctResult, is(equalTo(builtURLMethodResult)));
     }
 
     @Test
-    public void buildUrl_inputCorrectValue_assesrtIsEqual() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
-
-        String httpAddress = getUrlFromMethod(truckDriverPositionAndDataSenderAsyncTask);
-        URL url = new URL(httpAddress);
-
+    public void getHttpURLConnection_inputCorrectValue_assertIsEqual() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+        //given
+        URL url = new URL("http://192.168.0.21:8080/rest/api/truckdriverways/truckdriverway");
         HttpURLConnection httpURLConnection = getHttpURLConnectionFromMethod(url);
-        int responseCode = httpURLConnection.getResponseCode();
-        int correctResponseCode = 200;
-
-        assertThat(correctResponseCode, is(equalTo(responseCode)));
+        String correctRequestMethod = "POST";
+        //when
+        String requestMethod = httpURLConnection.getRequestMethod();
+        //then
+        assertThat(correctRequestMethod, is(equalTo(requestMethod)));
     }
 
-    @Test
-    public void buildUrl_inputIncorrectValue_assesrtIsEqual() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
-
-        HttpURLConnection httpURLConnection = getHttpURLConnectionFromMethod(null);
-
-        int responseCode = httpURLConnection.getResponseCode();
-        int correctResponseCode = 200;
-
-        assertThat(correctResponseCode, is(not(equalTo(responseCode))));
+    @Test(expected = NoRouteToHostException.class)
+    public void getHttpURLConnection_inputIncorrectValue_throwException() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+        //given
+        URL url = new URL("http://192.168.0.22:8080/rest/api/truckdriverways/truckdriverway");
+        HttpURLConnection httpURLConnection = getHttpURLConnectionFromMethod(url);
+        //when
+        httpURLConnection.getResponseCode();
     }
 
     private String getUrlFromMethod(TruckDriverPositionAndDataSenderAsyncTask truckDriverPositionAndDataSenderAsyncTask) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
         Class truckDriverPositionAndDataSenderAsyncTaskClass = truckDriverPositionAndDataSenderAsyncTask.getClass();
-        Method buildURLMethod = truckDriverPositionAndDataSenderAsyncTaskClass.getDeclaredMethod("buildUrl", String.class);
+        Method buildURLMethod = truckDriverPositionAndDataSenderAsyncTaskClass.getDeclaredMethod("buildUrl");
         buildURLMethod.setAccessible(true);
+
         return (String) buildURLMethod.invoke(truckDriverPositionAndDataSenderAsyncTask);
     }
 
     private HttpURLConnection getHttpURLConnectionFromMethod(URL url) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+
         Class truckDriverPositionAndDataSenderAsyncTaskClass = truckDriverPositionAndDataSenderAsyncTask.getClass();
-        Method buildURLMethod = truckDriverPositionAndDataSenderAsyncTaskClass.getDeclaredMethod("getHttpURLConnection", URL.class);
-        buildURLMethod.setAccessible(true);
-        return (HttpURLConnection) buildURLMethod.invoke(truckDriverPositionAndDataSenderAsyncTask, url);
+        Method getHttpURLConnectionMethod = truckDriverPositionAndDataSenderAsyncTaskClass.getDeclaredMethod("getHttpURLConnection", URL.class);
+        getHttpURLConnectionMethod.setAccessible(true);
+
+        return (HttpURLConnection) getHttpURLConnectionMethod.invoke(truckDriverPositionAndDataSenderAsyncTask, url);
     }
 
 }
