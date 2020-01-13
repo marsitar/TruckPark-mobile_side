@@ -66,5 +66,4 @@ public class MopDataService extends Service {
         });
     }
 
-
 }

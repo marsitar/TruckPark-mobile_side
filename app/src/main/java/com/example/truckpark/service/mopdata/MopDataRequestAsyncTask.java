@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
+public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
 
     private String URI;
     private String CATEGORY;
@@ -27,7 +27,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected List<Mop> doInBackground(Void... voids) {
 
         ObjectMapper mapperJsonToClass = new ObjectMapper();
         String url = buildUrl(CATEGORY);
@@ -46,7 +46,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, Void> {
         Log.d(className, String.format("Mops request has been successfully completed. Requested url=%s", url));
 
         setCurrentMopsInRepository(mopsData);
-        return null;
+        return mopsData;
     }
 
     private String buildUrl(String category) {
