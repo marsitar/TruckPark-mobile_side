@@ -11,6 +11,7 @@ import com.example.truckpark.properties.PropertyManager;
 
 public class MopDataService extends Service {
 
+    private final static String PROPERTY_FILE_NAME = "truckparkserver.properties";
     private final PropertyManager propertyManager;
     private String URI;
     private String CATEGORY;
@@ -20,7 +21,7 @@ public class MopDataService extends Service {
 
     public MopDataService() {
 
-        propertyManager = new PropertyManager("truckparkserver.properties");
+        propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
 
     }
 
@@ -64,6 +65,5 @@ public class MopDataService extends Service {
             }
         });
     }
-
 
 }

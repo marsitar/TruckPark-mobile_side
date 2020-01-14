@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 public class GoogleRouteService {
 
+    private final static String PROPERTY_FILE_NAME = "google-maps.properties";
     private final String APIKEY;
     private final String URI;
     private String className = this.getClass().getSimpleName();
 
     GoogleRouteService(Context context) {
 
-        PropertyManager propertyManager = new PropertyManager("google-maps.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
 
@@ -31,12 +32,12 @@ public class GoogleRouteService {
         try {
             requestedGoogleRoute = googleRouteRequestAsyncTask.get();
         } catch (ExecutionException executionException) {
-            Log.e(className, "Problem with getting result of GoogleRoute request.");
+            Log.e(className, String.format("Problem with getting result of GoogleRoute request. Origin=%s, destination=%s", origin, destination));
         } catch (InterruptedException interruptedException) {
-            Log.e(className, "Problem with interrupted connection during getting googleRoute data.");
+            Log.e(className, String.format("Problem with interrupted connection during getting googleRoute data. Origin=%s, destination=%s", origin, destination));
         }
 
-        Log.d(className, "GoogleRoute request has been successfully completed.");
+        Log.d(className, String.format("GoogleRoute request has been successfully completed. Origin=%s, destination=%s", origin, destination));
 
         return requestedGoogleRoute;
     }

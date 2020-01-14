@@ -10,13 +10,14 @@ import java.util.concurrent.ExecutionException;
 
 public class WeatherDataService {
 
+    private final static String PROPERTY_FILE_NAME = "openweathermap.properties";
     private final String APIKEY;
     private final String URI;
     private String className = this.getClass().getSimpleName();
 
     public WeatherDataService(Context context) {
 
-        PropertyManager propertyManager = new PropertyManager("openweathermap.properties");
+        PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
         URI = propertyManager.getProperty("URI", context);
 
@@ -31,12 +32,12 @@ public class WeatherDataService {
         try {
             weather = weatherDataRequestAsyncTask.get();
         } catch (ExecutionException executionException) {
-            Log.e(className, "Problem with getting result of GoogleRoute request.");
+            Log.e(className, String.format("Problem with getting result of GoogleRoute request. Parameter cityName=%s", cityName));
         } catch (InterruptedException interruptedException) {
-            Log.e(className, "Problem with interrupted connection during getting googleRoute data.");
+            Log.e(className, String.format("Problem with interrupted connection during getting googleRoute data. Parameter cityName=%s", cityName));
         }
 
-        Log.d(className, "Weather request has been successfully completed.");
+        Log.d(className, String.format("Weather request with cityName=%s has been successfully completed.", cityName));
 
         return weather;
     }

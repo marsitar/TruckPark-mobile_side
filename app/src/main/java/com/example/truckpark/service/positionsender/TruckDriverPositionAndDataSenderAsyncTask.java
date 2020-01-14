@@ -26,9 +26,10 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
     @Override
     protected Void doInBackground(Void... voids) {
 
-        try {
             String httpAddress = buildUrl();
+        try {
             URL url = new URL(httpAddress);
+
             HttpURLConnection connectionToRest = getHttpURLConnection(url);
 
             JSONObject truckDriverWayJSON = getFullTruckDriverWayJson();
@@ -43,9 +44,9 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
 
             Log.i(className, "truckDriverWay successfully send to the server.");
         } catch (JSONException jsonException) {
-            Log.e(className, "Problem with json.");
+            Log.e(className, String.format("Problem with json. Requested url=%s", httpAddress));
         } catch (IOException ioexception) {
-            Log.e(className, "Problem with access to data.");
+            Log.e(className, String.format("Problem with access to data. Requested url=%s", httpAddress));
         }
 
         return null;
@@ -110,7 +111,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
         coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
 
-        Log.v(className, String.format("Json with coordinates- %s, has been generated.",coordinateJSON.toString()));
+        Log.v(className, String.format("Json with coordinates- %s, has been generated.", coordinateJSON.toString()));
 
         return coordinateJSON;
     }
