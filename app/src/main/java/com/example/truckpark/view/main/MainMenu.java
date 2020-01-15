@@ -147,6 +147,11 @@ public class MainMenu extends AppCompatActivity {
         startActivity(onMapsActivityPullof);
     }
 
+    public void onRouteSchedule(View view) {
+        Intent onRouteSchedule = new Intent(this, MapsActivityPullOff.class);
+        startActivity(onRouteSchedule);
+    }
+
     public void onFindMo(View view) {
         Intent FindMo = new Intent(this, FindMop.class);
         startActivity(FindMo);
