@@ -95,7 +95,7 @@
         android:text="@string/routeschedule"
         android:textSize="18dp"
         android:textColor="@color/color4"
-        android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
+        android:drawableLeft="@drawable/ic_format_list_bulleted_black_24dp"
         android:onClick="onRouteSchedule"/>
 
     <Button
