@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,7 +59,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/findmop"
+        android:layout_above="@id/routeschedule"
         android:layout_marginBottom="3dp"
         android:background="@android:color/background_light"
         android:elevation="100dp"
@@ -77,6 +75,28 @@
         android:textColor="@color/color4"
         android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
         android:onClick="onMapsActivityPullof"/>
+
+    <Button
+        android:id="@+id/routeschedule"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/findmop"
+        android:layout_marginBottom="3dp"
+        android:background="@android:color/background_light"
+        android:elevation="100dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="10dp"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="3"
+        android:text="@string/routeschedule"
+        android:textSize="18dp"
+        android:textColor="@color/color4"
+        android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
+        android:onClick="onRouteSchedule"/>
 
     <Button
         android:id="@+id/findmop"
