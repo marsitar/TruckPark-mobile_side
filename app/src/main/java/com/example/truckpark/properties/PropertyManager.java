@@ -25,6 +25,7 @@ public class PropertyManager {
             AssetManager assetManager = context.getAssets();
             InputStream inputStream = assetManager.open(propertyFileName);
             properties.load(inputStream);
+            Log.d(className, String.format("Property has been get. PropertyKey=%s", propertyKey));
         } catch (IOException e) {
             Log.e(className, String.format("Problem with access to data. PropertyKey=%s", propertyKey));
         }

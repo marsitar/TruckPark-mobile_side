@@ -15,8 +15,7 @@ public class RouteSchedule extends AppCompatActivity {
         setContentView(R.layout.activity_routeschedule);
     }
 
-
     public void saveRouteScheduleData(View view){
-        
+
     }
 }
