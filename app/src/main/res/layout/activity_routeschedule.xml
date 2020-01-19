@@ -6,7 +6,7 @@
     android:paddingBottom="16dp"
     android:paddingTop="16dp"
     android:background="@color/color3"
-    tools:context=".view.functionality.routeschedule.RouteSchedule">
+    tools:context=".view.functionality.routescheduleform.RouteScheduleForm">
 
     <TextView
         android:id="@+id/routeschedule"

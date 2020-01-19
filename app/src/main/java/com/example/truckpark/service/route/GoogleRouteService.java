@@ -15,7 +15,7 @@ public class GoogleRouteService {
     private final String URI;
     private String className = this.getClass().getSimpleName();
 
-    GoogleRouteService(Context context) {
+    public GoogleRouteService(Context context) {
 
         PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
         APIKEY = propertyManager.getProperty("APIKEY", context);
