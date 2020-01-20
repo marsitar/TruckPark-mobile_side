@@ -1,5 +1,6 @@
 # TruckPark - mobile side
 > The application has been designed and created as a complex solution for truck drivers and truck fleet companies to optimize the time of work and control trucks fleet. Both companies' management and truck divers could take huge benefits by using it due to economizing time and money. The system consists of two components. This Github repository concerns a mobile component.
+
 ![TruckPark - mobile side](./app/docs/system_schema.png)
 
 ## Table of contents
@@ -17,6 +18,7 @@
 ## Features
 ### User authentication
 > User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: login and password. Currently, authentication data is mocked but eventually, the application will use the OAuth 2.0 protocol. After logging in, the user's position and state are sent to the server application and saved in a database.
+
 ![User authentication](./app/docs/user_authentication.jpg)
 
 ### Main menu
@@ -28,14 +30,17 @@
 * Find MOP
 * Check weather
 which let a user choose a specific functionality.
+
 ![Main menu](./app/docs/main_menu.jpg)
 
 ### Location service
-> It is a basic feature, which let the user preview his/her current position (update interval- every 5 second). The position is visualized as a blue circle on a base topographical map provided by GoogleMap. User's interaction with this functionality is limited to zoom in, zoom out and move on the map. During driving time camera view is moved with changing position so the location point is always centered.
+> It is a basic feature, which let the user preview his/her current position (update interval- every 5 second). The position is visualized as a blue circle on a base topographical map provided by GoogleMap. User's interaction with this functionality is limited to zoom in, zoom out and move on the map. During driving time camera view is moved with changing position so the location point is always centered. During using the functionality, the user also has access to real-time data concerns free parking places for trucks on Mops. 
+
 ![Location service](./app/docs/location_service.jpg)
 
 ### Navigation
-> A feature that lets the user foud the most optimal route between any two locations. After typing values into inputs "origin" and "destination" and confirmation of a choice, a route between preferred points become shown on a map in the next view. The result is accomplished due to using of GoogleMaps RestApi service which the best polyline between two points has been calculated by distance, velocity, and traffic on roads.
+> A feature that lets the user foud the most optimal route between any two locations. After typing values into inputs "origin" and "destination" and confirmation of a choice, a route between preferred points become shown on a map in the next view. The result is accomplished due to using of GoogleMaps RestApi service which the best polyline between two points has been calculated by distance, velocity, and traffic on roads. During using the functionality, the user also has access to real-time data concerns free parking places for trucks on Mops.
+
 ![Navigation](./app/docs/navigation.jpg)
      
 ### Route schedule
@@ -79,6 +84,7 @@ which let a user choose a specific functionality.
 	* Phone number
 	* E-mail adress
 > The MOP data are collected from Rest Api Service established on server application (part of the system).
+
 ![Find MOP](./app/docs/mop_data.jpg)
 
 ### Check weather
@@ -89,6 +95,7 @@ which let a user choose a specific functionality.
 * Pressure (HPa)
 * Wind speed (m/s)
 * Cloud cover (%)
+
 ![Check weather](./app/docs/weather.jpg)
 
 ## Technologies
