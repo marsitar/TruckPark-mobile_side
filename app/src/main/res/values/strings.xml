@@ -20,10 +20,8 @@
     <string name="saveRouteScheduleData">ZAPISZ PLAN PODRÓŻY</string>
     <string name="from">Skąd?</string>
     <string name="to">Dokąd?</string>
-    <string name="place1">Pierwsze miejsce...</string>
-    <string name="place2">Drugie miejsce...</string>
-    <string name="place3">Trzecie miejsce...</string>
-    <string name="place4">Czwarte miejsce...</string>
+    <string name="add_row">Dodaj</string>
+    <string name="delete_row">Usuń</string>
     <string name="findmop2_mopdata">DANE MOP</string>
     <string name="findmop2_roaddata">DANE DROGI</string>
     <string name="findmop2_numberofplaces">LICZBA MIEJSC</string>

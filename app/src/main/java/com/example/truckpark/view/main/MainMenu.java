@@ -20,6 +20,7 @@ import com.example.truckpark.view.functionality.location.MapsActivityLocation;
 import com.example.truckpark.view.functionality.mop.FindMop;
 import com.example.truckpark.view.functionality.navigation.NavigationMenu;
 import com.example.truckpark.view.functionality.pulloff.MapsActivityPullOff;
+import com.example.truckpark.view.functionality.routescheduleform.RouteScheduleForm;
 import com.example.truckpark.view.functionality.weather.FindWeather;
 
 public class MainMenu extends AppCompatActivity {
@@ -148,7 +149,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void onRouteSchedule(View view) {
-        Intent onRouteSchedule = new Intent(this, MapsActivityPullOff.class);
+        Intent onRouteSchedule = new Intent(this, RouteScheduleForm.class);
         startActivity(onRouteSchedule);
     }
 
