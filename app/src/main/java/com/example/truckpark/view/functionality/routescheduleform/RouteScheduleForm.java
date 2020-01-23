@@ -17,9 +17,9 @@ public class RouteScheduleForm extends AppCompatActivity {
 
 //    public List<Integer> placeIds = new ArrayList<>(Arrays.asList(1000029, 1000033, 1000027, 1000028));
 
-    AutoCompleteTextView inputText;
-    Button addButton;
-    LinearLayout rowContainer;
+    private AutoCompleteTextView inputText;
+    private Button addButton;
+    private LinearLayout rowContainer;
 
     private static final String[] PLACES = new String[] {
             "place1", "place2", "place3", "place4", "place5",
@@ -41,37 +41,23 @@ public class RouteScheduleForm extends AppCompatActivity {
         addButton = findViewById(R.id.add);
         rowContainer = findViewById(R.id.row_container);
 
-        addButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View addView = layoutInflater.inflate(R.layout.routeschedule_row, null);
-                AutoCompleteTextView nextRow = addView.findViewById(R.id.next_row);
-                nextRow.setAdapter(adapter);
-                nextRow.setText(inputText.getText().toString());
-                Button buttonRemove = addView.findViewById(R.id.remove_row);
+        addButton.setOnClickListener(view -> {
+            LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View addView = layoutInflater.inflate(R.layout.routeschedule_row, null);
+            AutoCompleteTextView nextRow = addView.findViewById(R.id.next_row);
+            nextRow.setAdapter(adapter);
+            nextRow.setText(inputText.getText().toString());
+            inputText.setText(null);
+            Button buttonRemove = addView.findViewById(R.id.remove_row);
 
-                final View.OnClickListener thisListener = new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-//                        info.append("thisListener called:\t" + this + "\n");
-//                        info.append("Remove addView: " + addView + "\n\n");
-                        ((LinearLayout)addView.getParent()).removeView(addView);
-
-                        listAllAddView();
-                    }
-                };
-
-                buttonRemove.setOnClickListener(thisListener);
-                rowContainer.addView(addView);
-
-//                info.append(
-//                        "thisListener:\t" + thisListener + "\n"
-//                                + "addView:\t" + addView + "\n\n"
-//                );
-
+            final View.OnClickListener thisListener = view1 -> {
+                ((LinearLayout)addView.getParent()).removeView(addView);
                 listAllAddView();
-            }
+            };
+
+            buttonRemove.setOnClickListener(thisListener);
+            rowContainer.addView(addView);
+            listAllAddView();
         });
     }
 
