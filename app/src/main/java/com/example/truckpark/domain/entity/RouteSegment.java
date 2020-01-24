@@ -4,17 +4,17 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoutePart {
+public class RouteSegment {
 
     private Duration duration;
     private Integer distance;
-    private List<RouteSegment> routeSegments = new ArrayList<>();
+    private List<Double[]> points = new ArrayList<>();
 
     public static final class Builder {
 
         private Duration duration;
         private Integer distance;
-        private List<RouteSegment> routeSegments = new ArrayList<>();
+        private List<Double[]> points = new ArrayList<>();
 
         public Builder withDuration(Duration duration) {
             this.duration = duration;
@@ -26,20 +26,20 @@ public class RoutePart {
             return this;
         }
 
-        public Builder withRouteSegments(List<RouteSegment> routeSegments) {
-            this.routeSegments = routeSegments;
+        public Builder withPoints(List<Double[]> points) {
+            this.points = points;
             return this;
         }
 
-        public RoutePart build() {
+        public RouteSegment build() {
 
-            RoutePart routePart = new RoutePart();
+            RouteSegment routeSegment = new RouteSegment();
 
-            routePart.duration = this.duration;
-            routePart.distance = this.distance;
-            routePart.routeSegments = this.routeSegments;
+            routeSegment.duration = this.duration;
+            routeSegment.distance = this.distance;
+            routeSegment.points = this.points;
 
-            return routePart;
+            return routeSegment;
         }
     }
 
@@ -51,7 +51,7 @@ public class RoutePart {
         return distance;
     }
 
-    public List<RouteSegment> getRouteSegments() {
-        return routeSegments;
+    public List<Double[]> getPoints() {
+        return points;
     }
 }
