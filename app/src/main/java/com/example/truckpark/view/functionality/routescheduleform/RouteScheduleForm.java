@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +23,8 @@ public class RouteScheduleForm extends AppCompatActivity {
     private AutoCompleteTextView inputText;
     private ImageButton addButton;
     private LinearLayout rowContainer;
+
+    private final static String POSITIVE_MESSAGE = "Plan trasy został pozytywnie zapisany";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class RouteScheduleForm extends AppCompatActivity {
     }
 
     private void findViewsByIdsAndSetFieldsAdapters() {
+        
         inputText = findViewById(R.id.input_text);
         addButton = findViewById(R.id.add);
         rowContainer = findViewById(R.id.row_container);
@@ -56,16 +60,28 @@ public class RouteScheduleForm extends AppCompatActivity {
 
     public void saveRouteScheduleData(View view) {
 
-        final List<String> allNotNullPlaces = IntStream.range(0, rowContainer.getChildCount())
-                .boxed()
-                .map(rowContainer::getChildAt)
-                .map(particularView -> (AutoCompleteTextView) particularView.findViewById(R.id.next_row))
-                .map(rowTextView -> rowTextView.getText().toString())
-                .filter(value -> !value.isEmpty())
-                .collect(Collectors.toList());
+        final List<String> allNotNullPlaces = prepareAllNotNullPlaces();
 
         RouteScheduleService routeScheduleService = new RouteScheduleService(getApplicationContext());
         routeScheduleService.saveRouteScheduler(allNotNullPlaces);
 
+        generatePositiveSystemMessage();
+    }
+
+    private List<String> prepareAllNotNullPlaces() {
+
+        return IntStream.range(0, rowContainer.getChildCount())
+                    .boxed()
+                    .map(rowContainer::getChildAt)
+                    .map(particularView -> (AutoCompleteTextView) particularView.findViewById(R.id.next_row))
+                    .map(rowTextView -> rowTextView.getText().toString())
+                    .filter(value -> !value.isEmpty())
+                    .collect(Collectors.toList());
+    }
+
+    private void generatePositiveSystemMessage() {
+
+        Toast toast = Toast.makeText(getApplicationContext(), POSITIVE_MESSAGE, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

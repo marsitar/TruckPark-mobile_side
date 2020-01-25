@@ -1,6 +1,7 @@
 package com.example.truckpark.service.routeschedule;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.truckpark.conventer.GoogleRouteToRoutePartConventer;
 import com.example.truckpark.domain.entity.RoutePart;
@@ -44,13 +45,20 @@ public class RouteScheduleService {
                 .withRouteParts(routeParts)
                 .build();
 
+        Log.d(className, String.format("Prepared RouteSchedule: %s.", routeSchedule));
+
         return routeSchedule;
     }
 
     private List<String[]> getItineraryPointPairsFromItineraryPoints(List<String> itineraryPoints) {
-        return IntStream.range(0, itineraryPoints.size() - 1)
+
+        List<String[]> itineraryPointPairs = IntStream.range(0, itineraryPoints.size() - 1)
                 .mapToObj(i -> new String[]{itineraryPoints.get(i), itineraryPoints.get(i + 1)})
                 .collect(Collectors.toList());
+
+        Log.d(className, String.format("ItineraryPointPairs has been generated from ItineraryPoints. Generated ItineraryPointPairs: %s.", itineraryPointPairs));
+
+        return itineraryPointPairs;
     }
 
     private List<RoutePart> getRoutePartsFromGoogleRoutes(List<GoogleRoute> generatedGoogleRouts) {
@@ -62,6 +70,8 @@ public class RouteScheduleService {
                     return googleRouteToRoutePartConventer.convertGoogleRouteToRouteSegment(googleRoute);
                 })
                 .collect(Collectors.toList());
+
+        Log.d(className, String.format("RouteParts has been generated from GoogleRoutes. Generated RouteParts: %s.", routeParts));
 
         return routeParts;
     }
