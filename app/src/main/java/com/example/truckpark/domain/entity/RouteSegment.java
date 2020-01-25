@@ -1,20 +1,18 @@
 package com.example.truckpark.domain.entity;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RouteSegment {
 
     private Duration duration;
     private Integer distance;
-    private List<Double[]> points = new ArrayList<>();
+    private Double[][] points = new Double[2][2];
 
     public static final class Builder {
 
         private Duration duration;
         private Integer distance;
-        private List<Double[]> points = new ArrayList<>();
+        private Double[][] points = new Double[2][2];
 
         public Builder withDuration(Duration duration) {
             this.duration = duration;
@@ -26,7 +24,7 @@ public class RouteSegment {
             return this;
         }
 
-        public Builder withPoints(List<Double[]> points) {
+        public Builder withPoints(Double[][] points) {
             this.points = points;
             return this;
         }
@@ -51,7 +49,7 @@ public class RouteSegment {
         return distance;
     }
 
-    public List<Double[]> getPoints() {
+    public Double[][] getPoints() {
         return points;
     }
 }

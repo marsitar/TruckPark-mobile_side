@@ -7,11 +7,11 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.service.routeschedule.RouteScheduleService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,10 +56,6 @@ public class RouteScheduleForm extends AppCompatActivity {
 
     public void saveRouteScheduleData(View view) {
 
-
-
-//        GoogleRouteService googleRouteService = new GoogleRouteService(getApplicationContext());
-//
         final List<String> allNotNullPlaces = IntStream.range(0, rowContainer.getChildCount())
                 .boxed()
                 .map(rowContainer::getChildAt)
@@ -68,14 +64,8 @@ public class RouteScheduleForm extends AppCompatActivity {
                 .filter(value -> !value.isEmpty())
                 .collect(Collectors.toList());
 
-        Toast toast = Toast.makeText(getApplicationContext(), allNotNullPlaces.toString(), Toast.LENGTH_SHORT);
-        toast.show();
-//
-//
-//        final List<GoogleRoute> googleRouteList = IntStream.range(0, allNotNullPlaces.size() - 1)
-//                .mapToObj(i -> new String[]{allNotNullPlaces.get(i), allNotNullPlaces.get(i + 1)})
-//                .map(originDestinationArray -> googleRouteService.getGoogleRoute(originDestinationArray[0], originDestinationArray[1]))
-//                .collect(Collectors.toList());
+        RouteScheduleService routeScheduleService = new RouteScheduleService(getApplicationContext());
+        routeScheduleService.saveRouteScheduler(allNotNullPlaces);
 
     }
 }

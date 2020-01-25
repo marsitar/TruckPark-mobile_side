@@ -6,7 +6,9 @@ import android.util.Log;
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
 import com.example.truckpark.properties.PropertyManager;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class GoogleRouteService {
 
@@ -40,6 +42,14 @@ public class GoogleRouteService {
         Log.d(className, String.format("GoogleRoute request has been successfully completed. Origin=%s, destination=%s", origin, destination));
 
         return requestedGoogleRoute;
+    }
+
+    public List<GoogleRoute> generateGoogleRouteListFromItineraryPointPairs(List<String[]> itineraryPointPairs) {
+
+        return itineraryPointPairs
+                .stream()
+                .map(originDestinationArray -> getGoogleRoute(originDestinationArray[0], originDestinationArray[1]))
+                .collect(Collectors.toList());
     }
 
 }
