@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingTop="16dp"
+    android:background="@color/color3"
+    tools:context=".view.functionality.routescheduleform.RouteScheduleForm">
+
+    <TextView
+        android:id="@+id/routeschedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="   PLAN PODRÓŻY"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/background_edit_text"
+        android:drawableStart="@drawable/ic_crop_square_black_24dp"
+    />
+
+    <LinearLayout
+        android:id="@+id/general_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_below="@+id/routeschedule"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/add"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="25dp"
+                android:layout_alignParentEnd="true"
+                android:background="@color/color3"
+                android:src="@drawable/ic_add_circle_black_45dp"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/input_text"
+                android:textSize="20sp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/add"
+                android:background="@drawable/background_edit_text"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/row_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/findway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/color2"
+        android:elevation="100dp"
+        android:paddingLeft="50dp"
+        android:paddingTop="16dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="16dp"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="3"
+        android:text="@string/saveRouteScheduleData"
+        android:textColor="@color/color0"
+        android:onClick="saveRouteScheduleData"
+        />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_location_on_black_24dp"/>
+</RelativeLayout>

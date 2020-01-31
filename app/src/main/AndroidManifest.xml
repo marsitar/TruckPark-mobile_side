@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.truckpark">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,14 +14,16 @@
         android:roundIcon="@drawable/truck_white"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.functionality.routescheduleform.RouteScheduleForm"></activity>
+
         <service
             android:name=".service.positionsender.TruckDriverPositionAndDataService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".service.mopdata.MopDataService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
