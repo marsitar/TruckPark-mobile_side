@@ -17,12 +17,12 @@
 
 ## Features
 ### User authentication
-> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: login and password. Currently, authentication data is mocked but eventually, the application will use the OAuth 2.0 protocol. After logging in, the user's position and state are sent to the server application and saved in a database.
+> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: login and password. Currently, authentication data is mocked but eventually, the application will use the OAuth 2.0 protocol. After logging in, in the background working application the user's position and state are sent to the server application and saved in a database every 10 second.
 
 ![User authentication](./app/docs/user_authentication.jpg)
 
 ### Main menu
-> Main menu has been created as simple. GUI consists of app logo and buttons: 
+> Main menu has been created as simple GUI consists of app logo and buttons: 
 * Location
 * Navigation
 * Route schedule
@@ -44,13 +44,15 @@ which let a user choose a specific functionality.
 ![Navigation](./app/docs/navigation.jpg)
      
 ### Route schedule
-> Under Deployment.
+> This functionality was developed to let a user inputs his/her route's origin, indirect points and destination. After pushing the "Save route schedule" button, the user can see communicate that schedule form was saved.During this operation location points are convert to modificated google map routes (using of GoogleMaps RestApi) and eventually stored in repository. Data which are inputed in this schedule form are used in application's main funcionality - Optiomalize driver's time.   
+
+![Route schedule](./app/docs/route_schedule_form.jpg)
 
 ### Optiomalize driver's time
 > Under Deployment.
 
 ### Find MOP
-> Find mop feature has been created as an access point to real-time MOP (Resting place for drivers) data. After MOP selection and confirm the choice, the user has access to current MOP's data. The data are updated in near real-time. On new views the user has access to some categories and information:
+> Find mop feature has been created as an access point to real-time MOP (Resting Place for Drivers) data. After MOP selection and confirm the choice, the user has access to current MOP's data. The data are updated in near real-time. On new views the user has access to some categories and information:
 * Main mop data
 	* Organization
 	* Place

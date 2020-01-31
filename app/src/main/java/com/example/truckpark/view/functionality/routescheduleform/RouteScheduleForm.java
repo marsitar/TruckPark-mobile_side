@@ -52,7 +52,7 @@ public class RouteScheduleForm extends AppCompatActivity {
     }
 
     private void findViewsByIdsAndSetFieldsAdapters() {
-        
+
         inputText = findViewById(R.id.input_text);
         addButton = findViewById(R.id.add);
         rowContainer = findViewById(R.id.row_container);
