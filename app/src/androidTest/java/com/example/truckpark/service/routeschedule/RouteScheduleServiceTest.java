@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -59,6 +60,19 @@ public class RouteScheduleServiceTest {
     }
 
     @Test
+    public void getItineraryPointPairsFromItineraryPoints_inputCorrectItineraryPoints_endValueOfPairIsEqualToStartValueOfNextPair() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        //given
+        List<String> itineraryPoints = Arrays.asList("warszawa", "gdynia", "bialystok");
+        Integer two = 2;
+        //when
+        List<String[]> itineraryPointPairsFromItineraryPoints = getItineraryPointPairsFromItineraryPointsFromMethod(itineraryPoints);
+        String endValue = itineraryPointPairsFromItineraryPoints.get(0)[1];
+        String startValue = itineraryPointPairsFromItineraryPoints.get(1)[0];
+        //then
+        assertThat(endValue, is(equalTo(startValue)));
+    }
+
+    @Test
     public void getRoutePartsFromGoogleRoutes_inputCorrectGoogleRoutes_itemNumbersAreGreaterThanZero() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         //given
         GoogleRouteService googleRouteService = new GoogleRouteService(context);
@@ -69,6 +83,23 @@ public class RouteScheduleServiceTest {
         List<RoutePart> routePartsFromGoogleRoutes = getRoutePartsFromGoogleRoutesFromMethod(generatedGoogleRouts);
         //then
         assertThat(routePartsFromGoogleRoutes.size(), is(greaterThan(zero)));
+    }
+
+    @Test
+    public void getRoutePartsFromGoogleRoutes_inputCorrectGoogleRoutes_totalDistanceGreaterThanZero() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        //given
+        GoogleRouteService googleRouteService = new GoogleRouteService(context);
+        List<String[]> itineraryPointPairs = Arrays.asList(new String[]{"warszawa", "poznan"}, new String[]{"poznan", "krakow"});
+        List<GoogleRoute> generatedGoogleRouts = googleRouteService.generateGoogleRouteListFromItineraryPointPairs(itineraryPointPairs);
+        Integer zero = 0;
+        //when
+        List<RoutePart> routePartsFromGoogleRoutes = getRoutePartsFromGoogleRoutesFromMethod(generatedGoogleRouts);
+        int totalDistance = routePartsFromGoogleRoutes
+                .stream()
+                .mapToInt(RoutePart::getDistance)
+                .sum();
+        //then
+        assertThat(totalDistance, is(greaterThan(zero)));
     }
 
     private RouteSchedule prepareRouteScheduleFromMethod(List<String> itineraryPoints) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
