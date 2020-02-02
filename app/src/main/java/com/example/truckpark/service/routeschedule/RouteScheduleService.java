@@ -7,6 +7,7 @@ import com.example.truckpark.conventer.GoogleRouteToRoutePartConventer;
 import com.example.truckpark.domain.entity.RoutePart;
 import com.example.truckpark.domain.entity.RouteSchedule;
 import com.example.truckpark.domain.json.googledirectionsapi.GoogleRoute;
+import com.example.truckpark.localdatamanagment.DataSaver;
 import com.example.truckpark.localdatamanagment.RouterScheduleDataManagement;
 import com.example.truckpark.service.route.GoogleRouteService;
 
@@ -27,7 +28,7 @@ public class RouteScheduleService {
     public void saveRouteScheduler(List<String> itineraryPoints) {
 
         RouteSchedule routeSchedule = prepareRouteSchedule(itineraryPoints);
-        RouterScheduleDataManagement routerScheduleDataManagement = new RouterScheduleDataManagement();
+        DataSaver<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
 
         routerScheduleDataManagement.save(routeSchedule);
     }
