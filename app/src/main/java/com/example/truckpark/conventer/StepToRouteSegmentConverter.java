@@ -3,10 +3,14 @@ package com.example.truckpark.conventer;
 import com.example.truckpark.domain.entity.RouteSegment;
 import com.example.truckpark.domain.json.googledirectionsapi.Data;
 import com.example.truckpark.domain.json.googledirectionsapi.LatLng;
+import com.example.truckpark.domain.json.googledirectionsapi.Polyline;
 import com.example.truckpark.domain.json.googledirectionsapi.Step;
+import com.google.maps.android.PolyUtil;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class StepToRouteSegmentConverter {
 
@@ -18,11 +22,13 @@ public class StepToRouteSegmentConverter {
         Duration duration = getDurationFromStep(step);
         Integer distance = getDistanceFromStep(step);
         Double[][] points = getPointsFromStep(step);
+        List<Double[]> innerPoints = getInnerPolylinePointsFormStep(step);
 
         RouteSegment routeSegment = new RouteSegment.Builder()
                 .withDuration(duration)
                 .withDistance(distance)
                 .withPoints(points)
+                .withInnerPoints(innerPoints)
                 .build();
 
 
@@ -70,9 +76,23 @@ public class StepToRouteSegmentConverter {
                 .map(LatLng::getLat)
                 .orElse(null);
 
-        Double[] startLocation = new Double[]{startLocationX, startLocationY};
-        Double[] endLocation = new Double[]{endLocationX, endLocationY};
+        Double[] startLocation = new Double[]{startLocationY, startLocationX};
+        Double[] endLocation = new Double[]{endLocationY, endLocationX};
 
         return new Double[][]{startLocation, endLocation};
+    }
+
+    private List<Double[]> getInnerPolylinePointsFormStep(Step step) {
+
+        List<com.google.android.gms.maps.model.LatLng> insideStepPolylinePoints = PolyUtil.decode(
+                Optional.of(step)
+                        .map(Step::getPolyline)
+                        .map(Polyline::getPoints)
+                        .orElse("")
+        );
+
+        return insideStepPolylinePoints.stream()
+                .map(point -> new Double[]{point.latitude, point.longitude})
+                .collect(Collectors.toList());
     }
 }

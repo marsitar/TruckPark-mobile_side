@@ -20,11 +20,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyCallback {
 
@@ -55,26 +59,8 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         clearAndAddMarkers();
 
         moveToRouteStartIfRouteScheduleExists();
-    }
 
-    private void moveToRouteStartIfRouteScheduleExists() {
-        
-        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
-
-        Optional.of(routerScheduleDataManagement)
-                .map(DataGetter::getData)
-                .map(RouteSchedule::getRouteParts)
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .findFirst()
-                .map(RoutePart::getRouteSegments)
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .findFirst()
-                .map(RouteSegment::getPoints)
-                .map(arrayPoints -> arrayPoints[0])
-                .ifPresent(pointPair ->
-                        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(pointPair[1], pointPair[0]), 15f)));
+        displayRoutesIfRouteScheduleExists();
     }
 
     private void clearAndAddMarkers() {
@@ -91,11 +77,63 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
                     markers = new ArrayList<>();
 
                     mopDataMarkersManagementService.addMarkersToMap(mops, markers, googleMap);
+
+                    PolylineOptions rectOptions = displayRoutesIfRouteScheduleExists();
+                    Polyline polyline = MapsActivityPullOff.googleMap.addPolyline(rectOptions);
                 }
 
                 handler.postDelayed(this, 5000);
             }
         });
+    }
+
+    private void moveToRouteStartIfRouteScheduleExists() {
+
+        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
+
+        Optional.of(routerScheduleDataManagement)
+                .map(DataGetter::getData)
+                .map(RouteSchedule::getRouteParts)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .findFirst()
+                .map(RoutePart::getRouteSegments)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .findFirst()
+                .map(RouteSegment::getPoints)
+                .map(arrayPoints -> arrayPoints[0])
+                .ifPresent(pointPair ->
+                        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(pointPair[0], pointPair[1]), 15f)));
+    }
+
+    private PolylineOptions displayRoutesIfRouteScheduleExists() {
+
+        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
+
+        List<Double[]> points= Optional.of(routerScheduleDataManagement)
+                .map(DataGetter::getData)
+                .map(RouteSchedule::getRouteParts)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(RoutePart::getRouteSegments)
+                .flatMap(Collection::stream)
+                .flatMap(routeSegment -> {
+                    List<Double[]> stepPointFullList = new ArrayList<>();
+                    stepPointFullList.add(routeSegment.getPoints()[0]);
+                    stepPointFullList.addAll(routeSegment.getInnerPoints());
+                    stepPointFullList.add(routeSegment.getPoints()[1]);
+                    return stepPointFullList.stream();
+                })
+                .distinct()
+                .collect(Collectors.toList());
+
+        PolylineOptions rectOptions = new PolylineOptions();
+        points.forEach( point ->
+                rectOptions.add(new LatLng(point[0],point[1]))
+        );
+
+        return rectOptions;
     }
 
 }
