@@ -1,6 +1,5 @@
 package com.example.truckpark.view.functionality.pulloff;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -14,17 +13,18 @@ import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.localdatamanagment.DataGetter;
 import com.example.truckpark.localdatamanagment.RouterScheduleDataManagement;
 import com.example.truckpark.repository.CurrentMops;
-import com.example.truckpark.service.mopdata.MopDataMarkersManagementService;
+import com.example.truckpark.service.geometry.AllGeometryGraphicsManagementService;
+import com.example.truckpark.service.geometry.MopDataMarkersManagementService;
+import com.example.truckpark.service.geometry.RouteDataPolylineManagementService;
+import com.example.truckpark.service.geometry.RouteStartAndEndpointsCircleManagementService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.RoundCap;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,30 +75,23 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
             public void run() {
 
                 if (googleMap != null) {
-                    MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
-                    mopDataMarkersManagementService.removeMarkersFromMap(googleMap);
+
+                    AllGeometryGraphicsManagementService allGeometryGraphicsManagementService = new AllGeometryGraphicsManagementService();
+                    allGeometryGraphicsManagementService.removeGraphicsFromMap(googleMap);
 
                     mops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
-                    markers = new ArrayList<>();
 
+                    markers = new ArrayList<>();
+                    MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
                     mopDataMarkersManagementService.addMarkersToMap(mops, markers, googleMap);
 
                     polylines = new ArrayList<>();
-                    polylineOptionsList.forEach(rectOption -> {
-                        Polyline polyline = MapsActivityPullOff.googleMap.addPolyline(rectOption
-                                .color(0xFF008080)
-                                .width(15)
-                                .startCap(new RoundCap())
-                                .endCap(new RoundCap()));
-                        polylines.add(polyline);
-                    });
+                    RouteDataPolylineManagementService routeDataPolylineManagementService = new RouteDataPolylineManagementService();
+                    routeDataPolylineManagementService.addPolylinesToMap(polylines, polylineOptionsList, googleMap);
 
-                    startAndEndpoints.forEach(point -> MapsActivityPullOff.googleMap.addCircle(new CircleOptions()
-                            .center(new LatLng(point.latitude, point.longitude))
-                            .radius(20)
-                            .strokeColor(Color.RED)
-                            .visible(true)
-                            .fillColor(Color.BLUE)));
+                    RouteStartAndEndpointsCircleManagementService routeStartAndEndpointsCircleManagementService = new RouteStartAndEndpointsCircleManagementService();
+                    routeStartAndEndpointsCircleManagementService.addStartAndEndpointsCirclesToMap(startAndEndpoints, googleMap);
+
                 }
 
                 handler.postDelayed(this, 5000);

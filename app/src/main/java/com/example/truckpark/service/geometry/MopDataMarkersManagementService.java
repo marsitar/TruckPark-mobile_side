@@ -1,4 +1,4 @@
-package com.example.truckpark.service.mopdata;
+package com.example.truckpark.service.geometry;
 
 import android.util.Log;
 
@@ -23,11 +23,6 @@ public class MopDataMarkersManagementService {
                 .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getOccupiedTruckPlaces()))));
 
         markers.forEach(googleMap::addMarker);
-        Log.v(className, "Markers has been added to the map.");
-    }
-
-    public void removeMarkersFromMap(GoogleMap googleMap) {
-        googleMap.clear();
-        Log.v(className, "Markers, polygons and other shapes has been deleted from the map.");
+        Log.v(className, "Markers have been added to the map.");
     }
 }
