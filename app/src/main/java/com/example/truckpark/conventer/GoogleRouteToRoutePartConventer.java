@@ -22,11 +22,15 @@ public class GoogleRouteToRoutePartConventer {
 
         Duration duration = getDurationFromLeg(leg);
         Integer distance = getDistanceFromLeg(leg);
+        String origin = getOriginFromLeg(leg);
+        String destination = getDestinationFromLeg(leg);
         List<RouteSegment> routeSegments = getRouteSegmentsFromLeg(leg);
 
         RoutePart routePart = new RoutePart.Builder()
                 .withDuration(duration)
                 .withDistance(distance)
+                .withOrigin(origin)
+                .withDestination(destination)
                 .withRouteSegments(routeSegments)
                 .build();
 
@@ -65,6 +69,20 @@ public class GoogleRouteToRoutePartConventer {
                 .map(Leg::getDistance)
                 .map(Data::getValue)
                 .orElse(0);
+    }
+
+    private String getOriginFromLeg(Leg leg){
+
+        return Optional.of(leg)
+                .map(Leg::getStartAddress)
+                .orElse("");
+    }
+
+    private String getDestinationFromLeg(Leg leg){
+
+        return Optional.of(leg)
+                .map(Leg::getEndAddress)
+                .orElse("");
     }
 
     private List<RouteSegment> getRouteSegmentsFromLeg(Leg leg) {

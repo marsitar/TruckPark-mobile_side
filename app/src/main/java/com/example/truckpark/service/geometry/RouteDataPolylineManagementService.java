@@ -18,6 +18,7 @@ public class RouteDataPolylineManagementService {
             Polyline polyline = googleMap.addPolyline(rectOption
                     .color(0xFF008080)
                     .width(15)
+                    .clickable(true)
                     .startCap(new RoundCap())
                     .endCap(new RoundCap()));
             polylines.add(polyline);
