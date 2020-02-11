@@ -22,6 +22,7 @@ import com.example.truckpark.service.geometry.RouteDataPolylineManagementService
 import com.example.truckpark.service.geometry.RouteStartAndEndpointsCircleManagementService;
 import com.example.truckpark.service.optiomalizedriverstime.DisplayOnMapService;
 import com.example.truckpark.service.optiomalizedriverstime.PolylineMessageContentService;
+import com.example.truckpark.service.optiomalizedriverstime.RouteScheduleInfoWindowContentService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -69,6 +70,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
 
         displayOnMapService.moveToRouteStartIfRouteScheduleExists();
         clearAndAddMarkers();
+        refreshRouteScheduleValues();
 
     }
 
@@ -117,11 +119,27 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         routeStartAndEndpointsCircleManagementService.addStartAndEndpointsCirclesToMap(startAndEndpoints, googleMap);
     }
 
+    private void refreshRouteScheduleValues() {
+
+        TextView originDestinationValue = findViewById(R.id.full_origin_destination);
+        TextView fullRestDistanceValue = findViewById(R.id.full_rest_distance_value);
+        TextView fullRestTimeValue = findViewById(R.id.full_rest_time_value);
+
+        RouteScheduleInfoWindowContentService routeScheduleInfoWindowContentService = new RouteScheduleInfoWindowContentService();
+        String originDestination = routeScheduleInfoWindowContentService.getOriginDestinationValue();
+        String fullRestDistance = routeScheduleInfoWindowContentService.getFullRestDistanceValue();
+        String fullRestTime = routeScheduleInfoWindowContentService.getFullRestTimeValue();
+
+        originDestinationValue.setText(originDestination);
+        fullRestDistanceValue.setText(fullRestDistance);
+        fullRestTimeValue.setText(fullRestTime);
+    }
+
     @Override
     public void onPolylineClick(Polyline polyline) {
 
-        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
         final int polylineIndex = polylines.indexOf(polyline);
+        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
 
         PolylineMessageContentService polylineMessageContentService = new PolylineMessageContentService();
         String origin = polylineMessageContentService.getRoutePartOrigin(routerScheduleDataManagement, polylineIndex);
@@ -145,10 +163,14 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         TextView distanceValue = toastLayout.findViewById(R.id.distance_value);
         TextView durationValue = toastLayout.findViewById(R.id.duration_value);
 
+        int distanceInKilometers = distance / 1000;
+        long durationInHours = duration.toHours();
+        long restDurationInMinutes = duration.toMinutes() - duration.toHours() * 60l;
+
         originValue.setText(origin);
         destinationValue.setText(destination);
-        distanceValue.setText(String.format("%d km", distance/1000));
-        durationValue.setText(String.format("%d h, %d min.", duration.toHours(), duration.toMinutes()-duration.toHours()*60l));
+        distanceValue.setText(String.format("%d km", distanceInKilometers));
+        durationValue.setText(String.format("%d h, %d min.", durationInHours, restDurationInMinutes));
 
         return toastLayout;
     }
