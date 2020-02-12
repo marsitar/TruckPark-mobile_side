@@ -23,7 +23,14 @@ public class DisplayOnMapService {
 
         DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
 
-        List<List<Double[]>> geometrySections = getRouteParts(routerScheduleDataManagement)
+        List<List<Double[]>> geometrySections = getGeometrySectionsFromRouterScheduleData(routerScheduleDataManagement);
+        List<PolylineOptions> polylineOptions = getPolylineOptionsFromGeometrySections(geometrySections);
+
+        return polylineOptions;
+    }
+
+    public List<List<Double[]>> getGeometrySectionsFromRouterScheduleData(DataGetter<RouteSchedule> routerScheduleDataManagement) {
+        return getRouteParts(routerScheduleDataManagement)
                 .stream()
                 .map(RoutePart::getRouteSegments)
                 .map(routeSegments -> routeSegments.stream()
@@ -38,9 +45,6 @@ public class DisplayOnMapService {
                         .collect(Collectors.toList())
                 )
                 .collect(Collectors.toList());
-
-
-        return getPolylineOptionsFromGeometrySections(geometrySections);
     }
 
     public List<LatLng> generateStartAndEndpoints(List<PolylineOptions> polylineOptionsList) {
