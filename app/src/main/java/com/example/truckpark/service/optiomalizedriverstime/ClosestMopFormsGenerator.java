@@ -40,7 +40,7 @@ public class ClosestMopFormsGenerator {
         String originCoordinates = prepareOriginCoordinatesAsString();
         List<String[]> originDestinationCoordinatesPairs = generateOriginDestinationCoordinatesPairsCollection(mops, originCoordinates);
 
-        List<GoogleRoute> googleRoutes =  googleRouteService.generateGoogleRouteListFromItineraryPointPairs(originDestinationCoordinatesPairs);
+        List<GoogleRoute> googleRoutes = googleRouteService.generateGoogleRouteListFromItineraryPointPairs(originDestinationCoordinatesPairs);
 
         Log.i(className, String.format("GoogleRoutes generated from external service: %s.", googleRoutes));
 
