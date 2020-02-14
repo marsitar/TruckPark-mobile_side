@@ -1,5 +1,7 @@
 package com.example.truckpark.service.optiomalizedriverstime;
 
+import android.util.Log;
+
 import com.esri.core.geometry.OperatorBuffer;
 import com.esri.core.geometry.OperatorOffset;
 import com.esri.core.geometry.Polygon;
@@ -16,13 +18,17 @@ import java.util.stream.Collectors;
 
 public class ArcGisGeometry {
 
+    private final String className = this.getClass().getSimpleName();
+
     public Polygon generateBufferOnTheRightSideOfRoad() {
 
         List<List<Double[]>> geometrySections = getGeometrySections();
 
         Polyline arcgisPolyline = generateArcgisPolylineFormGeometrySections(geometrySections);
         Polyline offsetArcgisPolyline = generateOffsetArcgisPolyline(arcgisPolyline);
-        Polygon bufferPolygone = generatePolygon(offsetArcgisPolyline);
+        Polygon bufferPolygone = generateArcgisPolygon(offsetArcgisPolyline);
+
+        Log.i(className, String.format("Generated BufferOnTheRightSideOfRoad: %s.", bufferPolygone));
 
         return bufferPolygone;
     }
@@ -32,7 +38,11 @@ public class ArcGisGeometry {
         DisplayOnMapService displayOnMapService = new DisplayOnMapService();
         DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
 
-        return displayOnMapService.getGeometrySectionsFromRouterScheduleData(routerScheduleDataManagement);
+        List<List<Double[]>> geometrySections = displayOnMapService.getGeometrySectionsFromRouterScheduleData(routerScheduleDataManagement);
+
+        Log.d(className, "GeometrySections have been get.");
+
+        return geometrySections;
     }
 
     private Polyline generateArcgisPolylineFormGeometrySections(List<List<Double[]>> geometrySections) {
@@ -54,6 +64,8 @@ public class ArcGisGeometry {
                         generatedArcgisPolyline.lineTo(point[0], point[1])
                 );
 
+        Log.d(className, String.format("Generated ArcgisPolyline: %s.", generatedArcgisPolyline));
+
         return generatedArcgisPolyline;
     }
 
@@ -65,15 +77,23 @@ public class ArcGisGeometry {
         double bevelRatio = 0.0;
         double numberOfPointsOnShapeEnding = 10.0;
 
-        return (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
+        Polyline generatedOffsetArcgisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
+
+        Log.d(className, String.format("Generated Offset Arcgis Polyline: %s.", generatedOffsetArcgisPolyline));
+
+        return generatedOffsetArcgisPolyline;
     }
 
-    private Polygon generatePolygon(Polyline sourcePolyline) {
+    private Polygon generateArcgisPolygon(Polyline sourcePolyline) {
 
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
         double polygoneRadius = 7.5;
 
-        return (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
+        Polygon generatedPolygon = (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
+
+        Log.d(className, String.format("Generated Arcgis Polygon: %s.", generatedPolygon));
+
+        return generatedPolygon;
     }
 
 }
