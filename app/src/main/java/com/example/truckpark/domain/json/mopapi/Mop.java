@@ -133,7 +133,7 @@ public class Mop {
 
     @Override
     public String toString() {
-        return "Mop{" +
+        return "MopForm{" +
                 "id=" + id +
                 ", identificationName='" + identificationName + '\'' +
                 ", category='" + category + '\'' +

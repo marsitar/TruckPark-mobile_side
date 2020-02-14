@@ -47,10 +47,7 @@ public class GeometryOperationService {
         Double x = mop.getCoordinate().getX();
         Double y = mop.getCoordinate().getY();
 
-        Point point = new Point();
-        point.setXY(x, y);
-
-        return point;
+        return setCoordinatesToPoint(x, y);
     }
 
     private boolean isMopWithinBuffer(Point mopCoordinates, Polygon buffer) {
@@ -72,9 +69,13 @@ public class GeometryOperationService {
 
     private Point createArcGisPointFromCurrentPosition() {
 
-        Double x = CurrentPosition.getCurrentPositionInstance().getCurrentX();
-        Double y = CurrentPosition.getCurrentPositionInstance().getCurrentY();
+        Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentX();
+        Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentY();
 
+        return setCoordinatesToPoint(currentX, currentY);
+    }
+
+    private Point setCoordinatesToPoint(Double x, Double y) {
         Point point = new Point();
         point.setXY(x, y);
 
