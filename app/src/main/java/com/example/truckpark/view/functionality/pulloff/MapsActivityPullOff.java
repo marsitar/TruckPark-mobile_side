@@ -2,6 +2,7 @@ package com.example.truckpark.view.functionality.pulloff;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
 
     public static GoogleMap googleMap;
 
+    private final String className = this.getClass().getSimpleName();
+
     private List<Mop> mops;
     private List<MarkerOptions> markers = new ArrayList<>();
     private List<PolylineOptions> polylineOptionsList = new ArrayList<>();
@@ -49,11 +52,14 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps_pulloff);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         refreshMops();
+
+        Log.i(className, "Activity has been created.");
     }
 
     @Override
@@ -72,6 +78,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         clearAndAddMarkers();
         refreshRouteScheduleValues();
 
+        Log.i(className, "Map is ready");
     }
 
     private void clearAndAddMarkers() {
@@ -87,36 +94,53 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
                     addRoutesPolylines();
                     addStartAndEndRouteCircles();
                 }
-
+                Log.d(className, "All geometries has been refreshed");
                 handler.postDelayed(this, 5000);
             }
         });
     }
 
     private void removeAllGeometries() {
+
         AllGeometryGraphicsManagementService allGeometryGraphicsManagementService = new AllGeometryGraphicsManagementService();
         allGeometryGraphicsManagementService.removeGraphicsFromMap(googleMap);
+
+        Log.d(className, "All geometries has been removed");
     }
 
     private void refreshMops() {
+
         mops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
+
+        Log.d(className, "Mops have been refreshed - data have been get from repository");
     }
 
     private void addMopMarkers() {
+
         markers = new ArrayList<>();
+
         MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
         mopDataMarkersManagementService.addMarkersToMap(mops, markers, googleMap);
+
+        Log.d(className, "Mop markers have been added.");
     }
 
     private void addRoutesPolylines() {
+
         polylines = new ArrayList<>();
+
         RouteDataPolylineManagementService routeDataPolylineManagementService = new RouteDataPolylineManagementService();
         routeDataPolylineManagementService.addPolylinesToMap(polylines, polylineOptionsList, googleMap);
+
+        Log.d(className, "Mop markers have been added.");
     }
 
     private void addStartAndEndRouteCircles() {
+
         RouteStartAndEndpointsCircleManagementService routeStartAndEndpointsCircleManagementService = new RouteStartAndEndpointsCircleManagementService();
         routeStartAndEndpointsCircleManagementService.addStartAndEndpointsCirclesToMap(startAndEndpoints, googleMap);
+
+        Log.d(className, "Start and end routeCircles have been added.");
     }
 
     private void refreshRouteScheduleValues() {
@@ -133,6 +157,8 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         originDestinationValue.setText(originDestination);
         fullRestDistanceValue.setText(fullRestDistance);
         fullRestTimeValue.setText(fullRestTime);
+
+        Log.d(className, String.format("RouteSchedule values (originDestination = %s, fullRestDistance = %s, fullRestTime = %s) have been been updated on screen.", originDestination, fullRestDistance, fullRestTime));
     }
 
     @Override
@@ -150,6 +176,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         View polylineToastLayout = generatePolylineToastViewWithTextValues(origin, destination, distance, duration);
         printPolylineToast(polylineToastLayout);
 
+        Log.d(className, String.format("Polyline(%s) has been clicked on screen.", polyline));
     }
 
     private View generatePolylineToastViewWithTextValues(String origin, String destination, int distance, Duration duration) {
@@ -172,15 +199,20 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         distanceValue.setText(String.format("%d km", distanceInKilometers));
         durationValue.setText(String.format("%d h, %d min.", durationInHours, restDurationInMinutes));
 
+        Log.d(className, "PolylineToastViewWithTextValue has been created.");
+
         return toastLayout;
     }
 
     private void printPolylineToast(View toastLayout) {
+
         Toast toast = new Toast(this);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setView(toastLayout);
         toast.show();
+
+        Log.d(className, "PolylineToast has been shown.");
     }
 
 }
