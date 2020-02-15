@@ -1,5 +1,7 @@
 package com.example.truckpark.service.optiomalizedriverstime;
 
+import android.util.Log;
+
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.OperatorWithin;
 import com.esri.core.geometry.Point;
@@ -15,22 +17,25 @@ import java.util.stream.Collectors;
 
 public class GeometryOperationService {
 
+    private final String className = this.getClass().getSimpleName();
+
     public List<Mop> getPotentialStopMops(Polygon polygon) {
 
         List<Mop> mopsFormRepository = getMopsFromRepository();
-        Point currentGpsArcgisPoint = createArcGisPointFromCurrentPosition();
+        Point currentGpsGisPoint = createGisPointFromCurrentPosition();
 
         List<Mop> potentialStopMops = mopsFormRepository.stream()
                 .filter(mop -> {
-                    Point mopArcgisPoint = createArcGisPointFromMop(mop);
-                    return isMopWithinBuffer(mopArcgisPoint, polygon);
+                    Point mopGisPoint = createGisPointFromMop(mop);
+                    return isMopWithinBuffer(mopGisPoint, polygon);
                 })
                 .filter(mop -> {
-                    Point mopArcgisPoint = createArcGisPointFromMop(mop);
-                    return isMopInsideRadius(mopArcgisPoint, currentGpsArcgisPoint);
+                    Point mopGisPoint = createGisPointFromMop(mop);
+                    return isMopInsideRadius(mopGisPoint, currentGpsGisPoint);
                 })
                 .collect(Collectors.toList());
 
+        Log.i(className, String.format("Filtered potentialStopMops list: %s.", potentialStopMops));
 
         return potentialStopMops;
     }
@@ -38,46 +43,67 @@ public class GeometryOperationService {
     private List<Mop> getMopsFromRepository() {
 
         DataGetter<List<Mop>> mopsDataManagement = new MopsDataManagement();
+        List<Mop> mopsFromRepository = mopsDataManagement.getData();
 
-        return mopsDataManagement.getData();
+        Log.d(className, "Mops have been get from repository.");
+
+        return mopsFromRepository;
     }
 
-    private Point createArcGisPointFromMop(Mop mop) {
+    private Point createGisPointFromMop(Mop mop) {
 
         Double x = mop.getCoordinate().getX();
         Double y = mop.getCoordinate().getY();
 
-        return setCoordinatesToPoint(x, y);
+        Point gisPointFromMop = setCoordinatesToPoint(x, y);
+
+        Log.d(className, String.format("Created GisPointFromMop = %s.", gisPointFromMop));
+
+        return gisPointFromMop;
     }
 
     private boolean isMopWithinBuffer(Point mopCoordinates, Polygon buffer) {
 
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
 
-        return OperatorWithin.local().execute(mopCoordinates, buffer, gpsSpatialReference, null);
+        boolean mopWithinBuffer = OperatorWithin.local().execute(mopCoordinates, buffer, gpsSpatialReference, null);
+
+        Log.d(className, String.format("Mop = %s is within buffer = %s : %s.", mopCoordinates, buffer, mopWithinBuffer));
+
+        return mopWithinBuffer;
     }
 
-    private boolean isMopInsideRadius(Point mopArcgisPoint, Point currentGpsPoint) {
+    private boolean isMopInsideRadius(Point mopGisPoint, Point currentGpsPoint) {
 
         double distanceInMeters = 50000;
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
 
-        double distance = GeometryEngine.distance(mopArcgisPoint, currentGpsPoint, gpsSpatialReference);
+        double distance = GeometryEngine.distance(mopGisPoint, currentGpsPoint, gpsSpatialReference);
 
-        return distance > distanceInMeters;
+        boolean mopInsideRadius = distance > distanceInMeters;
+
+        Log.d(className, String.format("Mop = %s is within radius of currentGpsPoint = %s : %s.", mopGisPoint, currentGpsPoint, mopInsideRadius));
+
+        return mopInsideRadius;
     }
 
-    private Point createArcGisPointFromCurrentPosition() {
+    private Point createGisPointFromCurrentPosition() {
 
         Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentX();
         Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentY();
 
-        return setCoordinatesToPoint(currentX, currentY);
+        Point gisPointFromCurrentPosition = setCoordinatesToPoint(currentX, currentY);
+
+        Log.d(className, String.format("gisPointFromCurrentPosition = %s.", gisPointFromCurrentPosition));
+
+        return gisPointFromCurrentPosition;
     }
 
     private Point setCoordinatesToPoint(Double x, Double y) {
         Point point = new Point();
         point.setXY(x, y);
+
+        Log.d(className, String.format("Coordinate x=%f, y=%f have been set to point", x, y));
 
         return point;
     }
