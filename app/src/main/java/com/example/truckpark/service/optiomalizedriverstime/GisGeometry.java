@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class ArcGisGeometry {
+public class GisGeometry {
 
     private final String className = this.getClass().getSimpleName();
 
@@ -24,9 +24,9 @@ public class ArcGisGeometry {
 
         List<List<Double[]>> geometrySections = getGeometrySections();
 
-        Polyline arcgisPolyline = generateArcgisPolylineFormGeometrySections(geometrySections);
-        Polyline offsetArcgisPolyline = generateOffsetArcgisPolyline(arcgisPolyline);
-        Polygon bufferPolygone = generateArcgisPolygon(offsetArcgisPolyline);
+        Polyline arcgisPolyline = generateGisPolylineFormGeometrySections(geometrySections);
+        Polyline offsetArcgisPolyline = generateOffsetGisPolyline(arcgisPolyline);
+        Polygon bufferPolygone = generateGisPolygon(offsetArcgisPolyline);
 
         Log.i(className, String.format("Generated BufferOnTheRightSideOfRoad: %s.", bufferPolygone));
 
@@ -45,7 +45,7 @@ public class ArcGisGeometry {
         return geometrySections;
     }
 
-    private Polyline generateArcgisPolylineFormGeometrySections(List<List<Double[]>> geometrySections) {
+    private Polyline generateGisPolylineFormGeometrySections(List<List<Double[]>> geometrySections) {
 
         List<Double[]> listOfGenuinePolylinePoints = geometrySections.stream()
                 .flatMap(Collection::stream)
@@ -55,21 +55,21 @@ public class ArcGisGeometry {
                 .findFirst()
                 .orElse(null);
 
-        Polyline generatedArcgisPolyline = new Polyline();
+        Polyline generatedGisPolyline = new Polyline();
 
-        generatedArcgisPolyline.startPath(firstPointOfGenuinePolyline[0], firstPointOfGenuinePolyline[1]);
+        generatedGisPolyline.startPath(firstPointOfGenuinePolyline[0], firstPointOfGenuinePolyline[1]);
 
         listOfGenuinePolylinePoints.stream()
                 .forEach(point ->
-                        generatedArcgisPolyline.lineTo(point[0], point[1])
+                        generatedGisPolyline.lineTo(point[0], point[1])
                 );
 
-        Log.d(className, String.format("Generated ArcgisPolyline: %s.", generatedArcgisPolyline));
+        Log.d(className, String.format("Generated GisPolyline: %s.", generatedGisPolyline));
 
-        return generatedArcgisPolyline;
+        return generatedGisPolyline;
     }
 
-    private Polyline generateOffsetArcgisPolyline(Polyline polyline) {
+    private Polyline generateOffsetGisPolyline(Polyline polyline) {
 
         OperatorOffset.JoinType typeOfShapeEnding = OperatorOffset.JoinType.Square;
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
@@ -77,21 +77,21 @@ public class ArcGisGeometry {
         double bevelRatio = 0.0;
         double numberOfPointsOnShapeEnding = 10.0;
 
-        Polyline generatedOffsetArcgisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
+        Polyline generatedOffsetGisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
 
-        Log.d(className, String.format("Generated Offset Arcgis Polyline: %s.", generatedOffsetArcgisPolyline));
+        Log.d(className, String.format("Generated Offset Gis Polyline: %s.", generatedOffsetGisPolyline));
 
-        return generatedOffsetArcgisPolyline;
+        return generatedOffsetGisPolyline;
     }
 
-    private Polygon generateArcgisPolygon(Polyline sourcePolyline) {
+    private Polygon generateGisPolygon(Polyline sourcePolyline) {
 
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
         double polygoneRadius = 7.5;
 
         Polygon generatedPolygon = (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
 
-        Log.d(className, String.format("Generated Arcgis Polygon: %s.", generatedPolygon));
+        Log.d(className, String.format("Generated Gis Polygon: %s.", generatedPolygon));
 
         return generatedPolygon;
     }
