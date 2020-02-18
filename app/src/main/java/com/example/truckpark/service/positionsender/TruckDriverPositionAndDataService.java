@@ -31,6 +31,7 @@ public class TruckDriverPositionAndDataService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d(className, "TruckDriverPositionAndDataService has been created.");
 
         URI = propertyManager.getProperty("URI", TruckDriverPositionAndDataService.this);
 
@@ -45,7 +46,7 @@ public class TruckDriverPositionAndDataService extends Service {
 
     private void sendPost() {
 
-        Log.i(className, "TruckDriverPositionAndData are to be periodically sent to remote server.");
+        Log.d(className, "TruckDriverPositionAndData is to be periodically sent to remote server.");
 
         final Handler handler = new Handler();
 

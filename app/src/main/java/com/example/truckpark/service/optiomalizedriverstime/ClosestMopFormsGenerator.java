@@ -10,6 +10,7 @@ import com.example.truckpark.repository.CurrentPosition;
 import com.example.truckpark.service.route.GoogleRouteService;
 
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class ClosestMopFormsGenerator {
         List<String> destinationMopNames = generateDestinationMopNamesCollection(mops);
         List<Integer> freePlacesForTruck = generateFreePlacesForTruckCollection(mops);
 
-        List<MopForm> mopForms = prepareMopFormsCollection(distances, durations, destinationMopNames, freePlacesForTruck);
+        List<MopForm> mopForms = prepareSortedMopFormsCollection(distances, durations, destinationMopNames, freePlacesForTruck);
 
         Log.i(className, String.format("Generated MopForms: %s.", mopForms));
 
@@ -144,7 +145,7 @@ public class ClosestMopFormsGenerator {
         return originCoordinatesAsString;
     }
 
-    private List<MopForm> prepareMopFormsCollection(List<Integer> distances, List<Integer> durations, List<String> destinationMopNames, List<Integer> freePlacesForTruck) {
+    private List<MopForm> prepareSortedMopFormsCollection(List<Integer> distances, List<Integer> durations, List<String> destinationMopNames, List<Integer> freePlacesForTruck) {
 
         List<MopForm> mopFormsCollection = IntStream.range(0, distances.size() - 1)
                 .mapToObj(i -> {
@@ -155,6 +156,7 @@ public class ClosestMopFormsGenerator {
                     mopForm.setFreePlacesForTrucks(freePlacesForTruck.get(i));
                     return mopForm;
                 })
+                .sorted(Comparator.comparing(MopForm::getLeftTime))
                 .collect(Collectors.toList());
 
         Log.i(className, String.format("Mops prepared from given collections: %s.", mopFormsCollection));
