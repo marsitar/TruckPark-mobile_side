@@ -150,7 +150,7 @@ public class MainMenu extends AppCompatActivity {
         }
 
         DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
-        if (routerScheduleDataManagement.getData() == null) {
+        if (routerScheduleDataManagement.getData() != null) {
 
             Intent mainOptimizationDriversTimeServiceIntent = new Intent(this, MainOptimizationDriversTimeService.class);
             bindService(mainOptimizationDriversTimeServiceIntent, mainOptimizationDriversTimeServiceConnection, Context.BIND_AUTO_CREATE);
@@ -176,7 +176,7 @@ public class MainMenu extends AppCompatActivity {
         Log.i(className, "Back button has been pressed.");
     }
 
-    private void unboundAllServices(){
+    private void unboundAllServices() {
 
         if (locationDeviceServiceBound) {
             unbindService(locationDeviceServiceConnection);

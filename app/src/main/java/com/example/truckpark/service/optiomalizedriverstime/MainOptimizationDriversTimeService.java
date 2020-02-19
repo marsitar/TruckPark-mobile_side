@@ -16,14 +16,14 @@ import com.example.truckpark.localdatamanagment.DataGetter;
 import com.example.truckpark.localdatamanagment.RouterScheduleDataManagement;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainOptimizationDriversTimeService extends Service {
 
-    private LocalDateTime firstBreakTime;
+    private List<LocalDateTime> breakTimes = new ArrayList<>();
 
     private String className = this.getClass().getSimpleName();
-
     private final IBinder binder = new MainOptimizationDriversTimeBinder();
 
     public class MainOptimizationDriversTimeBinder extends Binder {
@@ -41,9 +41,12 @@ public class MainOptimizationDriversTimeService extends Service {
         DataGetter<RouteSchedule> routeScheduleDataGetter = new RouterScheduleDataManagement();
         LocalDateTime timeOfSavingSchedule = routeScheduleDataGetter.getData().getSaveDateAndTime();
 
-        this.firstBreakTime = timeOfSavingSchedule.plusHours(3).plusMinutes(30);
+        LocalDateTime firstBreak = timeOfSavingSchedule.plusHours(3).plusMinutes(30);
+        breakTimes.add(firstBreak);
 
         service();
+
+        Log.i(className, "MainOptimizationDriversTimeService has been created.");
     }
 
     @Override
@@ -61,14 +64,19 @@ public class MainOptimizationDriversTimeService extends Service {
             @Override
             public void run() {
 
-                if (firstBreakTime.minusMinutes(30).compareTo(LocalDateTime.now()) >= 0) {
+                LocalDateTime firstBreakMinusPeriodOfTime = breakTimes.get(0).minusMinutes(30);
+
+                if (firstBreakMinusPeriodOfTime.compareTo(LocalDateTime.now()) >= 0) {
 
                     List<MopForm> closestMopForms = getMopFormsFromAlgorithmClasses();
 
                     Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
                     toast.show();
                 }
-                handler.postDelayed(this, 300000);
+
+                Log.d(className, String.format("firstBreakMinusPeriodOfTime = %s, timeNow = %s", firstBreakMinusPeriodOfTime, LocalDateTime.now()));
+
+                handler.postDelayed(this, 1000);
             }
         });
     }
