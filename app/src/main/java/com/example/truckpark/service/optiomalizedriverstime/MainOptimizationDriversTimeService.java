@@ -69,17 +69,14 @@ public class MainOptimizationDriversTimeService extends Service {
 
                     Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
                     toast.show();
-
                 }
-
                 handler.postDelayed(this, 300000);
             }
         });
-
-
     }
 
     private List<MopForm> getMopFormsFromAlgorithmClasses() {
+
         GisGeometry gisGeometry = new GisGeometry();
         Polygon gisPolygon = gisGeometry.generateBufferOnTheRightSideOfRoad();
 
@@ -87,6 +84,10 @@ public class MainOptimizationDriversTimeService extends Service {
         List<Mop> potentialStopMops = geometryOperationService.getPotentialStopMops(gisPolygon);
 
         ClosestMopFormsGenerator closestMopFormsGenerator = new ClosestMopFormsGenerator(getApplicationContext());
-        return closestMopFormsGenerator.generateClosestMopFormsGenerator(potentialStopMops);
+        List<MopForm> mopForms = closestMopFormsGenerator.generateClosestMopFormsGenerator(potentialStopMops);
+
+        Log.d(className, String.format("Mops get form algorithm classes: ", mopForms));
+
+        return mopForms;
     }
 }

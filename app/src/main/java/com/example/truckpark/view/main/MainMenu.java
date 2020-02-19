@@ -11,10 +11,14 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.domain.entity.RouteSchedule;
+import com.example.truckpark.localdatamanagment.DataGetter;
+import com.example.truckpark.localdatamanagment.RouterScheduleDataManagement;
 import com.example.truckpark.repository.CurrentMops;
 import com.example.truckpark.repository.CurrentState;
 import com.example.truckpark.service.location.LocationDeviceService;
 import com.example.truckpark.service.mopdata.MopDataService;
+import com.example.truckpark.service.optiomalizedriverstime.MainOptimizationDriversTimeService;
 import com.example.truckpark.service.positionsender.TruckDriverPositionAndDataService;
 import com.example.truckpark.view.functionality.location.MapsActivityLocation;
 import com.example.truckpark.view.functionality.mop.FindMop;
@@ -28,10 +32,12 @@ public class MainMenu extends AppCompatActivity {
     public LocationDeviceService locationDeviceService;
     public TruckDriverPositionAndDataService truckDriverPositionAndDataService;
     public MopDataService mopDataService;
+    public MainOptimizationDriversTimeService mainOptimizationDriversTimeService;
 
     private boolean locationDeviceServiceBound = false;
     private boolean truckDriverPositionAndDataServiceBound = false;
     private boolean mopDataServiceBound = false;
+    private boolean mainOptimizationDriversTimeBound = false;
 
     private ServiceConnection locationDeviceServiceConnection = new ServiceConnection() {
         @Override
@@ -75,6 +81,20 @@ public class MainMenu extends AppCompatActivity {
         }
     };
 
+    private ServiceConnection mainOptimizationDriversTimeServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+            MainOptimizationDriversTimeService.MainOptimizationDriversTimeBinder mainOptimizationDriversTimeBinder = (MainOptimizationDriversTimeService.MainOptimizationDriversTimeBinder) binder;
+            mainOptimizationDriversTimeService = mainOptimizationDriversTimeBinder.getMainOptimizationDriversTime();
+            mainOptimizationDriversTimeBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mainOptimizationDriversTimeBound = false;
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +122,12 @@ public class MainMenu extends AppCompatActivity {
             CurrentMops.getCurrentMopsInstance().setMopsRequestingOn(true);
         }
 
+        DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
+        if (routerScheduleDataManagement.getData() != null) {
+            Intent mainOptimizationDriversTimeServiceIntent = new Intent(this, MainOptimizationDriversTimeService.class);
+            bindService(mainOptimizationDriversTimeServiceIntent, mainOptimizationDriversTimeServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+
     }
 
     @Override
@@ -117,6 +143,7 @@ public class MainMenu extends AppCompatActivity {
     }
 
     private void unboundAllServices(){
+
         if (locationDeviceServiceBound) {
             unbindService(locationDeviceServiceConnection);
             locationDeviceServiceBound = false;
@@ -130,6 +157,11 @@ public class MainMenu extends AppCompatActivity {
         if (mopDataServiceBound) {
             unbindService(mopDataServiceConnection);
             mopDataServiceBound = false;
+        }
+
+        if (mainOptimizationDriversTimeBound) {
+            unbindService(mainOptimizationDriversTimeServiceConnection);
+            mainOptimizationDriversTimeBound = false;
         }
     }
 

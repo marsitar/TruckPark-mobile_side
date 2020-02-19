@@ -64,7 +64,6 @@ public class RouteScheduleForm extends AppCompatActivity {
 
         RouteScheduleService routeScheduleService = new RouteScheduleService(getApplicationContext());
         routeScheduleService.saveRouteScheduler(allNotNullPlaces);
-
         generatePositiveSystemMessage();
     }
 
