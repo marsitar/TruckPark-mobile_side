@@ -33,7 +33,6 @@ public class MainOptimizationDriversTimeService extends Service {
         }
     }
 
-
     @Override
     public void onCreate() {
 
@@ -58,7 +57,6 @@ public class MainOptimizationDriversTimeService extends Service {
         Log.i(className, "TruckDriverPositionAndData is to be periodically sent to remote server.");
 
         final Handler handler = new Handler();
-
         handler.post(new Runnable() {
             @Override
             public void run() {
