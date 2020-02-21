@@ -79,13 +79,11 @@ public class ClosestMopFormsGenerator {
         List<Integer> distances = generatedGoogleRouts.stream().map(GoogleRoute::getRoutes).map(routes ->
                 routes.stream()
                         .findFirst()
-                        .map(route ->
+                        .flatMap(route ->
                                 route.getLegs().stream()
                                         .findFirst()
                                         .map(leg -> leg.getDistance().getValue())
-                        )
-                        .orElse(Optional.empty())
-                        .orElse(null)
+                        ).orElse(1000000)
         ).collect(Collectors.toList());
 
         Log.d(className, String.format("Distances generated from GoogleRoutes: %s.", distances));
@@ -126,7 +124,7 @@ public class ClosestMopFormsGenerator {
                                         .map(leg -> leg.getDuration().getValue())
                         )
                         .orElse(Optional.empty())
-                        .orElse(null)
+                        .orElse(100000)
         ).collect(Collectors.toList());
 
         Log.d(className, String.format("Durations generated from GoogleRoutes: %s.", generatedDurations));

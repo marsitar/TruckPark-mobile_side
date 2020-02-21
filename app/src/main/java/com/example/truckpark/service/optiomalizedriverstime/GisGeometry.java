@@ -24,9 +24,9 @@ public class GisGeometry {
 
         List<List<Double[]>> geometrySections = getGeometrySections();
 
-        Polyline arcgisPolyline = generateGisPolylineFormGeometrySections(geometrySections);
-        Polyline offsetArcgisPolyline = generateOffsetGisPolyline(arcgisPolyline);
-        Polygon bufferPolygone = generateGisPolygon(offsetArcgisPolyline);
+        Polyline gisPolyline = generateGisPolylineFormGeometrySections(geometrySections);
+        Polyline offsetGisPolyline = generateOffsetGisPolyline(gisPolyline);
+        Polygon bufferPolygone = generateGisPolygon(offsetGisPolyline);
 
         Log.i(className, String.format("Generated BufferOnTheRightSideOfRoad: %s.", bufferPolygone));
 
@@ -71,15 +71,15 @@ public class GisGeometry {
 
     private Polyline generateOffsetGisPolyline(Polyline polyline) {
 
-        OperatorOffset.JoinType typeOfShapeEnding = OperatorOffset.JoinType.Square;
+        OperatorOffset.JoinType typeOfShapeEnding = OperatorOffset.JoinType.Miter;
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
-        double offsetDistance = 7.5;
-        double bevelRatio = 0.0;
+        double offsetDistance = 0.0003;
+        double bevelRatio = 1;
         double numberOfPointsOnShapeEnding = 10.0;
 
         Polyline generatedOffsetGisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
 
-        Log.d(className, String.format("Generated Offset Gis Polyline: %s.", generatedOffsetGisPolyline));
+        Log.d(className, String.format("Generated Offset Gis Polyline: %s.", generatedOffsetGisPolyline.toString()));
 
         return generatedOffsetGisPolyline;
     }
@@ -87,7 +87,7 @@ public class GisGeometry {
     private Polygon generateGisPolygon(Polyline sourcePolyline) {
 
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
-        double polygoneRadius = 7.5;
+        double polygoneRadius = 0.5;
 
         Polygon generatedPolygon = (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
 

@@ -69,14 +69,15 @@ public class MainOptimizationDriversTimeService extends Service {
                 if (firstBreakMinusPeriodOfTime.compareTo(LocalDateTime.now()) >= 0) {
 
                     List<MopForm> closestMopForms = getMopFormsFromAlgorithmClasses();
-
-                    Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
-                    toast.show();
+                    if(!closestMopForms.isEmpty()) {
+                        Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
 
                 Log.d(className, String.format("firstBreakMinusPeriodOfTime = %s, timeNow = %s", firstBreakMinusPeriodOfTime, LocalDateTime.now()));
 
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 60000);
             }
         });
     }

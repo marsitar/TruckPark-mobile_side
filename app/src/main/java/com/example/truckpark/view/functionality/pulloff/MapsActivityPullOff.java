@@ -94,6 +94,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
                     addRoutesPolylines();
                     addStartAndEndRouteCircles();
                 }
+
                 Log.d(className, "All geometries has been refreshed");
                 handler.postDelayed(this, 5000);
             }

@@ -75,7 +75,7 @@ public class GeometryOperationService {
 
     private boolean isMopInsideRadius(Point mopGisPoint, Point currentGpsPoint) {
 
-        double distanceInMeters = 50000;
+        double distanceInMeters = 0.5;
         SpatialReference gpsSpatialReference = SpatialReference.create(4326);
 
         double distance = GeometryEngine.distance(mopGisPoint, currentGpsPoint, gpsSpatialReference);
