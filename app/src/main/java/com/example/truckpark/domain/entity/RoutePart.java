@@ -8,12 +8,17 @@ public class RoutePart {
 
     private Duration duration;
     private Integer distance;
+    private String origin;
+    private String destination;
     private List<RouteSegment> routeSegments = new ArrayList<>();
 
     public static final class Builder {
 
         private Duration duration;
         private Integer distance;
+        private String origin;
+        private String destination;
+
         private List<RouteSegment> routeSegments = new ArrayList<>();
 
         public Builder withDuration(Duration duration) {
@@ -23,6 +28,16 @@ public class RoutePart {
 
         public Builder withDistance(Integer distance) {
             this.distance = distance;
+            return this;
+        }
+
+        public Builder withOrigin(String origin) {
+            this.origin = origin;
+            return this;
+        }
+
+        public Builder withDestination(String destination) {
+            this.destination = destination;
             return this;
         }
 
@@ -37,6 +52,8 @@ public class RoutePart {
 
             routePart.duration = this.duration;
             routePart.distance = this.distance;
+            routePart.origin = this.origin;
+            routePart.destination = this.destination;
             routePart.routeSegments = this.routeSegments;
 
             return routePart;
@@ -49,6 +66,14 @@ public class RoutePart {
 
     public Integer getDistance() {
         return distance;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
     }
 
     public List<RouteSegment> getRouteSegments() {

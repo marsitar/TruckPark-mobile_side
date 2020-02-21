@@ -24,6 +24,10 @@
             android:name=".service.mopdata.MopDataService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".service.optiomalizedriverstime.MainOptimizationDriversTimeService"
+            android:enabled="true"
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

@@ -9,7 +9,8 @@ import com.example.truckpark.R;
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.repository.CurrentMops;
 import com.example.truckpark.repository.CurrentPosition;
-import com.example.truckpark.service.mopdata.MopDataMarkersManagementService;
+import com.example.truckpark.service.geometry.AllGeometryGraphicsManagementService;
+import com.example.truckpark.service.geometry.MopDataMarkersManagementService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -64,12 +65,13 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
             public void run() {
 
                 if (googleMap != null) {
-                    MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
-                    mopDataMarkersManagementService.removeMarkersFromMap(googleMap);
+                    AllGeometryGraphicsManagementService allGeometryGraphicsManagementService = new AllGeometryGraphicsManagementService();
+                    allGeometryGraphicsManagementService.removeGraphicsFromMap(googleMap);
 
                     mops = CurrentMops.getCurrentMopsInstance().getCurrentMopsList();
                     markers = new ArrayList<>();
 
+                    MopDataMarkersManagementService mopDataMarkersManagementService = new MopDataMarkersManagementService();
                     mopDataMarkersManagementService.addMarkersToMap(mops, markers, googleMap);
                 }
 
