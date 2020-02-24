@@ -2,6 +2,8 @@ package com.example.truckpark.view.functionality.pulloff;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +38,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener {
 
@@ -147,17 +150,27 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     private void refreshRouteScheduleValues() {
 
         TextView originDestinationValue = findViewById(R.id.full_origin_destination);
-        TextView fullRestDistanceValue = findViewById(R.id.full_rest_distance_value);
-        TextView fullRestTimeValue = findViewById(R.id.full_rest_time_value);
+        TextView fullRestDistanceValue = findViewById(R.id.full_rest_distance_label);
+        TextView fullRestTimeValue = findViewById(R.id.full_rest_time_label);
 
         RouteScheduleInfoWindowContentService routeScheduleInfoWindowContentService = new RouteScheduleInfoWindowContentService();
-        String originDestination = routeScheduleInfoWindowContentService.getOriginDestinationValue();
-        String fullRestDistance = routeScheduleInfoWindowContentService.getFullRestDistanceValue();
-        String fullRestTime = routeScheduleInfoWindowContentService.getFullRestTimeValue();
+
+        String originDestination = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getOriginDestinationValue)
+                .orElse("");
+        String fullRestDistance = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getFullRestDistanceValue)
+                .orElse("");
+        String fullRestTime = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getFullRestTimeValue)
+                .orElse("");
+
+        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder("Pozostało kilometrów: " + fullRestDistance, 22, fullRestDistance.length()+22);
+        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder("Pozostało czasu: " + fullRestTime, 17, fullRestTime.length()+17);
 
         originDestinationValue.setText(originDestination);
-        fullRestDistanceValue.setText(fullRestDistance);
-        fullRestTimeValue.setText(fullRestTime);
+        fullRestDistanceValue.setText(fullRestDistanceBold);
+        fullRestTimeValue.setText(fullRestTimeBold);
 
         Log.d(className, String.format("RouteSchedule values (originDestination = %s, fullRestDistance = %s, fullRestTime = %s) have been been updated on screen.", originDestination, fullRestDistance, fullRestTime));
     }
@@ -214,6 +227,12 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         toast.show();
 
         Log.d(className, "PolylineToast has been shown.");
+    }
+
+    private SpannableStringBuilder getSpannableStringBuilder(String stringToBeBold, int start, int end) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringToBeBold);
+        spannableStringBuilder.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableStringBuilder;
     }
 
 }
