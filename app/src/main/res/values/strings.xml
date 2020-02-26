@@ -58,4 +58,5 @@
     <string name="organization_in_charge_label">☐ IMIE I NAZWISKO/NAZWA</string>
     <string name="organization_in_charge_phone_label">☐ NUMER TELEFONU</string>
     <string name="organization_in_charge_email_label">☐ ADRES EMAIL</string>
+    <string name="free_truck_places_snippet_label">Liczba wolnych miejsc dla Tir-ów</string>
 </resources>
