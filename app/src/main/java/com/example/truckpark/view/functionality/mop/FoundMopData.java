@@ -2,7 +2,6 @@ package com.example.truckpark.view.functionality.mop;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
@@ -59,33 +58,38 @@ public class FoundMopData extends AppCompatActivity {
         String organizationText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganization)
-                .orElse(null);
-        String organization = String.format("☐ ODDZIAL: %s\n", organizationText);
+                .orElse("");
+        String organizationLabel = getString(R.string.organization_label);
+        String organization = String.format("%s: %s\n", organizationLabel, organizationText);
 
         String placeText = Optional.ofNullable(foundMop)
                 .map(Mop::getPlace)
-                .orElse(null);
-        String place = String.format("☐ MIEJSCOWOSC: %s\n", placeText);
+                .orElse("");
+        String placeLabel = getString(R.string.place_label);
+        String place = String.format("%s: %s\n", placeLabel, placeText);
 
         String identificationDataText = Optional.ofNullable(foundMop)
                 .map(Mop::getIdentificationName)
-                .orElse(null);
-        String identificationData = String.format("☐ DANE IDENTYFIKACYJNE: %s\n", identificationDataText);
+                .orElse("");
+        String identificationDataLabel = getString(R.string.identification_data_label);
+        String identificationData = String.format("%s: %s\n", identificationDataLabel, identificationDataText);
 
         String categoryText = Optional.ofNullable(foundMop)
                 .map(Mop::getCategory)
-                .orElse(null);
-        String category = String.format("☐ KATEGORIA: %s\n", categoryText);
+                .orElse("");
+        String categoryLabel = getString(R.string.category_label);
+        String category = String.format("%s: %s\n", categoryLabel, categoryText);
 
         Double coordinateX = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
                 .map(Coordinate::getX)
-                .orElse(null);
+                .orElse(0.0);
         Double coordinateY = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
                 .map(Coordinate::getY)
-                .orElse(null);
-        String coordinates = String.format("☐ WSPOLRZEDNE: %f X\n %f Y", coordinateX, coordinateY);
+                .orElse(0.0);
+        String coordinatesLabel = getString(R.string.coordinates_label);
+        String coordinates = String.format("%s: %f X\n %f Y", coordinatesLabel, coordinateX, coordinateY);
 
         SpannableStringBuilder organizationBold = getSpannableStringBuilder(organization, 0, 9);
         SpannableStringBuilder placeBold = getSpannableStringBuilder(place, 0, 13);
@@ -104,23 +108,25 @@ public class FoundMopData extends AppCompatActivity {
 
         mopContent = findViewById(R.id.mopcontent);
 
-
         String roadClassText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getRoadClass)
-                .orElse(null);
-        String roadClass = String.format("☐ KLASA TECHNICZNA: %s\n", roadClassText);
+                .orElse("");
+        String roadClassLabel = getString(R.string.road_class_label);
+        String roadClass = String.format("%s: %s\n", roadClassLabel, roadClassText);
 
         String roadNumberText = Optional.ofNullable(foundMop)
                 .map(Mop::getRoadNumber)
-                .orElse(null);
-        String roadNumber = String.format("☐ NUMER: %s\n", roadNumberText);
+                .orElse("");
+        String roadNumberLabel = getString(R.string.road_number_label);
+        String roadNumber = String.format("%s: %s\n", roadNumberLabel, roadNumberText);
 
         String directionText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getDirection)
-                .orElse(null);
-        String direction = String.format("☐ KIERUNEK: %s\n", directionText);
+                .orElse("");
+        String directionLabel = getString(R.string.direction_label);
+        String direction = String.format("%s: %s\n", directionLabel, directionText);
 
         SpannableStringBuilder roadClassBold = getSpannableStringBuilder(roadClass, 0, 19);
         SpannableStringBuilder roadNumberBold = getSpannableStringBuilder(roadNumber, 0, 8);
@@ -137,25 +143,29 @@ public class FoundMopData extends AppCompatActivity {
 
         Integer truckPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getTruckPlaces)
-                .orElse(null);
-        String truckPlaces = String.format("☐ MIEJSCA CIEZAROWE OGOLEM: %d\n", truckPlacesNumber);
+                .orElse(0);
+        String truckPlacesLabel = getString(R.string.truck_places_label);
+        String truckPlaces = String.format("%s: %d\n", truckPlacesLabel, truckPlacesNumber);
 
         Integer occupiedTruckPlaces = Optional.ofNullable(foundMop)
                 .map(Mop::getOccupiedTruckPlaces)
-                .orElse(null);
-        String freeTruckPlaces = String.format("☐ WOLNE MIEJSCA CIEZAROWE: %d\n\n", truckPlacesNumber - occupiedTruckPlaces);
+                .orElse(0);
+        String freeTruckPlacesLabel = getString(R.string.free_truck_places_label);
+        String freeTruckPlaces = String.format("%s: %d\n\n", freeTruckPlacesLabel, truckPlacesNumber - occupiedTruckPlaces);
 
         Integer passengerPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPassengerPlaces)
-                .orElse(null);
-        String passengerPlaces = String.format("☐ MIEJSCA OSOBOWE OGOLEM: %d\n\n", passengerPlacesNumber);
+                .orElse(0);
+        String passengerPlacesLabel = getString(R.string.passenger_places_label);
+        String passengerPlaces = String.format("%s: %d\n\n", passengerPlacesLabel, passengerPlacesNumber);
 
         Integer coachPlacesNumber = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getCoachPlaces)
-                .orElse(null);
-        String coachPlaces = String.format("☐ MIEJSCA AUTOBUSOWE: %d", coachPlacesNumber);
+                .orElse(0);
+        String coachPlacesLabel = getString(R.string.coach_places_label);
+        String coachPlaces = String.format("%s: %d", coachPlacesLabel, coachPlacesNumber);
 
         SpannableStringBuilder truckPlacesBold = getSpannableStringBuilder(truckPlaces, 0, 27);
         SpannableStringBuilder freeTruckPlacesBold = getSpannableStringBuilder(freeTruckPlaces, 0, 25);
@@ -172,77 +182,89 @@ public class FoundMopData extends AppCompatActivity {
 
         mopContent = findViewById(R.id.mopcontent);
 
-        Boolean isGuardedBoolean = Optional.ofNullable(foundMop)
+        boolean isGuardedBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getGuarded)
                 .orElse(false);
-        String isGuarded = String.format("☐ STRZEZONY: %s\n", isGuardedBoolean ? "✔" : "✗");
+        String isGuardedLabel = getString(R.string.is_guarded_label);
+        String isGuarded = String.format("%s: %s\n", isGuardedLabel, isGuardedBoolean ? "✔" : "✗");
 
-        Boolean isFencedBoolean = Optional.ofNullable(foundMop)
+        boolean isFencedBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getFenced)
                 .orElse(false);
-        String isFenced = String.format("☐ OGRODZONY: %s\n", isFencedBoolean ? "✔" : "✗");
+        String isFencedLabel = getString(R.string.is_fenced_label);
+        String isFenced = String.format("%s: %s\n", isFencedLabel, isFencedBoolean ? "✔" : "✗");
 
-        Boolean isMonitoringBoolean = Optional.ofNullable(foundMop)
+        boolean isMonitoringBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getSecurityCamera)
                 .orElse(false);
-        String isSecurityCamera = String.format("☐ MONITORING WIDEO: %s\n", isMonitoringBoolean ? "✔" : "✗");
+        String isMonitoringLabel = getString(R.string.is_monitoring_label);
+        String isSecurityCamera = String.format("%s: %s\n", isMonitoringLabel, isMonitoringBoolean ? "✔" : "✗");
 
-        Boolean isPetroleumBoolean = Optional.ofNullable(foundMop)
+        boolean isPetroleumBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPetroleum)
                 .orElse(false);
-        String isPetroleum = String.format("☐ STACJA BENZYNOWA: %s\n", isPetroleumBoolean ? "✔" : "✗");
+        String isPetroleumLabel = getString(R.string.is_petroleum_label);
+        String isPetroleum = String.format("%s: %s\n", isPetroleumLabel, isPetroleumBoolean ? "✔" : "✗");
 
         boolean isRestaurantBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getRestaurant)
                 .orElse(false);
-        String isRestaurant = String.format("☐ RESTAURACJA: %s\n", isRestaurantBoolean ? "✔" : "✗");
+        String isRestaurantLabel = getString(R.string.is_restaurant_label);
+        String isRestaurant = String.format("%s: %s\n", isRestaurantLabel, isRestaurantBoolean ? "✔" : "✗");
 
         boolean isPlaceToStayBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getPlaceToStay)
                 .orElse(false);
-        String isPlaceToStay = String.format("☐ MIEJSCA NOCLEGOWE: %s\n", isPlaceToStayBoolean ? "✔" : "✗");
+        String isPlaceToStayLabel = getString(R.string.is_place_to_stay_label);
+        String isPlaceToStay = String.format("%s: %s\n", isPlaceToStayLabel, isPlaceToStayBoolean ? "✔" : "✗");
 
         boolean isToiletBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getToilet)
                 .orElse(false);
-        String isToilet = String.format("☐ TOALETA: %s\n", isToiletBoolean ? "✔" : "✗");
+        String isToiletLabel = getString(R.string.is_toilet_label);
+        String isToilet = String.format("%s: %s\n", isToiletLabel, isToiletBoolean ? "✔" : "✗");
 
         boolean isCarwashBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getCarwash)
                 .orElse(false);
-        String isCarwash = String.format("☐ MYJNIA SAMOCHODOWA: %s\n", isCarwashBoolean ? "✔" : "✗");
+        String isCarwashLabel = getString(R.string.is_carwash_label);
+        String isCarwash = String.format("%s: %s\n", isCarwashLabel, isCarwashBoolean ? "✔" : "✗");
 
         boolean isWorkshopBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getWorkshop)
                 .orElse(false);
-        String isWorkshop = String.format("☐ WARSZTAT: %s\n", isWorkshopBoolean ? "✔" : "✗");
+        String isWorkshopLabel = getString(R.string.is_workshop_label);
+        String isWorkshop = String.format("%s: %s\n", isWorkshopLabel, isWorkshopBoolean ? "✔" : "✗");
 
         boolean isLightingBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getLighting)
                 .orElse(false);
-        String isLighting = String.format("☐ OSWIETLENIE: %s\n", isLightingBoolean ? "✔" : "✗");
+        String isLightingLabel = getString(R.string.is_lighting_label);
+        String isLighting = String.format("%s: %s\n", isLightingLabel, isLightingBoolean ? "✔" : "✗");
 
         boolean isElectricChargerBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getElectricCharger)
                 .orElse(false);
-        String isElectricCharger = String.format("☐ LADOWARKA ELEKTRYCZNA: %s\n", isElectricChargerBoolean ? "✔" : "✗");
+        String isElectricChargerLabel = getString(R.string.is_electric_charger);
+        String isElectricCharger = String.format("%s: %s\n", isElectricChargerLabel, isElectricChargerBoolean ? "✔" : "✗");
 
         boolean isDangerousCargoBoolean = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getDangerousCargo)
                 .orElse(false);
-        String isDangerousCargo = String.format("☐ NIEBEZPIECZNE LADUNKI: %s\n", isDangerousCargoBoolean ? "✔" : "✗");
+        String isDangerousLabel = getString(R.string.is_dangerous_label);
+        String isDangerousCargo = String.format("%s: %s\n", isDangerousLabel, isDangerousCargoBoolean ? "✔" : "✗");
 
         SpannableStringBuilder isGuardedBold = getSpannableStringBuilder(isGuarded, 0, 12);
         SpannableStringBuilder isFencedBold = getSpannableStringBuilder(isFenced, 0, 12);
@@ -278,21 +300,24 @@ public class FoundMopData extends AppCompatActivity {
         String organizationInChargeText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInCharge)
-                .orElse(null);
-        String organizationInCharge = String.format("☐ IMIE I NAZWISKO/NAZWA: %s\n", organizationInChargeText);
+                .orElse("");
+        String organizationInChargeLabel = getString(R.string.organization_in_charge_label);
+        String organizationInCharge = String.format("%s: %s\n", organizationInChargeLabel, organizationInChargeText);
 
 
         String organizationInChargePhoneText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInChargePhone)
-                .orElse(null);
-        String organizationInChargePhone = String.format("☐ NUMER TELEFONU: %s\n", organizationInChargePhoneText);
+                .orElse("");
+        String organizationInChargePhoneLabel = getString(R.string.organization_in_charge_phone_label);
+        String organizationInChargePhone = String.format("%s: %s\n", organizationInChargePhoneLabel, organizationInChargePhoneText);
 
         String organizationInChargeEmailText = Optional.ofNullable(foundMop)
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getOrganizationInChargeEmail)
-                .orElse(null);
-        String organizationInChargeEmail = String.format("☐ ADRES EMAIL: %s\n", organizationInChargeEmailText);
+                .orElse("");
+        String organizationInChargeEmailLabel = getString(R.string.organization_in_charge_email_label);
+        String organizationInChargeEmail = String.format("%s: %s\n", organizationInChargeEmailLabel, organizationInChargeEmailText);
 
         SpannableStringBuilder organizationInChargeBold = getSpannableStringBuilder(organizationInCharge, 0, 24);
         SpannableStringBuilder organizationInChargePhoneBold = getSpannableStringBuilder(organizationInChargePhone, 0, 17);

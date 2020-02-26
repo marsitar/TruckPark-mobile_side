@@ -36,7 +36,7 @@
             android:lineSpacingExtra="14sp"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/full_rest_distance_label"
+            android:id="@+id/full_rest_distance_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/full_origin_destination"
@@ -45,10 +45,10 @@
             android:lineSpacingExtra="14sp"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/full_rest_time_label"
+            android:id="@+id/full_rest_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/full_rest_distance_label"
+            android:layout_below="@+id/full_rest_distance_text"
             android:text="Pozostało czasu: "
             android:layout_centerHorizontal="true"
             android:lineSpacingExtra="14sp"

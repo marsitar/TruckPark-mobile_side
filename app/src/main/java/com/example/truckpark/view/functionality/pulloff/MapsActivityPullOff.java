@@ -44,6 +44,12 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
 
     public static GoogleMap googleMap;
 
+    private final static int FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX = 22;
+    private final static int FULL_REST_TIME_BOLD_START_CHAR_INDEX = 17;
+    private final static double POLAND_CENTER_LAT = 52.068716;
+    private final static double POLAND_CENTER_LONG = 19.0;
+    private final static float DEFAULT_ZOOM = 5.7f;
+
     private final String className = this.getClass().getSimpleName();
 
     private List<Mop> mops;
@@ -69,7 +75,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
 
         MapsActivityPullOff.googleMap = googleMap;
-        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
+        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(POLAND_CENTER_LAT, POLAND_CENTER_LONG), DEFAULT_ZOOM));
         MapsActivityPullOff.googleMap.setMyLocationEnabled(true);
         MapsActivityPullOff.googleMap.setOnPolylineClickListener(this);
 
@@ -78,13 +84,13 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         startAndEndpoints = displayOnMapService.generateStartAndEndpoints(polylineOptionsList);
 
         displayOnMapService.moveToRouteStartIfRouteScheduleExists();
-        clearAndAddMarkers();
+        clearAndAddAllGeometries();
         refreshRouteScheduleValues();
 
         Log.i(className, "Map is ready");
     }
 
-    private void clearAndAddMarkers() {
+    private void clearAndAddAllGeometries() {
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -150,8 +156,8 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     private void refreshRouteScheduleValues() {
 
         TextView originDestinationValue = findViewById(R.id.full_origin_destination);
-        TextView fullRestDistanceValue = findViewById(R.id.full_rest_distance_label);
-        TextView fullRestTimeValue = findViewById(R.id.full_rest_time_label);
+        TextView fullRestDistanceText = findViewById(R.id.full_rest_distance_text);
+        TextView fullRestTimeText = findViewById(R.id.full_rest_time_text);
 
         RouteScheduleInfoWindowContentService routeScheduleInfoWindowContentService = new RouteScheduleInfoWindowContentService();
 
@@ -165,12 +171,15 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
                 .map(RouteScheduleInfoWindowContentService::getFullRestTimeValue)
                 .orElse("");
 
-        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder("Pozostało kilometrów: " + fullRestDistance, 22, fullRestDistance.length()+22);
-        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder("Pozostało czasu: " + fullRestTime, 17, fullRestTime.length()+17);
+        String fullRestDistanceLabel = getString(R.string.full_rest_distance_label);
+        String fullRestTimeLabel = getString(R.string.full_rest_time_label);
+
+        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder(fullRestDistanceLabel + fullRestDistance, FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX, fullRestDistance.length() + FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX);
+        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder(fullRestTimeLabel + fullRestTime, FULL_REST_TIME_BOLD_START_CHAR_INDEX, fullRestTime.length() + FULL_REST_TIME_BOLD_START_CHAR_INDEX);
 
         originDestinationValue.setText(originDestination);
-        fullRestDistanceValue.setText(fullRestDistanceBold);
-        fullRestTimeValue.setText(fullRestTimeBold);
+        fullRestDistanceText.setText(fullRestDistanceBold);
+        fullRestTimeText.setText(fullRestTimeBold);
 
         Log.d(className, String.format("RouteSchedule values (originDestination = %s, fullRestDistance = %s, fullRestTime = %s) have been been updated on screen.", originDestination, fullRestDistance, fullRestTime));
     }
