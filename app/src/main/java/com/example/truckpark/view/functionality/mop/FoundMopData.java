@@ -91,11 +91,11 @@ public class FoundMopData extends AppCompatActivity {
         String coordinatesLabel = getString(R.string.coordinates_label);
         String coordinates = String.format("%s: %f X\n %f Y", coordinatesLabel, coordinateX, coordinateY);
 
-        SpannableStringBuilder organizationBold = getSpannableStringBuilder(organization, 0, 9);
-        SpannableStringBuilder placeBold = getSpannableStringBuilder(place, 0, 13);
-        SpannableStringBuilder identificationDataBold = getSpannableStringBuilder(identificationData, 0, 22);
-        SpannableStringBuilder categoryBold = getSpannableStringBuilder(category, 0, 12);
-        SpannableStringBuilder coordinatesBold = getSpannableStringBuilder(coordinates, 0, 12);
+        SpannableStringBuilder organizationBold = getSpannableStringBuilder(organization, 0, organizationLabel.length() + 1);
+        SpannableStringBuilder placeBold = getSpannableStringBuilder(place, 0, placeLabel.length() + 1);
+        SpannableStringBuilder identificationDataBold = getSpannableStringBuilder(identificationData, 0, identificationDataLabel.length() + 1);
+        SpannableStringBuilder categoryBold = getSpannableStringBuilder(category, 0, categoryLabel.length() + 1);
+        SpannableStringBuilder coordinatesBold = getSpannableStringBuilder(coordinates, 0, coordinatesLabel.length() + 1);
 
         mopContent.setText(organizationBold
                 .append(placeBold)
@@ -128,9 +128,9 @@ public class FoundMopData extends AppCompatActivity {
         String directionLabel = getString(R.string.direction_label);
         String direction = String.format("%s: %s\n", directionLabel, directionText);
 
-        SpannableStringBuilder roadClassBold = getSpannableStringBuilder(roadClass, 0, 19);
-        SpannableStringBuilder roadNumberBold = getSpannableStringBuilder(roadNumber, 0, 8);
-        SpannableStringBuilder directionBold = getSpannableStringBuilder(direction, 0, 11);
+        SpannableStringBuilder roadClassBold = getSpannableStringBuilder(roadClass, 0, roadClassLabel.length() + 1);
+        SpannableStringBuilder roadNumberBold = getSpannableStringBuilder(roadNumber, 0, roadNumberLabel.length() + 1);
+        SpannableStringBuilder directionBold = getSpannableStringBuilder(direction, 0, directionLabel.length() + 1);
 
         mopContent.setText(roadClassBold
                 .append(roadNumberBold)
@@ -167,10 +167,10 @@ public class FoundMopData extends AppCompatActivity {
         String coachPlacesLabel = getString(R.string.coach_places_label);
         String coachPlaces = String.format("%s: %d", coachPlacesLabel, coachPlacesNumber);
 
-        SpannableStringBuilder truckPlacesBold = getSpannableStringBuilder(truckPlaces, 0, 27);
-        SpannableStringBuilder freeTruckPlacesBold = getSpannableStringBuilder(freeTruckPlaces, 0, 25);
-        SpannableStringBuilder passengerPlacesBold = getSpannableStringBuilder(passengerPlaces, 0, 25);
-        SpannableStringBuilder coachPlacesBold = getSpannableStringBuilder(coachPlaces, 0, 21);
+        SpannableStringBuilder truckPlacesBold = getSpannableStringBuilder(truckPlaces, 0, truckPlacesLabel.length() + 1);
+        SpannableStringBuilder freeTruckPlacesBold = getSpannableStringBuilder(freeTruckPlaces, 0, freeTruckPlacesLabel.length() + 1);
+        SpannableStringBuilder passengerPlacesBold = getSpannableStringBuilder(passengerPlaces, 0, passengerPlacesLabel.length() + 1);
+        SpannableStringBuilder coachPlacesBold = getSpannableStringBuilder(coachPlaces, 0, coachPlacesLabel.length() + 1);
 
         mopContent.setText(truckPlacesBold
                 .append(freeTruckPlacesBold)
@@ -263,21 +263,21 @@ public class FoundMopData extends AppCompatActivity {
                 .map(Mop::getExtendedMopData)
                 .map(ExtendedMopData::getDangerousCargo)
                 .orElse(false);
-        String isDangerousLabel = getString(R.string.is_dangerous_label);
-        String isDangerousCargo = String.format("%s: %s\n", isDangerousLabel, isDangerousCargoBoolean ? "✔" : "✗");
+        String isDangerousCargoLabel = getString(R.string.is_dangerous_label);
+        String isDangerousCargo = String.format("%s: %s\n", isDangerousCargoLabel, isDangerousCargoBoolean ? "✔" : "✗");
 
-        SpannableStringBuilder isGuardedBold = getSpannableStringBuilder(isGuarded, 0, 12);
-        SpannableStringBuilder isFencedBold = getSpannableStringBuilder(isFenced, 0, 12);
-        SpannableStringBuilder isSecurityCameraBold = getSpannableStringBuilder(isSecurityCamera, 0, 19);
-        SpannableStringBuilder isPetroleumBold = getSpannableStringBuilder(isPetroleum, 0, 19);
-        SpannableStringBuilder isRestaurantBold = getSpannableStringBuilder(isRestaurant, 0, 14);
-        SpannableStringBuilder isPlaceToStayBold = getSpannableStringBuilder(isPlaceToStay, 0, 20);
-        SpannableStringBuilder isToiletBold = getSpannableStringBuilder(isToilet, 0, 10);
-        SpannableStringBuilder isCarwashBold = getSpannableStringBuilder(isCarwash, 0, 21);
-        SpannableStringBuilder isWorkshopBold = getSpannableStringBuilder(isWorkshop, 0, 11);
-        SpannableStringBuilder isLightingBold = getSpannableStringBuilder(isLighting, 0, 14);
-        SpannableStringBuilder isElectricChargerBold = getSpannableStringBuilder(isElectricCharger, 0, 24);
-        SpannableStringBuilder isDangerousCargoBold = getSpannableStringBuilder(isDangerousCargo, 0, 23);
+        SpannableStringBuilder isGuardedBold = getSpannableStringBuilder(isGuarded, 0, isGuardedLabel.length() + 1);
+        SpannableStringBuilder isFencedBold = getSpannableStringBuilder(isFenced, 0, isFencedLabel.length() + 1);
+        SpannableStringBuilder isSecurityCameraBold = getSpannableStringBuilder(isSecurityCamera, 0, isMonitoringLabel.length() + 1);
+        SpannableStringBuilder isPetroleumBold = getSpannableStringBuilder(isPetroleum, 0, isPetroleumLabel.length() + 1);
+        SpannableStringBuilder isRestaurantBold = getSpannableStringBuilder(isRestaurant, 0, isRestaurantLabel.length() + 1);
+        SpannableStringBuilder isPlaceToStayBold = getSpannableStringBuilder(isPlaceToStay, 0, isPlaceToStayLabel.length() + 1);
+        SpannableStringBuilder isToiletBold = getSpannableStringBuilder(isToilet, 0, isToiletLabel.length() + 1);
+        SpannableStringBuilder isCarwashBold = getSpannableStringBuilder(isCarwash, 0, isCarwashLabel.length() + 1);
+        SpannableStringBuilder isWorkshopBold = getSpannableStringBuilder(isWorkshop, 0, isWorkshopLabel.length() + 1);
+        SpannableStringBuilder isLightingBold = getSpannableStringBuilder(isLighting, 0, isLightingLabel.length() + 1);
+        SpannableStringBuilder isElectricChargerBold = getSpannableStringBuilder(isElectricCharger, 0, isElectricChargerLabel.length() + 1);
+        SpannableStringBuilder isDangerousCargoBold = getSpannableStringBuilder(isDangerousCargo, 0, isDangerousCargoLabel.length() + 1);
 
         mopContent.setText(isGuardedBold
                 .append(isFencedBold)
