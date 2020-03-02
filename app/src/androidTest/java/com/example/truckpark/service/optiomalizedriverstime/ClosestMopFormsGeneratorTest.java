@@ -152,7 +152,7 @@ public class ClosestMopFormsGeneratorTest {
     }
 
     @Test
-    public void generateClosestMopFormsGenerator_inputIncorrectValues_assertIsNull() {
+    public void generateClosestMopFormsGenerator_inputNullValue_assertIsNull() {
         //given
         List<Mop> mops = null;
         //when
