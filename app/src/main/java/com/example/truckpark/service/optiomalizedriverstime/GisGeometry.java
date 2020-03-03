@@ -22,6 +22,7 @@ public class GisGeometry {
     private static final double OFFSET_DISTANCE_IN_WGS84_UNIT = 0.0003;
     private static final double BEVEL_RADIO = 1;
     private static final double NUMBER_OF_POINTS_ON_SHAPE_ENDING = 10.0;
+    private static final double POLYGONE_RADIUS = 0.5;
 
     private final String className = this.getClass().getSimpleName();
 
@@ -88,8 +89,8 @@ public class GisGeometry {
 
     private Polygon generateGisPolygon(Polyline sourcePolyline) {
 
-        SpatialReference gpsSpatialReference = SpatialReference.create(4326);
-        double polygoneRadius = 0.5;
+        SpatialReference gpsSpatialReference = SpatialReference.create(SPATIAL_REFERENCE_EPSG_CODE);
+        double polygoneRadius = POLYGONE_RADIUS;
 
         Polygon generatedPolygon = (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
 

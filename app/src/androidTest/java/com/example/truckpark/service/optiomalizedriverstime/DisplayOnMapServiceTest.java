@@ -153,5 +153,5 @@ public class DisplayOnMapServiceTest {
         DataGetter<RouteSchedule> routerScheduleDataManagement = new RouterScheduleDataManagement();
         routerScheduleDataManagement.getData().getRouteParts().clear();
     }
-    
+
 }
