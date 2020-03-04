@@ -42,7 +42,7 @@ public class StepToRouteSegmentConverter {
                 .map(Data::getValue)
                 .orElse(0);
 
-        return Duration.ofSeconds(duration);
+        return Duration.ofMinutes(duration);
     }
 
     private Integer getDistanceFromStep(Step step) {
