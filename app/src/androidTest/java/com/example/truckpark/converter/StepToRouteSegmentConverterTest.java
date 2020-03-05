@@ -1,5 +1,7 @@
 package com.example.truckpark.converter;
 
+import androidx.test.runner.AndroidJUnit4;
+
 import com.example.truckpark.conventer.StepToRouteSegmentConverter;
 import com.example.truckpark.domain.entity.RouteSegment;
 import com.example.truckpark.domain.json.googledirectionsapi.Data;
@@ -8,6 +10,7 @@ import com.example.truckpark.domain.json.googledirectionsapi.Polyline;
 import com.example.truckpark.domain.json.googledirectionsapi.Step;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -18,10 +21,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+@RunWith(AndroidJUnit4.class)
 public class StepToRouteSegmentConverterTest {
 
     @Test
-    public void convertStepToRouteSegment_inputCorrectValues_assertResultHasProperValues() {
+    public void convertStepToRouteSegment_inputCorrectValues_assertResultIsCorrect() {
         //given
         Step step = new Step(
                 new Data("5 m", 5),

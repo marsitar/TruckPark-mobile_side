@@ -18,7 +18,6 @@ public class RoutePart {
         private Integer distance;
         private String origin;
         private String destination;
-
         private List<RouteSegment> routeSegments = new ArrayList<>();
 
         public Builder withDuration(Duration duration) {
