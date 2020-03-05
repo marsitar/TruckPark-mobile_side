@@ -174,8 +174,8 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         String fullRestDistanceLabel = getString(R.string.full_rest_distance_label);
         String fullRestTimeLabel = getString(R.string.full_rest_time_label);
 
-        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder(fullRestDistanceLabel + fullRestDistance, FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX, fullRestDistance.length() + FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX);
-        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder(fullRestTimeLabel + fullRestTime, FULL_REST_TIME_BOLD_START_CHAR_INDEX, fullRestTime.length() + FULL_REST_TIME_BOLD_START_CHAR_INDEX);
+        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder(String.format("%s %s", fullRestDistanceLabel, fullRestDistance), FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX, fullRestDistance.length() + FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX);
+        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder(String.format("%s %s", fullRestTimeLabel , fullRestTime), FULL_REST_TIME_BOLD_START_CHAR_INDEX, fullRestTime.length() + FULL_REST_TIME_BOLD_START_CHAR_INDEX);
 
         originDestinationValue.setText(originDestination);
         fullRestDistanceText.setText(fullRestDistanceBold);
