@@ -66,7 +66,10 @@ public class DisplayOnMapService {
         LatLng lastEndPoint = getLastEndPoint(polylineOptionsList);
 
         completedListOfPoints.addAll(startPoints);
-        completedListOfPoints.add(lastEndPoint);
+
+        Optional.ofNullable(lastEndPoint)
+                .ifPresent(completedListOfPoints::add);
+
 
         Log.i(className, String.format("Completed list of startAndEndpoints has been generated: %s.", completedListOfPoints));
 
