@@ -18,6 +18,12 @@ import java.util.stream.Collectors;
 
 public class GisGeometry {
 
+    private static final int SPATIAL_REFERENCE_EPSG_CODE = 4326;
+    private static final double OFFSET_DISTANCE_IN_WGS84_UNIT = 0.0003;
+    private static final double BEVEL_RADIO = 1;
+    private static final double NUMBER_OF_POINTS_ON_SHAPE_ENDING = 10.0;
+    private static final double POLYGONE_RADIUS = 0.5;
+
     private final String className = this.getClass().getSimpleName();
 
     public Polygon generateBufferOnTheRightSideOfRoad() {
@@ -72,12 +78,9 @@ public class GisGeometry {
     private Polyline generateOffsetGisPolyline(Polyline polyline) {
 
         OperatorOffset.JoinType typeOfShapeEnding = OperatorOffset.JoinType.Miter;
-        SpatialReference gpsSpatialReference = SpatialReference.create(4326);
-        double offsetDistance = 0.0003;
-        double bevelRatio = 1;
-        double numberOfPointsOnShapeEnding = 10.0;
+        SpatialReference gpsSpatialReference = SpatialReference.create(SPATIAL_REFERENCE_EPSG_CODE);
 
-        Polyline generatedOffsetGisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, offsetDistance, typeOfShapeEnding, bevelRatio, numberOfPointsOnShapeEnding, null);
+        Polyline generatedOffsetGisPolyline = (Polyline) OperatorOffset.local().execute(polyline, gpsSpatialReference, OFFSET_DISTANCE_IN_WGS84_UNIT, typeOfShapeEnding, BEVEL_RADIO, NUMBER_OF_POINTS_ON_SHAPE_ENDING, null);
 
         Log.d(className, String.format("Generated Offset Gis Polyline: %s.", generatedOffsetGisPolyline.toString()));
 
@@ -86,8 +89,8 @@ public class GisGeometry {
 
     private Polygon generateGisPolygon(Polyline sourcePolyline) {
 
-        SpatialReference gpsSpatialReference = SpatialReference.create(4326);
-        double polygoneRadius = 0.5;
+        SpatialReference gpsSpatialReference = SpatialReference.create(SPATIAL_REFERENCE_EPSG_CODE);
+        double polygoneRadius = POLYGONE_RADIUS;
 
         Polygon generatedPolygon = (Polygon) OperatorBuffer.local().execute(sourcePolyline, gpsSpatialReference, polygoneRadius, null);
 

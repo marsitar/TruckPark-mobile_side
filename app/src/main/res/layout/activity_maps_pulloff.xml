@@ -13,8 +13,7 @@
         android:orientation="vertical"
         android:layout_weight=".9">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
@@ -23,6 +22,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/rest_distance_and_time_background"
         android:orientation="vertical"
         android:layout_weight=".1">
 
@@ -31,43 +31,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:textColor="@color/black"
             android:layout_centerHorizontal="true"
             android:lineSpacingExtra="14sp"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/full_rest_distance_label"
+            android:id="@+id/full_rest_distance_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/full_origin_destination"
-            android:text="Pozostały czasu: "
+            android:text="Pozostało kilometrów: "
             android:layout_centerHorizontal="true"
             android:lineSpacingExtra="14sp"
             android:textSize="18sp" />
         <TextView
-            android:id="@+id/full_rest_distance_value"
+            android:id="@+id/full_rest_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/full_origin_destination"
-            android:layout_toRightOf="@+id/full_rest_distance_label"
-            android:text=""
-            android:lineSpacingExtra="14sp"
-            android:textSize="18sp" />
-        <TextView
-            android:id="@+id/full_rest_time_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/full_rest_distance_label"
-            android:text="Pozostał kilometrów: "
+            android:layout_below="@+id/full_rest_distance_text"
+            android:text="Pozostało czasu: "
             android:layout_centerHorizontal="true"
-            android:lineSpacingExtra="14sp"
-            android:textSize="18sp" />
-        <TextView
-            android:id="@+id/full_rest_time_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/full_rest_distance_label"
-            android:layout_toRightOf="@+id/full_rest_time_label"
-            android:text=""
             android:lineSpacingExtra="14sp"
             android:textSize="18sp" />
     </RelativeLayout>

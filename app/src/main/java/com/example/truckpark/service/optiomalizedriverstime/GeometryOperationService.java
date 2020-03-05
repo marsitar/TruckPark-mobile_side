@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 
 public class GeometryOperationService {
 
+    private static final int SPATIAL_REFERENCE_EPSG_CODE = 4326;
+    private static final double RADIUS_DISTANCE_IN_WGS84_UNIT = 0.5;
+
     private final String className = this.getClass().getSimpleName();
 
     public List<Mop> getPotentialStopMops(Polygon polygon) {
@@ -64,7 +67,7 @@ public class GeometryOperationService {
 
     private boolean isMopWithinBuffer(Point mopCoordinates, Polygon buffer) {
 
-        SpatialReference gpsSpatialReference = SpatialReference.create(4326);
+        SpatialReference gpsSpatialReference = SpatialReference.create(SPATIAL_REFERENCE_EPSG_CODE);
 
         boolean mopWithinBuffer = OperatorWithin.local().execute(mopCoordinates, buffer, gpsSpatialReference, null);
 
@@ -75,12 +78,11 @@ public class GeometryOperationService {
 
     private boolean isMopInsideRadius(Point mopGisPoint, Point currentGpsPoint) {
 
-        double distanceInMeters = 0.5;
-        SpatialReference gpsSpatialReference = SpatialReference.create(4326);
+        SpatialReference gpsSpatialReference = SpatialReference.create(SPATIAL_REFERENCE_EPSG_CODE);
 
         double distance = GeometryEngine.distance(mopGisPoint, currentGpsPoint, gpsSpatialReference);
 
-        boolean mopInsideRadius = distance > distanceInMeters;
+        boolean mopInsideRadius = distance > RADIUS_DISTANCE_IN_WGS84_UNIT;
 
         Log.d(className, String.format("Mop = %s is within radius of currentGpsPoint = %s : %s.", mopGisPoint, currentGpsPoint, mopInsideRadius));
 

@@ -2,6 +2,8 @@ package com.example.truckpark.view.functionality.pulloff;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,10 +38,17 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnPolylineClickListener {
 
     public static GoogleMap googleMap;
+
+    private final static int FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX = 22;
+    private final static int FULL_REST_TIME_BOLD_START_CHAR_INDEX = 17;
+    private final static double POLAND_CENTER_LAT = 52.068716;
+    private final static double POLAND_CENTER_LONG = 19.0;
+    private final static float DEFAULT_ZOOM = 5.7f;
 
     private final String className = this.getClass().getSimpleName();
 
@@ -66,7 +75,7 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
 
         MapsActivityPullOff.googleMap = googleMap;
-        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.068716, 19.0), 5.7f));
+        MapsActivityPullOff.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(POLAND_CENTER_LAT, POLAND_CENTER_LONG), DEFAULT_ZOOM));
         MapsActivityPullOff.googleMap.setMyLocationEnabled(true);
         MapsActivityPullOff.googleMap.setOnPolylineClickListener(this);
 
@@ -75,13 +84,13 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         startAndEndpoints = displayOnMapService.generateStartAndEndpoints(polylineOptionsList);
 
         displayOnMapService.moveToRouteStartIfRouteScheduleExists();
-        clearAndAddMarkers();
+        clearAndAddAllGeometries();
         refreshRouteScheduleValues();
 
         Log.i(className, "Map is ready");
     }
 
-    private void clearAndAddMarkers() {
+    private void clearAndAddAllGeometries() {
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -147,17 +156,30 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
     private void refreshRouteScheduleValues() {
 
         TextView originDestinationValue = findViewById(R.id.full_origin_destination);
-        TextView fullRestDistanceValue = findViewById(R.id.full_rest_distance_value);
-        TextView fullRestTimeValue = findViewById(R.id.full_rest_time_value);
+        TextView fullRestDistanceText = findViewById(R.id.full_rest_distance_text);
+        TextView fullRestTimeText = findViewById(R.id.full_rest_time_text);
 
         RouteScheduleInfoWindowContentService routeScheduleInfoWindowContentService = new RouteScheduleInfoWindowContentService();
-        String originDestination = routeScheduleInfoWindowContentService.getOriginDestinationValue();
-        String fullRestDistance = routeScheduleInfoWindowContentService.getFullRestDistanceValue();
-        String fullRestTime = routeScheduleInfoWindowContentService.getFullRestTimeValue();
+
+        String originDestination = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getOriginDestinationValue)
+                .orElse("");
+        String fullRestDistance = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getFullRestDistanceValue)
+                .orElse("");
+        String fullRestTime = Optional.of(routeScheduleInfoWindowContentService)
+                .map(RouteScheduleInfoWindowContentService::getFullRestTimeValue)
+                .orElse("");
+
+        String fullRestDistanceLabel = getString(R.string.full_rest_distance_label);
+        String fullRestTimeLabel = getString(R.string.full_rest_time_label);
+
+        SpannableStringBuilder fullRestDistanceBold = getSpannableStringBuilder(String.format("%s %s", fullRestDistanceLabel, fullRestDistance), FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX, fullRestDistance.length() + FULL_REST_DISTANCE_BOLD_START_CHAR_INDEX);
+        SpannableStringBuilder fullRestTimeBold = getSpannableStringBuilder(String.format("%s %s", fullRestTimeLabel , fullRestTime), FULL_REST_TIME_BOLD_START_CHAR_INDEX, fullRestTime.length() + FULL_REST_TIME_BOLD_START_CHAR_INDEX);
 
         originDestinationValue.setText(originDestination);
-        fullRestDistanceValue.setText(fullRestDistance);
-        fullRestTimeValue.setText(fullRestTime);
+        fullRestDistanceText.setText(fullRestDistanceBold);
+        fullRestTimeText.setText(fullRestTimeBold);
 
         Log.d(className, String.format("RouteSchedule values (originDestination = %s, fullRestDistance = %s, fullRestTime = %s) have been been updated on screen.", originDestination, fullRestDistance, fullRestTime));
     }
@@ -214,6 +236,12 @@ public class MapsActivityPullOff extends FragmentActivity implements OnMapReadyC
         toast.show();
 
         Log.d(className, "PolylineToast has been shown.");
+    }
+
+    private SpannableStringBuilder getSpannableStringBuilder(String stringToBeBold, int start, int end) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(stringToBeBold);
+        spannableStringBuilder.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableStringBuilder;
     }
 
 }

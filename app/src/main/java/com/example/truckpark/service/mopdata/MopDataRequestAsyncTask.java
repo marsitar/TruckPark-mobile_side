@@ -4,7 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.truckpark.domain.json.mopapi.Mop;
-import com.example.truckpark.repository.CurrentMops;
+import com.example.truckpark.localdatamanagment.DataSaver;
+import com.example.truckpark.localdatamanagment.MopsDataManagement;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
 
@@ -64,10 +66,13 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
 
     private void setCurrentMopsInRepository(List<Mop> mopsData) {
 
-        CurrentMops.getCurrentMopsInstance().setCurrentMopsList(mopsData);
-
-        Log.d(className, "New mops has been set in repository.");
-
+        Optional.ofNullable(mopsData)
+                .ifPresent(mops -> {
+                    DataSaver<List<Mop>> mopsDataManagement = new MopsDataManagement();
+                    mopsDataManagement.save(mopsData);
+                    Log.d(className, "New mops has been set in repository.");
+                    }
+                );
     }
 
 }

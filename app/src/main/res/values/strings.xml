@@ -29,5 +29,34 @@
     <string name="ownerdata">DANE OBSLUGUJĄCEGO</string>
     <string name="title_activity_maps_navigation">Map</string>
     <string name="title_activity_maps_pulloff">Map</string>
-
+    <string name="full_rest_distance_label">Pozostało kilometrów: </string>
+    <string name="full_rest_time_label">Pozostało czasu: </string>
+    <string name="organization_label">☐ ODDZIAL</string>
+    <string name="place_label">☐ MIEJSCOWOSC</string>
+    <string name="identification_data_label">☐ DANE IDENTYFIKACYJNE</string>
+    <string name="category_label">☐ KATEGORIA</string>
+    <string name="coordinates_label">☐ WSPOLRZEDNE</string>
+    <string name="road_class_label">☐ KLASA TECHNICZNA</string>
+    <string name="road_number_label">☐ NUMER</string>
+    <string name="direction_label">☐ KIERUNEK</string>
+    <string name="truck_places_label">☐ MIEJSCA CIEZAROWE OGOLEM</string>
+    <string name="free_truck_places_label">☐ WOLNE MIEJSCA CIEZAROWE</string>
+    <string name="passenger_places_label">☐ MIEJSCA OSOBOWE OGOLEM</string>
+    <string name="coach_places_label">☐ MIEJSCA AUTOBUSOWE</string>
+    <string name="is_guarded_label">☐ STRZEZONY</string>
+    <string name="is_fenced_label">☐ OGRODZONY</string>
+    <string name="is_monitoring_label">☐ MONITORING WIDEO</string>
+    <string name="is_petroleum_label">☐ STACJA BENZYNOWA</string>
+    <string name="is_restaurant_label">☐ RESTAURACJA</string>
+    <string name="is_place_to_stay_label">☐ MIEJSCA NOCLEGOWE</string>
+    <string name="is_toilet_label">☐ TOALETA</string>
+    <string name="is_carwash_label">☐ MYJNIA SAMOCHODOWA</string>
+    <string name="is_workshop_label">☐ WARSZTAT</string>
+    <string name="is_lighting_label">☐ OSWIETLENIE</string>
+    <string name="is_electric_charger">☐ LADOWARKA ELEKTRYCZNA</string>
+    <string name="is_dangerous_label">☐ NIEBEZPIECZNE LADUNKI</string>
+    <string name="organization_in_charge_label">☐ IMIE I NAZWISKO/NAZWA</string>
+    <string name="organization_in_charge_phone_label">☐ NUMER TELEFONU</string>
+    <string name="organization_in_charge_email_label">☐ ADRES EMAIL</string>
+    <string name="free_truck_places_snippet_label">Liczba wolnych miejsc dla Tir-ów</string>
 </resources>
