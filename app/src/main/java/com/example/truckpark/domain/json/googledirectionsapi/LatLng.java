@@ -2,6 +2,14 @@ package com.example.truckpark.domain.json.googledirectionsapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LatLng {
 
     @JsonProperty("lat")
@@ -10,27 +18,4 @@ public class LatLng {
     @JsonProperty("lng")
     private double lng;
 
-    public LatLng() {
-    }
-
-    public LatLng(double lat, double lng) {
-        this.lat = lat;
-        this.lng = lng;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
 }

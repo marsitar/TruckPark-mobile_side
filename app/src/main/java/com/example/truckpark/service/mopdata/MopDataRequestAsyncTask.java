@@ -32,6 +32,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
     protected List<Mop> doInBackground(Void... voids) {
 
         ObjectMapper mapperJsonToClass = new ObjectMapper();
+
         String url = buildUrl(CATEGORY);
         List<Mop> mopsData = null;
         try {

@@ -37,11 +37,11 @@ public class StepToRouteSegmentConverterTest {
                 "DRIVING"
         );
 
-        RouteSegment routeSegment = new RouteSegment.Builder()
-                .withDistance(5)
-                .withDuration(Duration.ofMinutes(1))
-                .withInnerPoints(Arrays.asList(new Double[]{54.35202, 18.646630000000002}, new Double[]{54.352070000000005, 18.646610000000003}))
-                .withPoints(new Double[][]{new Double[]{54.3520236, 18.646629}, new Double[]{54.3520654, 18.6466084}})
+        RouteSegment routeSegment = RouteSegment.builder()
+                .distance(5)
+                .duration(Duration.ofMinutes(1))
+                .innerPoints(Arrays.asList(new Double[]{54.35202, 18.646630000000002}, new Double[]{54.352070000000005, 18.646610000000003}))
+                .points(new Double[][]{new Double[]{54.3520236, 18.646629}, new Double[]{54.3520654, 18.6466084}})
                 .build();
 
         StepToRouteSegmentConverter stepToRouteSegmentConverter = new StepToRouteSegmentConverter();
@@ -64,11 +64,11 @@ public class StepToRouteSegmentConverterTest {
                 "DRIVING"
         );
 
-        RouteSegment routeSegment = new RouteSegment.Builder()
-                .withDistance(6)
-                .withDuration(Duration.ofMinutes(1))
-                .withInnerPoints(Arrays.asList(new Double[]{54.35202, 18.646630000000002}, new Double[]{54.352070000000005, 18.646610000000003}))
-                .withPoints(new Double[][]{new Double[]{54.3520236, 18.646629}, new Double[]{66.520654, 18.6466084}})
+        RouteSegment routeSegment = RouteSegment.builder()
+                .distance(6)
+                .duration(Duration.ofMinutes(1))
+                .innerPoints(Arrays.asList(new Double[]{54.35202, 18.646630000000002}, new Double[]{54.352070000000005, 18.646610000000003}))
+                .points(new Double[][]{new Double[]{54.3520236, 18.646629}, new Double[]{66.520654, 18.6466084}})
                 .build();
 
         StepToRouteSegmentConverter stepToRouteSegmentConverter = new StepToRouteSegmentConverter();

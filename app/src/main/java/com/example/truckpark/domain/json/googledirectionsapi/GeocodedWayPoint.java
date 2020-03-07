@@ -3,6 +3,13 @@ package com.example.truckpark.domain.json.googledirectionsapi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties({"types"})
 public class GeocodedWayPoint {
 
@@ -12,27 +19,4 @@ public class GeocodedWayPoint {
     @JsonProperty("place_id")
     private String placeId;
 
-    public GeocodedWayPoint() {
-    }
-
-    public GeocodedWayPoint(String geocoderStatus, String placeId) {
-        this.geocoderStatus = geocoderStatus;
-        this.placeId = placeId;
-    }
-
-    public String getGeocoderStatus() {
-        return geocoderStatus;
-    }
-
-    public void setGeocoderStatus(String geocoderStatus) {
-        this.geocoderStatus = geocoderStatus;
-    }
-
-    public String getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
 }

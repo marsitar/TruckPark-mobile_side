@@ -61,19 +61,19 @@ public class GoogleRouteToRoutePartConverterTest {
                 "OK"
         );
 
-        RouteSegment routeSegment = new RouteSegment.Builder()
-                .withDistance(92)
-                .withDuration(Duration.ofSeconds(19))
-                .withInnerPoints(Arrays.asList(new Double[]{53.4827, 18.76103}, new Double[]{53.4834, 18.76135}, new Double[]{18.761390000000002}))
-                .withPoints(new Double[][]{new Double[]{53.4826965, 18.7610288}, new Double[]{53.4834919, 18.7613914}})
+        RouteSegment routeSegment = RouteSegment.builder()
+                .distance(92)
+                .duration(Duration.ofSeconds(19))
+                .innerPoints(Arrays.asList(new Double[]{53.4827, 18.76103}, new Double[]{53.4834, 18.76135}, new Double[]{18.761390000000002}))
+                .points(new Double[][]{new Double[]{53.4826965, 18.7610288}, new Double[]{53.4834919, 18.7613914}})
                 .build();
 
-        RoutePart routePart = new RoutePart.Builder()
-                .withDuration(Duration.ofSeconds(19))
-                .withDistance(92)
-                .withOrigin("Dworcowa, 86-300 Grudziądz, Poland")
-                .withDestination("Królewska, 86-300 Grudziądz, Poland")
-                .withRouteSegments(Arrays.asList(routeSegment))
+        RoutePart routePart = RoutePart.builder()
+                .duration(Duration.ofSeconds(19))
+                .distance(92)
+                .origin("Dworcowa, 86-300 Grudziądz, Poland")
+                .destination("Królewska, 86-300 Grudziądz, Poland")
+                .routeSegments(Arrays.asList(routeSegment))
                 .build();
 
 
@@ -115,19 +115,19 @@ public class GoogleRouteToRoutePartConverterTest {
                 "OK"
         );
 
-        RouteSegment routeSegment = new RouteSegment.Builder()
-                .withDistance(92)
-                .withDuration(Duration.ofSeconds(19))
-                .withInnerPoints(Arrays.asList(new Double[]{53.4827, 18.76103}, new Double[]{53.4834, 18.76135}, new Double[]{18.761390000000002}))
-                .withPoints(new Double[][]{new Double[]{53.4826965, 18.7610288}, new Double[]{53.4834919, 18.7613914}})
+        RouteSegment routeSegment = RouteSegment.builder()
+                .distance(92)
+                .duration(Duration.ofSeconds(19))
+                .innerPoints(Arrays.asList(new Double[]{53.4827, 18.76103}, new Double[]{53.4834, 18.76135}, new Double[]{18.761390000000002}))
+                .points(new Double[][]{new Double[]{53.4826965, 18.7610288}, new Double[]{53.4834919, 18.7613914}})
                 .build();
 
-        RoutePart routePart = new RoutePart.Builder()
-                .withDuration(Duration.ofSeconds(19))
-                .withDistance(92)
-                .withOrigin("Dworcowe, 86-300 Grudziądz, Poland")
-                .withDestination("Królewska, 86-300 Grudziądz, Poland")
-                .withRouteSegments(Arrays.asList(routeSegment))
+        RoutePart routePart = RoutePart.builder()
+                .duration(Duration.ofSeconds(19))
+                .distance(92)
+                .origin("Dworcowe, 86-300 Grudziądz, Poland")
+                .destination("Królewska, 86-300 Grudziądz, Poland")
+                .routeSegments(Arrays.asList(routeSegment))
                 .build();
 
 

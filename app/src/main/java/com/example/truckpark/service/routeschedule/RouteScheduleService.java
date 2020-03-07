@@ -41,9 +41,9 @@ public class RouteScheduleService {
         List<GoogleRoute> generatedGoogleRouts = googleRouteService.generateGoogleRouteListFromItineraryPointPairs(itineraryPointPairs);
         List<RoutePart> routeParts = getRoutePartsFromGoogleRoutes(generatedGoogleRouts);
 
-        RouteSchedule routeSchedule = new RouteSchedule.Builder()
-                .withSaveDateAndTime(LocalDateTime.now())
-                .withRouteParts(routeParts)
+        RouteSchedule routeSchedule = RouteSchedule.builder()
+                .saveDateAndTime(LocalDateTime.now())
+                .routeParts(routeParts)
                 .build();
 
         Log.d(className, String.format("Prepared RouteSchedule: %s.", routeSchedule));
