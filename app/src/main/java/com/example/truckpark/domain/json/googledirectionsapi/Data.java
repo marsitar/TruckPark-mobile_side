@@ -2,6 +2,12 @@ package com.example.truckpark.domain.json.googledirectionsapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@lombok.Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Data {
 
     @JsonProperty("text")
@@ -10,27 +16,4 @@ public class Data {
     @JsonProperty("value")
     private Integer value;
 
-    public Data() {
-    }
-
-    public Data(String text, Integer value) {
-        this.text = text;
-        this.value = value;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
 }

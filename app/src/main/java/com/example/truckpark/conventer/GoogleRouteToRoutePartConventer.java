@@ -26,12 +26,12 @@ public class GoogleRouteToRoutePartConventer {
         String destination = getDestinationFromLeg(leg);
         List<RouteSegment> routeSegments = getRouteSegmentsFromLeg(leg);
 
-        RoutePart routePart = new RoutePart.Builder()
-                .withDuration(duration)
-                .withDistance(distance)
-                .withOrigin(origin)
-                .withDestination(destination)
-                .withRouteSegments(routeSegments)
+        RoutePart routePart = RoutePart.builder()
+                .duration(duration)
+                .distance(distance)
+                .origin(origin)
+                .destination(destination)
+                .routeSegments(routeSegments)
                 .build();
 
         return routePart;

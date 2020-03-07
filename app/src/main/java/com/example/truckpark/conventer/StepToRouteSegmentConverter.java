@@ -24,11 +24,11 @@ public class StepToRouteSegmentConverter {
         Double[][] points = getPointsFromStep(step);
         List<Double[]> innerPoints = getInnerPolylinePointsFormStep(step);
 
-        RouteSegment routeSegment = new RouteSegment.Builder()
-                .withDuration(duration)
-                .withDistance(distance)
-                .withPoints(points)
-                .withInnerPoints(innerPoints)
+        RouteSegment routeSegment = RouteSegment.builder()
+                .duration(duration)
+                .distance(distance)
+                .points(points)
+                .innerPoints(innerPoints)
                 .build();
 
 
