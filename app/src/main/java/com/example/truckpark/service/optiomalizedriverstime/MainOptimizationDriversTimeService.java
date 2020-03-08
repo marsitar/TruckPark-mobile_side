@@ -15,13 +15,15 @@ import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.localdatamanagment.DataGetter;
 import com.example.truckpark.localdatamanagment.RouterScheduleDataManagement;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainOptimizationDriversTimeService extends Service {
 
-    private List<LocalDateTime> breakTimes = new ArrayList<>();
+    private List<LocalDateTime> driverbreaks = new ArrayList<>();
 
     private String className = this.getClass().getSimpleName();
     private final IBinder binder = new MainOptimizationDriversTimeBinder();
@@ -38,13 +40,8 @@ public class MainOptimizationDriversTimeService extends Service {
 
         super.onCreate();
 
-        DataGetter<RouteSchedule> routeScheduleDataGetter = new RouterScheduleDataManagement();
-        LocalDateTime timeOfSavingSchedule = routeScheduleDataGetter.getData().getSaveDateAndTime();
-
-        LocalDateTime firstBreak = timeOfSavingSchedule.plusHours(3).plusMinutes(30);
-        breakTimes.add(firstBreak);
-
-        service();
+        addBreaksAndWorkEndTime();
+        runMainOptimizationDriversTimeService();
 
         Log.i(className, "MainOptimizationDriversTimeService has been created.");
     }
@@ -55,7 +52,7 @@ public class MainOptimizationDriversTimeService extends Service {
         return binder;
     }
 
-    public void service() {
+    public void runMainOptimizationDriversTimeService() {
 
         Log.i(className, "TruckDriverPositionAndData is to be periodically sent to remote server.");
 
@@ -64,7 +61,7 @@ public class MainOptimizationDriversTimeService extends Service {
             @Override
             public void run() {
 
-                LocalDateTime firstBreakMinusPeriodOfTime = breakTimes.get(0).minusMinutes(30);
+                LocalDateTime firstBreakMinusPeriodOfTime = driverbreaks.get(0).minusMinutes(30);
 
                 if (firstBreakMinusPeriodOfTime.compareTo(LocalDateTime.now()) >= 0) {
 
@@ -96,5 +93,18 @@ public class MainOptimizationDriversTimeService extends Service {
         Log.d(className, String.format("Mops get form algorithm classes: ", mopForms));
 
         return mopForms;
+    }
+
+    private void addBreaksAndWorkEndTime() {
+        DataGetter<RouteSchedule> routeScheduleDataGetter = new RouterScheduleDataManagement();
+        LocalDateTime timeOfSavingSchedule = routeScheduleDataGetter.getData().getSaveDateAndTime();
+
+        LocalDateTime firstBreak = timeOfSavingSchedule.plusHours(4).plusMinutes(30);
+        Duration firstBreakDuration = Duration.ofMinutes(15);
+        LocalDateTime secondBreak = firstBreak.plus(firstBreakDuration).plusHours(1).plusMinutes(15);
+        Duration secondBreakDuration = Duration.ofMinutes(15);
+        LocalDateTime endWorkDayTime = secondBreak.plus(secondBreakDuration).plusHours(1).plusMinutes(45);
+
+        driverbreaks.addAll(Arrays.asList(firstBreak, secondBreak, endWorkDayTime));
     }
 }
