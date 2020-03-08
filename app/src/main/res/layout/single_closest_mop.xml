@@ -87,4 +87,52 @@
         android:textStyle="bold"
         android:text=""
         android:textSize="20dp" />
+
+
+    <TextView
+        android:id="@+id/full_rest_distance_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:layout_below="@+id/free_tir_places_quantity_value"
+        android:layout_alignEnd="@+id/free_tir_places_quantity_text"
+        android:textAlignment="textEnd"
+        android:text="Kilometry:"
+        android:textSize="20dp" />
+    <TextView
+        android:id="@+id/full_rest_distance_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/free_tir_places_quantity_value"
+        android:layout_toEndOf="@+id/full_rest_distance_text"
+        android:layout_marginStart="10dp"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        android:text=""
+        android:textSize="20dp" />
+
+
+    <TextView
+        android:id="@+id/full_rest_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:layout_below="@+id/full_rest_distance_value"
+        android:layout_alignEnd="@+id/free_tir_places_quantity_text"
+        android:textAlignment="textEnd"
+        android:text="Czas:"
+        android:textSize="20dp" />
+    <TextView
+        android:id="@+id/full_rest_time_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/full_rest_distance_value"
+        android:layout_toEndOf="@+id/full_rest_time_text"
+        android:layout_marginStart="10dp"
+        android:textAlignment="textStart"
+        android:textStyle="bold"
+        android:text=""
+        android:textSize="20dp" />
+
+
 </RelativeLayout>

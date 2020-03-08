@@ -1,14 +1,19 @@
 package com.example.truckpark.service.optiomalizedriverstime;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.esri.core.geometry.Polygon;
+import com.example.truckpark.R;
 import com.example.truckpark.domain.entity.MopForm;
 import com.example.truckpark.domain.entity.RouteSchedule;
 import com.example.truckpark.domain.json.mopapi.Mop;
@@ -106,5 +111,30 @@ public class MainOptimizationDriversTimeService extends Service {
         LocalDateTime endWorkDayTime = secondBreak.plus(secondBreakDuration).plusHours(1).plusMinutes(45);
 
         driverBreaks.addAll(Arrays.asList(firstBreak, secondBreak, endWorkDayTime));
+    }
+
+    private View generateClosestMopToastViewWithTextValues(String origin, String destination, int distance, Duration duration) {
+
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View toastLayout = layoutInflater.inflate(R.layout.single_closest_mop, null);
+        toastLayout.setClipToOutline(true);
+
+        TextView originValue = toastLayout.findViewById(R.id.origin_value);
+        TextView destinationValue = toastLayout.findViewById(R.id.destination_value);
+        TextView distanceValue = toastLayout.findViewById(R.id.distance_value);
+        TextView durationValue = toastLayout.findViewById(R.id.duration_value);
+
+        int distanceInKilometers = distance / 1000;
+        long durationInHours = duration.toHours();
+        long restDurationInMinutes = duration.toMinutes() - duration.toHours() * 60l;
+
+        originValue.setText(origin);
+        destinationValue.setText(destination);
+        distanceValue.setText(String.format("%d km", distanceInKilometers));
+        durationValue.setText(String.format("%d h, %d min.", durationInHours, restDurationInMinutes));
+
+        Log.d(className, "PolylineToastViewWithTextValue has been created.");
+
+        return toastLayout;
     }
 }
