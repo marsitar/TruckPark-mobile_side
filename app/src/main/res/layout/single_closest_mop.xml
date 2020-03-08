@@ -87,8 +87,6 @@
         android:textStyle="bold"
         android:text=""
         android:textSize="20dp" />
-
-
     <TextView
         android:id="@+id/full_rest_distance_text"
         android:layout_width="wrap_content"
@@ -110,8 +108,6 @@
         android:textStyle="bold"
         android:text=""
         android:textSize="20dp" />
-
-
     <TextView
         android:id="@+id/full_rest_time_text"
         android:layout_width="wrap_content"
@@ -133,6 +129,5 @@
         android:textStyle="bold"
         android:text=""
         android:textSize="20dp" />
-
 
 </RelativeLayout>

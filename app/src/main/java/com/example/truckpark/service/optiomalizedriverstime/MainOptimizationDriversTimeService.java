@@ -7,8 +7,10 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MainOptimizationDriversTimeService extends Service {
 
@@ -72,14 +76,28 @@ public class MainOptimizationDriversTimeService extends Service {
 
                     List<MopForm> closestMopForms = getMopFormsFromAlgorithmClasses();
                     if(!closestMopForms.isEmpty()) {
-                        Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
+//                        toast.show();
+
+                        LayoutInflater layoutInflater = (LayoutInflater) getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                        LinearLayout toastLayout = (LinearLayout) layoutInflater.inflate(R.layout.closest_mops_toast, null);
+                        toastLayout.setClipToOutline(true);
+
+                        List<View> closestMopToastViews = closestMopForms.stream()
+                                .map(closestMopForm->generateClosestMopToastViewWithTextValues(closestMopForm))
+                                .collect(Collectors.toList());
+
+                        closestMopToastViews.forEach(
+                                closestMopToast -> toastLayout.addView(closestMopToast)
+                        );
+
+                        printClosestMopToast(toastLayout);
                     }
                 }
 
                 Log.d(className, String.format("firstBreakMinusPeriodOfTime = %s, timeNow = %s", firstBreakMinusPeriodOfTime, LocalDateTime.now()));
 
-                handler.postDelayed(this, 60000);
+                handler.postDelayed(this, 10000);
             }
         });
     }
@@ -113,28 +131,56 @@ public class MainOptimizationDriversTimeService extends Service {
         driverBreaks.addAll(Arrays.asList(firstBreak, secondBreak, endWorkDayTime));
     }
 
-    private View generateClosestMopToastViewWithTextValues(String origin, String destination, int distance, Duration duration) {
+    private View generateClosestMopToastViewWithTextValues(MopForm mopForm) {
 
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View toastLayout = layoutInflater.inflate(R.layout.single_closest_mop, null);
         toastLayout.setClipToOutline(true);
 
-        TextView originValue = toastLayout.findViewById(R.id.origin_value);
-        TextView destinationValue = toastLayout.findViewById(R.id.destination_value);
-        TextView distanceValue = toastLayout.findViewById(R.id.distance_value);
-        TextView durationValue = toastLayout.findViewById(R.id.duration_value);
+        TextView placeNameValue = toastLayout.findViewById(R.id.place_name_value);
+        TextView categoryValue = toastLayout.findViewById(R.id.category_value);
+        TextView tirPlacesQuantityValue = toastLayout.findViewById(R.id.tir_places_quantity_value);
+        TextView freeTirPlacesQuantityValue = toastLayout.findViewById(R.id.free_tir_places_quantity_value);
+        TextView fullRestDistanceValue = toastLayout.findViewById(R.id.full_rest_distance_value);
+        TextView fullRestTimeValue = toastLayout.findViewById(R.id.full_rest_time_value);
 
-        int distanceInKilometers = distance / 1000;
-        long durationInHours = duration.toHours();
-        long restDurationInMinutes = duration.toMinutes() - duration.toHours() * 60l;
+        String mopName = Optional.ofNullable(mopForm)
+                .map(MopForm::getMopName)
+                .orElse("");
+        int freePlacesForTrucks = Optional.ofNullable(mopForm)
+                .map(MopForm::getFreePlacesForTrucks)
+                .orElse(0);
+        int leftKilometers = Optional.ofNullable(mopForm)
+                .map(MopForm::getLeftKilometers)
+                .map(leftKm -> leftKm/1000)
+                .orElse(0);
+        long durationInHours = Optional.ofNullable(mopForm)
+                .map(MopForm::getLeftTime)
+                .map(Duration::toHours)
+                .orElse(0L);
+        long restDurationInMinutes = Optional.ofNullable(mopForm)
+                .map(MopForm::getLeftTime)
+                .map(duration -> duration.toMinutes() - duration.toHours() * 60l)
+                .orElse(0L);
 
-        originValue.setText(origin);
-        destinationValue.setText(destination);
-        distanceValue.setText(String.format("%d km", distanceInKilometers));
-        durationValue.setText(String.format("%d h, %d min.", durationInHours, restDurationInMinutes));
+        placeNameValue.setText(mopName);
+        freeTirPlacesQuantityValue.setText(String.valueOf(freePlacesForTrucks));
+        fullRestDistanceValue.setText(String.format("%d km", leftKilometers));
+        fullRestTimeValue.setText(String.format("%d h, %d min.", durationInHours, restDurationInMinutes));
 
-        Log.d(className, "PolylineToastViewWithTextValue has been created.");
+        Log.d(className, "ClosestMopToastViewWithTextValues has been created.");
 
         return toastLayout;
+    }
+
+    private void printClosestMopToast(View toastLayout) {
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setView(toastLayout);
+        toast.show();
+
+        Log.d(className, "ClosestMopToast has been shown.");
     }
 }
