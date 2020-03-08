@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MainOptimizationDriversTimeService extends Service {
 
-    private List<LocalDateTime> driverbreaks = new ArrayList<>();
+    private List<LocalDateTime> driverBreaks = new ArrayList<>();
 
     private String className = this.getClass().getSimpleName();
     private final IBinder binder = new MainOptimizationDriversTimeBinder();
@@ -61,7 +61,7 @@ public class MainOptimizationDriversTimeService extends Service {
             @Override
             public void run() {
 
-                LocalDateTime firstBreakMinusPeriodOfTime = driverbreaks.get(0).minusMinutes(30);
+                LocalDateTime firstBreakMinusPeriodOfTime = driverBreaks.get(0).minusMinutes(30);
 
                 if (firstBreakMinusPeriodOfTime.compareTo(LocalDateTime.now()) >= 0) {
 
@@ -105,6 +105,6 @@ public class MainOptimizationDriversTimeService extends Service {
         Duration secondBreakDuration = Duration.ofMinutes(15);
         LocalDateTime endWorkDayTime = secondBreak.plus(secondBreakDuration).plusHours(1).plusMinutes(45);
 
-        driverbreaks.addAll(Arrays.asList(firstBreak, secondBreak, endWorkDayTime));
+        driverBreaks.addAll(Arrays.asList(firstBreak, secondBreak, endWorkDayTime));
     }
 }
