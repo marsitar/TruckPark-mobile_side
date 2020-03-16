@@ -82,7 +82,7 @@ public class GeometryOperationService {
 
         double distance = GeometryEngine.distance(mopGisPoint, currentGpsPoint, gpsSpatialReference);
 
-        boolean mopInsideRadius = distance > RADIUS_DISTANCE_IN_WGS84_UNIT;
+        boolean mopInsideRadius = distance < RADIUS_DISTANCE_IN_WGS84_UNIT;
 
         Log.d(className, String.format("Mop = %s is within radius of currentGpsPoint = %s : %s.", mopGisPoint, currentGpsPoint, mopInsideRadius));
 
