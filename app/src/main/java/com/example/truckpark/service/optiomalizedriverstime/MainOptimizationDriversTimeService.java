@@ -72,12 +72,10 @@ public class MainOptimizationDriversTimeService extends Service {
 
                 LocalDateTime firstBreakMinusPeriodOfTime = driverBreaks.get(0).minusMinutes(30);
 
-                if (firstBreakMinusPeriodOfTime.compareTo(LocalDateTime.now()) >= 0) {
+                if (firstBreakMinusPeriodOfTime.isBefore(LocalDateTime.now())) {
 
                     List<MopForm> closestMopForms = getMopFormsFromAlgorithmClasses();
                     if(!closestMopForms.isEmpty()) {
-//                        Toast toast = Toast.makeText(getApplicationContext(), String.format("closestMop1: %s, %d", closestMopForms.get(0).getMopName(), closestMopForms.get(0).getLeftKilometers()), Toast.LENGTH_SHORT);
-//                        toast.show();
 
                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService( Context.LAYOUT_INFLATER_SERVICE );
                         LinearLayout toastLayout = (LinearLayout) layoutInflater.inflate(R.layout.closest_mops_toast, null);
@@ -88,7 +86,7 @@ public class MainOptimizationDriversTimeService extends Service {
                                 .collect(Collectors.toList());
 
                         closestMopToastViews.forEach(
-                                closestMopToast -> toastLayout.addView(closestMopToast)
+                                toastLayout::addView
                         );
 
                         printClosestMopToast(toastLayout);
@@ -97,7 +95,7 @@ public class MainOptimizationDriversTimeService extends Service {
 
                 Log.d(className, String.format("firstBreakMinusPeriodOfTime = %s, timeNow = %s", firstBreakMinusPeriodOfTime, LocalDateTime.now()));
 
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 30000);
             }
         });
     }
