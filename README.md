@@ -49,7 +49,19 @@ which let a user choose a specific functionality.
 ![Route schedule](./app/docs/route_schedule_form.jpg)
 
 ### Optiomalize driver's time
-> Under Deployment.
+> It the main and the most usable feature in this application. After inputting the route schedule in previous functionality a user has access to his routes visible on a map. At the bottom of the view, the user has information about travel parameters - origin, destination, remaining time and distance. Polygon of every fragment is clickable and after clicking the info form is displayed. A pop-up contains information about the fragment's origin, destination, duration, and distance. In the background, the main algorithm is launched every few minutes. Finding the closest MOPs algorithm is fully activated half an hour before booked break time (currently beak times are static - 4.5, 6 and 8 hours after workday start). Working of the algorithm could be divided into the following steps:
+* Creating a polygon on the right side of the planned road (width- 15 meters). The main goal of this activity is the elimination of places that are on the wrong side to the direction of driving.
+* Reducing MOP's set to items that are inside the polygon.
+* Reducing the set to MOPs which are in a distance of 75 kilometers from current driver's position and sorting them from closest to furthest
+* Found MOPs are converting to form and displayed as a pop-up. The pop-up contains some information about mops:
+    * Name
+    * Category
+    * Number of places
+    * Number of free places
+    * Remaining time
+    * Remaining distance
+  
+![Optiomalize driver's time](./app/docs/optiomalize_drivers_time.jpg)
 
 ### Find MOP
 > Find mop feature has been created as an access point to real-time MOP (Resting Place for Drivers) data. After MOP selection and confirm the choice, the user has access to current MOP's data. The data are updated in near real-time. On new views the user has access to some categories and information:
@@ -108,6 +120,8 @@ which let a user choose a specific functionality.
 * Maps SDK for Android 2
 * JUnit 4.12
 * Hamcrest 1.3
+* Lombok 1.18
+* Esri Geometry Api 2.2.3
 
 ## External Services	
 * GoogleMaps Map Service 
