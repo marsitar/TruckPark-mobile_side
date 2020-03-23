@@ -48,7 +48,7 @@ which let a user choose a specific functionality.
 
 ![Route schedule](./app/docs/route_schedule_form.jpg)
 
-### Optiomalize driver's time
+### Where to pull off
 > It the main and the most usable feature in this application. After inputting the route schedule in previous functionality a user has access to his routes visible on a map. At the bottom of the view, the user has information about travel parameters - origin, destination, remaining time and distance. Polygon of every fragment is clickable and after clicking the info form is displayed. A pop-up contains information about the fragment's origin, destination, duration, and distance. In the background, the main algorithm is launched every few minutes. Finding the closest MOPs algorithm is fully activated half an hour before booked break time (currently beak times are static - 4.5, 6 and 8 hours after workday start). Working of the algorithm could be divided into the following steps:
 * Creating a polygon on the right side of the planned road (width- 15 meters). The main goal of this activity is the elimination of places that are on the wrong side to the direction of driving.
 * Reducing MOP's set to items that are inside the polygon.
