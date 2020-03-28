@@ -48,8 +48,8 @@ public class MapsActivityLocation extends FragmentActivity implements OnMapReady
 
         if (CurrentPosition.getCurrentPositionInstance().isLocationOn()) {
             MapsActivityLocation.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentX(),
-                            CurrentPosition.getCurrentPositionInstance().getCurrentX()),
+                    new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentLat(),
+                            CurrentPosition.getCurrentPositionInstance().getCurrentLng()),
                     15)
             );
         }

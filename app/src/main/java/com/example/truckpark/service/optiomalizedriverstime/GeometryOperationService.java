@@ -55,8 +55,8 @@ public class GeometryOperationService {
 
     private Point createGisPointFromMop(Mop mop) {
 
-        Double x = mop.getCoordinate().getX();
-        Double y = mop.getCoordinate().getY();
+        Double x = mop.getCoordinate().getLat();
+        Double y = mop.getCoordinate().getLng();
 
         Point gisPointFromMop = setCoordinatesToPoint(x, y);
 
@@ -91,8 +91,8 @@ public class GeometryOperationService {
 
     private Point createGisPointFromCurrentPosition() {
 
-        Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentX();
-        Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentY();
+        Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentLat();
+        Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentLng();
 
         Point gisPointFromCurrentPosition = setCoordinatesToPoint(currentX, currentY);
 

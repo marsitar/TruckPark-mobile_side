@@ -3,8 +3,8 @@ package com.example.truckpark.repository;
 public final class CurrentPosition {
 
     private static volatile CurrentPosition CURRENT_POSITION;
-    private volatile double currentX;
-    private volatile double currentY;
+    private volatile double currentLat;
+    private volatile double currentLng;
     private volatile boolean isLocationOn = false;
 
     private CurrentPosition() {
@@ -21,20 +21,20 @@ public final class CurrentPosition {
         return CURRENT_POSITION;
     }
 
-    public synchronized double getCurrentX() {
-        return currentX;
+    public synchronized double getCurrentLat() {
+        return currentLat;
     }
 
-    public synchronized void setCurrentX(double currentX) {
-        this.currentX = currentX;
+    public synchronized void setCurrentLat(double currentLat) {
+        this.currentLat = currentLat;
     }
 
-    public synchronized double getCurrentY() {
-        return currentY;
+    public synchronized double getCurrentLng() {
+        return currentLng;
     }
 
-    public synchronized void setCurrentY(double currentY) {
-        this.currentY = currentY;
+    public synchronized void setCurrentLng(double currentLng) {
+        this.currentLng = currentLng;
     }
 
     public synchronized boolean isLocationOn() {
