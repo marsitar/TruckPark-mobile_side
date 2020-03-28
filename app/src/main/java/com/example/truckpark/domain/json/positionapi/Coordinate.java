@@ -7,24 +7,19 @@ public class Coordinate {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("x")
-    private Double x;
+    @JsonProperty("lat")
+    private Double lat;
 
-    @JsonProperty("y")
-    private Double y;
+    @JsonProperty("lng")
+    private Double lng;
 
     public Coordinate() {
     }
 
-    public Coordinate(Double x, Double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public Coordinate(Long id, Double x, Double y) {
+    public Coordinate(Long id, Double lat, Double lng) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public Long getId() {
@@ -35,28 +30,28 @@ public class Coordinate {
         this.id = id;
     }
 
-    public Double getX() {
-        return x;
+    public Double getLat() {
+        return lat;
     }
 
-    public void setX(Double x) {
-        this.x = x;
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
-    public Double getY() {
-        return y;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setY(Double y) {
-        this.y = y;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     @Override
     public String toString() {
         return "Coordinate{" +
                 "id=" + id +
-                ", x=" + x +
-                ", y=" + y +
+                ", lat=" + lat +
+                ", lng=" + lng +
                 '}';
     }
 }

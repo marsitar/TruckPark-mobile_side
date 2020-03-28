@@ -40,8 +40,8 @@ public class LocationDeviceService extends Service {
 
                 setCurrentPositionInRepository(location);
 
-                LatLng latLng = new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentX()
-                        , CurrentPosition.getCurrentPositionInstance().getCurrentY());
+                LatLng latLng = new LatLng(CurrentPosition.getCurrentPositionInstance().getCurrentLat()
+                        , CurrentPosition.getCurrentPositionInstance().getCurrentLng());
 
                 moveCameraOnMapViews(latLng);
 
@@ -81,8 +81,8 @@ public class LocationDeviceService extends Service {
                 .ifPresent(latitude -> {
                     CurrentPosition
                             .getCurrentPositionInstance()
-                            .setCurrentX(latitude);
-                    Log.d(className, String.format("New x coordinate = %f has been set in Repository.", latitude));
+                            .setCurrentLat(latitude);
+                    Log.d(className, String.format("New lat = %f has been set in Repository.", latitude));
                 });
 
         Optional.ofNullable(location)
@@ -90,8 +90,8 @@ public class LocationDeviceService extends Service {
                 .ifPresent(longitude -> {
                     CurrentPosition
                             .getCurrentPositionInstance()
-                            .setCurrentY(longitude);
-                    Log.d(className, String.format("New y coordinate = %f has been set in Repository.", longitude));
+                            .setCurrentLng(longitude);
+                    Log.d(className, String.format("New lng = %f has been set in Repository.", longitude));
                 });
 
     }

@@ -108,8 +108,8 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         JSONObject coordinateJSON = new JSONObject();
 
         coordinateJSON.put("id", null);
-        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
-        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+        coordinateJSON.put("lat", CurrentPosition.getCurrentPositionInstance().getCurrentLat());
+        coordinateJSON.put("lng", CurrentPosition.getCurrentPositionInstance().getCurrentLng());
 
         Log.v(className, String.format("Json with coordinates- %s, has been generated.", coordinateJSON.toString()));
 

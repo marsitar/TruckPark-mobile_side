@@ -22,7 +22,7 @@ public class MopDataMarkersManagementService {
         Optional.ofNullable(allMops)
                 .orElseGet(Collections::emptyList)
                 .forEach(mop -> markers.add(new MarkerOptions()
-                .position(new LatLng(mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+                .position(new LatLng(mop.getCoordinate().getLat(), mop.getCoordinate().getLng()))
                 .title(mop.getPlace())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.parking_mop_icon))
                 .snippet(String.format("Liczba wolnych miejsc dla Tir-ów: %d", mop.getTruckPlaces()-mop.getOccupiedTruckPlaces()))));

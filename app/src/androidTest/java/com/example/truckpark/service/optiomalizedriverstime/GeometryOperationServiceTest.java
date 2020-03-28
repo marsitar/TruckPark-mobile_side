@@ -65,8 +65,8 @@ public class GeometryOperationServiceTest {
         DataSaver<List<Mop>> routerScheduleDataSaver = new MopsDataManagement();
         routerScheduleDataSaver.save(Arrays.asList(mop1, mop2));
 
-        CurrentPosition.getCurrentPositionInstance().setCurrentX(54.398917);
-        CurrentPosition.getCurrentPositionInstance().setCurrentY(18.572389);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLat(54.398917);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLng(18.572389);
 
 
         Polyline sourcePolyline = new Polyline();
@@ -124,7 +124,7 @@ public class GeometryOperationServiceTest {
         DataGetter<List<Mop>> routerScheduleDataGetter = new MopsDataManagement();
         routerScheduleDataGetter.getData().clear();
 
-        CurrentPosition.getCurrentPositionInstance().setCurrentX(0);
-        CurrentPosition.getCurrentPositionInstance().setCurrentY(0);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLat(0);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLng(0);
     }
 }

@@ -65,7 +65,7 @@ public class ClosestMopFormsGenerator {
     private List<String[]> generateOriginDestinationCoordinatesPairsCollection(List<Mop> mops, String originCoordinates) {
 
         List<String[]> originDestinationCoordinatesPairs = mops.stream()
-                .map(mop -> String.format("%f,%f", mop.getCoordinate().getX(), mop.getCoordinate().getY()))
+                .map(mop -> String.format("%f,%f", mop.getCoordinate().getLat(), mop.getCoordinate().getLng()))
                 .map(destinationCoordinates -> new String[]{originCoordinates, destinationCoordinates})
                 .collect(Collectors.toList());
 
@@ -133,8 +133,8 @@ public class ClosestMopFormsGenerator {
     }
 
     private String prepareOriginCoordinatesAsString() {
-        Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentX();
-        Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentY();
+        Double currentX = CurrentPosition.getCurrentPositionInstance().getCurrentLat();
+        Double currentY = CurrentPosition.getCurrentPositionInstance().getCurrentLng();
 
         String originCoordinatesAsString = String.format("%f,%f", currentX, currentY);
 
