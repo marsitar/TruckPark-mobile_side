@@ -82,11 +82,11 @@ public class FoundMopData extends AppCompatActivity {
 
         Double coordinateX = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
-                .map(Coordinate::getX)
+                .map(Coordinate::getLat)
                 .orElse(0.0);
         Double coordinateY = Optional.ofNullable(foundMop)
                 .map(Mop::getCoordinate)
-                .map(Coordinate::getY)
+                .map(Coordinate::getLng)
                 .orElse(0.0);
         String coordinatesLabel = getString(R.string.coordinates_label);
         String coordinates = String.format("%s: %f X\n %f Y", coordinatesLabel, coordinateX, coordinateY);

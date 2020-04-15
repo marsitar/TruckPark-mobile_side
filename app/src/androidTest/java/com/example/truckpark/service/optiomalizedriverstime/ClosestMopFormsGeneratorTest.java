@@ -172,14 +172,14 @@ public class ClosestMopFormsGeneratorTest {
     }
 
     private void prepareRepositoryDataToSetCurrentPositionInGdansk() {
-        CurrentPosition.getCurrentPositionInstance().setCurrentX(54.402997);
-        CurrentPosition.getCurrentPositionInstance().setCurrentY(18.565098);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLat(54.402997);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLng(18.565098);
     }
 
     @After
     public void correctRepoData() {
-        CurrentPosition.getCurrentPositionInstance().setCurrentX(0.0);
-        CurrentPosition.getCurrentPositionInstance().setCurrentY(0.0);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLat(0.0);
+        CurrentPosition.getCurrentPositionInstance().setCurrentLng(0.0);
     }
 
 }
