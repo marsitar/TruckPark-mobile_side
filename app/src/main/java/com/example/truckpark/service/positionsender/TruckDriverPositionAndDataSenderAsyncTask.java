@@ -90,7 +90,6 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
 
         JSONObject truckDriverWayJSON = new JSONObject();
 
-        truckDriverWayJSON.put("id", null);
         truckDriverWayJSON.put("resultTime", LocalDateTime.now());
         truckDriverWayJSON.put("distance", 0);
         truckDriverWayJSON.put("fuel", 0);
@@ -108,8 +107,8 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         JSONObject coordinateJSON = new JSONObject();
 
         coordinateJSON.put("id", null);
-        coordinateJSON.put("x", CurrentPosition.getCurrentPositionInstance().getCurrentX());
-        coordinateJSON.put("y", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+        coordinateJSON.put("lat", CurrentPosition.getCurrentPositionInstance().getCurrentX());
+        coordinateJSON.put("lng", CurrentPosition.getCurrentPositionInstance().getCurrentY());
 
         Log.v(className, String.format("Json with coordinates- %s, has been generated.", coordinateJSON.toString()));
 

@@ -7,10 +7,10 @@ public class Coordinate {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("x")
+    @JsonProperty("lat")
     private Double x;
 
-    @JsonProperty("y")
+    @JsonProperty("lng")
     private Double y;
 
     public Coordinate() {

@@ -17,7 +17,7 @@ public class Mop {
     @JsonProperty("place")
     private String place;
 
-    @JsonProperty("coordinateDTO")
+    @JsonProperty("coordinate")
     private Coordinate coordinate;
 
     @JsonProperty("roadNumber")
@@ -32,7 +32,7 @@ public class Mop {
     @JsonProperty("extendedId")
     private String extendedId;
 
-    @JsonProperty("extendedMopDataDTO")
+    @JsonProperty("extendedMopData")
     private ExtendedMopData extendedMopData;
 
     public Mop() {
