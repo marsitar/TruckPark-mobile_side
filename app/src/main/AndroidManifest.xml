@@ -17,8 +17,8 @@
 
         <activity android:name=".view.login.LoginActivity">
             <intent-filter>
-                <data android:scheme="example"
-                    android:host="gizmos" />
+                <data android:scheme="truckpark"
+                    android:host="authorizationpage" />
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="android.intent.action.VIEW" />
