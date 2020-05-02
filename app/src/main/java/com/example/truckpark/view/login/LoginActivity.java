@@ -1,7 +1,6 @@
 package com.example.truckpark.view.login;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,6 +9,8 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
 import com.example.truckpark.view.main.MainMenu;
@@ -20,9 +21,18 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.jboss.aerogear.android.core.Callback;
 
 import java.net.URL;
+import java.util.Collections;
+
+import static com.example.truckpark.view.login.Constants.AUTHZ_ACCOUNT_ID;
+import static com.example.truckpark.view.login.Constants.AUTHZ_CLIENT_ID;
+import static com.example.truckpark.view.login.Constants.AUTHZ_CLIENT_SECRET;
+import static com.example.truckpark.view.login.Constants.AUTHZ_ENDPOINT;
+import static com.example.truckpark.view.login.Constants.AUTHZ_REDIRECT_URL;
+import static com.example.truckpark.view.login.Constants.AUTHZ_TOKEN_ENDPOINT;
+import static com.example.truckpark.view.login.Constants.AUTHZ_URL;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     private String className = this.getClass().getSimpleName();
     private AuthzModule authzModule;
@@ -46,13 +56,14 @@ public class LoginActivity extends Activity {
         try {
 
             authzModule = AuthorizationManager.config("GoogleDriveAuthz", OAuth2AuthorizationConfiguration.class)
-                    .setBaseURL(new URL("http://192.168.0.20:8091/auth"))
-                    .setAuthzEndpoint("/realms/truckpark/protocol/openid-connect/auth")
-                    .setAccessTokenEndpoint("/realms/truckpark/protocol/openid-connect/token")
-                    .setAccountId("keycloak-token")
-                    .setClientId("truckparkclientfrontend")
-                    .setClientSecret("")
-                    .setRedirectURL("com.example.truckpark.view.main.MainMenu")
+                    .setBaseURL(new URL(AUTHZ_URL))
+                    .setAuthzEndpoint(AUTHZ_ENDPOINT)
+                    .setAccessTokenEndpoint(AUTHZ_TOKEN_ENDPOINT)
+                    .setAccountId(AUTHZ_ACCOUNT_ID)
+                    .setClientId(AUTHZ_CLIENT_ID)
+                    .setClientSecret(AUTHZ_CLIENT_SECRET)
+                    .setRedirectURL(AUTHZ_REDIRECT_URL)
+                    .setScopes(Collections.singletonList("https://www.googleapis.com/auth/drive"))
                     .addAdditionalAuthorizationParam((Pair.create("access_type", "offline")))
                     .asModule();
 
@@ -60,8 +71,6 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onSuccess(String o) {
                     Log.d("TOKEN ++ ", o);
-                    Toast.makeText(getApplicationContext(), o, Toast.LENGTH_LONG).show();
-
                 }
 
                 @Override
