@@ -46,5 +46,5 @@ dependencies {
     implementation group: 'com.esri.geometry', name: 'esri-geometry-api', version: '2.2.3'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
-    implementation 'org.jboss.aerogear:aerogear-android-authz:3.0.1'
+    implementation 'org.jboss.aerogear:aerogear-android-authz:4.0.0'
 }

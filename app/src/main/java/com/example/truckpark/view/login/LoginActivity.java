@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.jboss.aerogear.android.core.Callback;
 
 import java.net.URL;
-import java.util.Collections;
 
 import static com.example.truckpark.view.login.Constants.AUTHZ_ACCOUNT_ID;
 import static com.example.truckpark.view.login.Constants.AUTHZ_CLIENT_ID;
@@ -49,13 +46,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        this.authz();
+        this.authorizeAndAuthenticate();
     }
 
-    private void authz() {
+    private void authorizeAndAuthenticate() {
         try {
-
-            authzModule = AuthorizationManager.config("GoogleDriveAuthz", OAuth2AuthorizationConfiguration.class)
+            authzModule = AuthorizationManager.config("KeycloakAuthz", OAuth2AuthorizationConfiguration.class)
                     .setBaseURL(new URL(AUTHZ_URL))
                     .setAuthzEndpoint(AUTHZ_ENDPOINT)
                     .setAccessTokenEndpoint(AUTHZ_TOKEN_ENDPOINT)
@@ -63,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                     .setClientId(AUTHZ_CLIENT_ID)
                     .setClientSecret(AUTHZ_CLIENT_SECRET)
                     .setRedirectURL(AUTHZ_REDIRECT_URL)
-                    .setScopes(Collections.singletonList("https://www.googleapis.com/auth/drive"))
                     .addAdditionalAuthorizationParam((Pair.create("access_type", "offline")))
                     .asModule();
 
@@ -71,35 +66,21 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(String o) {
                     Log.d("TOKEN ++ ", o);
+                    Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
+                    startActivity(mainMenu);
                 }
 
                 @Override
-                public void onFailure(Exception e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                public void onFailure(Exception exception) {
+                    Log.e(className, String.format("Connection to an authorization server failure. Reason: %s", exception.getMessage()));
+                    Toast.makeText(getApplicationContext(), "Błąd połączenia z serwerem logującym , skontaktuj się z dostawcą oprogramowania", Toast.LENGTH_LONG).show();
                 }
             });
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void onLog(View view) {
-        TextView textViewLog = findViewById(R.id.login);
-        TextView textViewPass = findViewById(R.id.password);
-        String login = "m";
-        String pass = "m";
-        if (textViewLog.getText().toString().equals(login) && textViewPass.getText().toString().equals(pass)) {
-            Intent mainMenu = new Intent(this, MainMenu.class);
-            Log.i(className, String.format("User- login:%s,pass:%s has been logged in.",login,pass));
-            startActivity(mainMenu);
-        } else {
-            String text = String.format("logowanie z nastepujacymi poswiadczeniami: user-%s, password-%s nieudalo się, wprowadź poprawne poswiadczenia", login, pass);
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
-            Log.w(className, "Bad logging attempt.");
+        } catch (Exception exception) {
+            Log.wtf(className, String.format("Creating a connection to an authorization server failure. Reason: %s", exception.getMessage()));
+            Toast.makeText(getApplicationContext(), "Błąd tworzenia połączenia z serwerem logującym , skontaktuj się z dostawcą oprogramowania", Toast.LENGTH_LONG).show();
         }
     }
 }
