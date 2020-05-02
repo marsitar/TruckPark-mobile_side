@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [appAuthRedirectScheme: 'com.example.truckpark.view.main.MainMenu']
     }
     buildTypes {
         release {
@@ -46,4 +47,5 @@ dependencies {
     implementation group: 'com.esri.geometry', name: 'esri-geometry-api', version: '2.2.3'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    implementation 'org.jboss.aerogear:aerogear-android-authz:3.1.1'
 }
