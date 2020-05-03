@@ -10,6 +10,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -47,4 +51,5 @@ dependencies {
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
     implementation 'org.jboss.aerogear:aerogear-android-authz:4.0.0'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.6.0'
 }

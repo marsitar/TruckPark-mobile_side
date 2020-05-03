@@ -6,16 +6,18 @@ import android.util.Log;
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.localdatamanagment.DataSaver;
 import com.example.truckpark.localdatamanagment.MopsDataManagement;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.example.truckpark.view.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
 
@@ -31,20 +33,9 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
     @Override
     protected List<Mop> doInBackground(Void... voids) {
 
-        ObjectMapper mapperJsonToClass = new ObjectMapper();
-
         String url = buildUrl(CATEGORY);
-        List<Mop> mopsData = null;
-        try {
-            Mop[] mopsArrayData = mapperJsonToClass.readValue(new URL(url), Mop[].class);
-            mopsData = Arrays.asList(mopsArrayData);
-        } catch (JsonParseException | JsonMappingException jsonException) {
-            Log.e(className, String.format("Problem with json (parsing or mapping). Requested url=%s", url));
-        } catch (MalformedURLException malformedURLException) {
-            Log.e(className, String.format("Problem with malformed URL. Requested url=%s", url));
-        } catch (IOException ioexception) {
-            Log.e(className, String.format("Problem with access to data. Requested url=%s", url));
-        }
+        Request request = buildRequest(url);
+        List<Mop> mopsData = doGetRequestAndMapResults(request);
 
         Log.d(className, String.format("Mops request has been successfully completed. Requested url=%s", url));
 
@@ -65,14 +56,41 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
         return builtURL.toString();
     }
 
+    private Request buildRequest(String url) {
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", String.format("Bearer %s", LoginActivity.TOKEN))
+                .build();
+
+        Log.d(className, String.format(" Request(url=%s) - %s has been built.", url, request.toString()));
+
+        return request;
+    }
+
+    private List<Mop> doGetRequestAndMapResults(Request request) {
+
+        ObjectMapper mapperJsonToClass = new ObjectMapper();
+        OkHttpClient client = new OkHttpClient();
+
+        try (Response response = client.newCall(request).execute()) {
+            String responseString = response.body().string();
+            Mop[] mopsArrayData = mapperJsonToClass.readValue(responseString, Mop[].class);
+            return Arrays.asList(mopsArrayData);
+        } catch (IOException e) {
+            Log.e(className, String.format("Problem with access to data. Request =%s", request.toString()));
+            return new ArrayList<>();
+        }
+    }
+
     private void setCurrentMopsInRepository(List<Mop> mopsData) {
 
         Optional.ofNullable(mopsData)
                 .ifPresent(mops -> {
-                    DataSaver<List<Mop>> mopsDataManagement = new MopsDataManagement();
-                    mopsDataManagement.save(mopsData);
-                    Log.d(className, "New mops has been set in repository.");
-                    }
+                            DataSaver<List<Mop>> mopsDataManagement = new MopsDataManagement();
+                            mopsDataManagement.save(mopsData);
+                            Log.d(className, "New mops has been set in repository.");
+                        }
                 );
     }
 
