@@ -1,12 +1,10 @@
 package com.example.truckpark.domain.json.truckdriverwayapi;
 
-import java.time.LocalDateTime;
-
 public class TruckDriverWayDtoCreate {
 
     private Double fuel;
     private Double distance;
-    private LocalDateTime resultTime;
+    private String resultTime;
     private CoordinateDto coordinateDto;
     private Long truckId;
     private Long driverId;
@@ -30,11 +28,11 @@ public class TruckDriverWayDtoCreate {
         this.distance = distance;
     }
 
-    public LocalDateTime getResultTime() {
+    public String getResultTime() {
         return resultTime;
     }
 
-    public void setResultTime(LocalDateTime resultTime) {
+    public void setResultTime(String resultTime) {
         this.resultTime = resultTime;
     }
 
