@@ -1,6 +1,7 @@
 package com.example.truckpark.view.login;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,9 +26,11 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String PROPERTY_FILE_NAME = "keycloak.properties";
+    public static final String AUTHZ_MODULE_NAME = "KeycloakAuthz";
+    private static AuthzModule authzModule;
+    public static String TOKEN;
     private String className = this.getClass().getSimpleName();
-    private final static String PROPERTY_FILE_NAME = "keycloak.properties";
-    private AuthzModule authzModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void authorizeAndAuthenticate() {
         try {
-            this.buildAuthzModule();
+            LoginActivity.buildAuthzModule(this);
             authzModule.requestAccess(this, new Callback<String>() {
                 @Override
                 public void onSuccess(String o) {
+                    TOKEN = o;
                     Log.d("TOKEN ++ ", o);
                     Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(mainMenu);
@@ -69,18 +73,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void buildAuthzModule() throws MalformedURLException{
+    private static void buildAuthzModule(Context context) throws MalformedURLException{
 
         PropertyManager propertyManager = new PropertyManager(PROPERTY_FILE_NAME);
-        final String AUTHZ_URL = propertyManager.getProperty("AUTHZ_URL", this);
-        final String AUTHZ_ENDPOINT = propertyManager.getProperty("AUTHZ_ENDPOINT", this);
-        final String AUTHZ_TOKEN_ENDPOINT = propertyManager.getProperty("AUTHZ_TOKEN_ENDPOINT", this);
-        final String AUTHZ_ACCOUNT_ID = propertyManager.getProperty("AUTHZ_ACCOUNT_ID", this);
-        final String AUTHZ_CLIENT_ID = propertyManager.getProperty("AUTHZ_CLIENT_ID", this);
-        final String AUTHZ_CLIENT_SECRET = propertyManager.getProperty("AUTHZ_CLIENT_SECRET", this);
-        final String AUTHZ_REDIRECT_URL = propertyManager.getProperty("AUTHZ_REDIRECT_URL", this);
+        final String AUTHZ_URL = propertyManager.getProperty("AUTHZ_URL", context);
+        final String AUTHZ_ENDPOINT = propertyManager.getProperty("AUTHZ_ENDPOINT", context);
+        final String AUTHZ_TOKEN_ENDPOINT = propertyManager.getProperty("AUTHZ_TOKEN_ENDPOINT", context);
+        final String AUTHZ_ACCOUNT_ID = propertyManager.getProperty("AUTHZ_ACCOUNT_ID", context);
+        final String AUTHZ_CLIENT_ID = propertyManager.getProperty("AUTHZ_CLIENT_ID", context);
+        final String AUTHZ_CLIENT_SECRET = propertyManager.getProperty("AUTHZ_CLIENT_SECRET", context);
+        final String AUTHZ_REDIRECT_URL = propertyManager.getProperty("AUTHZ_REDIRECT_URL", context);
 
-        authzModule = AuthorizationManager.config("KeycloakAuthz", OAuth2AuthorizationConfiguration.class)
+        authzModule = AuthorizationManager.config(AUTHZ_MODULE_NAME, OAuth2AuthorizationConfiguration.class)
                 .setBaseURL(new URL(AUTHZ_URL))
                 .setAuthzEndpoint(AUTHZ_ENDPOINT)
                 .setAccessTokenEndpoint(AUTHZ_TOKEN_ENDPOINT)
