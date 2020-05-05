@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.truckpark.domain.json.truckdriverwayapi.CoordinateDto;
 import com.example.truckpark.domain.json.truckdriverwayapi.TruckDriverWayDtoCreate;
+import com.example.truckpark.exception.PositionIsNotEstablishedYetException;
 import com.example.truckpark.repository.CurrentPosition;
 import com.example.truckpark.view.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,9 +34,13 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
     protected Void doInBackground(Void... voids) {
 
         String url = buildUrl();
-        String string = getFullTruckDriverWayJson();
-        Request postRequest = buildRequest(url, string);
-        doPostRequest(postRequest);
+        try {
+            String string = getFullTruckDriverWayJson();
+            Request postRequest = buildRequest(url, string);
+            doPostRequest(postRequest);
+        } catch (PositionIsNotEstablishedYetException positionIsNotEstablishedYetException){
+            Log.e(className, positionIsNotEstablishedYetException.getMessage());
+        }
 
         return null;
 
@@ -88,7 +93,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         }
     }
 
-    private String getFullTruckDriverWayJson() {
+    private String getFullTruckDriverWayJson() throws PositionIsNotEstablishedYetException{
 
         CoordinateDto coordinateDto = generateCoordinateObject();
 
@@ -104,21 +109,30 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         }
     }
 
-    private CoordinateDto generateCoordinateObject(){
+    private CoordinateDto generateCoordinateObject() throws PositionIsNotEstablishedYetException{
 
         CoordinateDto coordinateDto = new CoordinateDto();
 
-        coordinateDto.setLat(CurrentPosition.getCurrentPositionInstance().getCurrentLat());
-        coordinateDto.setLng(CurrentPosition.getCurrentPositionInstance().getCurrentLng());
+        double lat = CurrentPosition.getCurrentPositionInstance().getCurrentLat();
+        double lng = CurrentPosition.getCurrentPositionInstance().getCurrentLng();
+
+        if(lat == 0 || lng == 0){
+            throw new PositionIsNotEstablishedYetException();
+        }
+
+        coordinateDto.setLat(lat);
+        coordinateDto.setLng(lng);
 
         return coordinateDto;
     }
 
-    private TruckDriverWayDtoCreate generateTruckDriverWayObject(CoordinateDto coordinateDto) {
+    private TruckDriverWayDtoCreate generateTruckDriverWayObject(CoordinateDto coordinateDto) throws PositionIsNotEstablishedYetException{
 
         TruckDriverWayDtoCreate truckDriverWayDtoCreate = new TruckDriverWayDtoCreate();
 
-        truckDriverWayDtoCreate.setResultTime(LocalDateTime.now().toString());
+        String resulTime =LocalDateTime.now().toString();
+
+        truckDriverWayDtoCreate.setResultTime(resulTime);
         truckDriverWayDtoCreate.setDistance(0.0);
         truckDriverWayDtoCreate.setFuel(0.0);
         truckDriverWayDtoCreate.setDriverId(1L);
