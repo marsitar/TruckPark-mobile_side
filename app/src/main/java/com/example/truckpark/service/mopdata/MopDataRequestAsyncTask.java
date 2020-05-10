@@ -45,7 +45,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
             KeycloakHelper.connect(new Activity(), new Callback() {
                 @Override
                 public void onSuccess(Object token) {
-                    MopDataRequestAsyncTask.keycloakToken = (String) token;
+                    MopDataRequestAsyncTask.keycloakToken = token.toString();
                     getMopsFromRemoteSource();
 
                     Log.d(className, "Mops request has been successfully completed.");

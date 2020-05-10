@@ -44,7 +44,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
             KeycloakHelper.connect(new Activity(), new Callback() {
                 @Override
                 public void onSuccess(Object token) {
-                    TruckDriverPositionAndDataSenderAsyncTask.keycloakToken = (String) token;
+                    TruckDriverPositionAndDataSenderAsyncTask.keycloakToken = token.toString();
                     sendCurrentPosition();
 
                     Log.d(className, "Send position request has been successfully completed.");
