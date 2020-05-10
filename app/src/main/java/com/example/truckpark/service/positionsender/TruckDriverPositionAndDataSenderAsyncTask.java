@@ -1,5 +1,6 @@
 package com.example.truckpark.service.positionsender;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -7,8 +8,10 @@ import com.example.truckpark.domain.json.truckdriverwayapi.CoordinateDto;
 import com.example.truckpark.domain.json.truckdriverwayapi.TruckDriverWayDtoCreate;
 import com.example.truckpark.exception.PositionIsNotEstablishedYetException;
 import com.example.truckpark.repository.CurrentPosition;
-import com.example.truckpark.view.login.LoginActivity;
+import com.example.truckpark.util.KeycloakHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jboss.aerogear.android.core.Callback;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -22,9 +25,10 @@ import okhttp3.Response;
 
 public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    private String URI;
-    private String className = this.getClass().getSimpleName();
+    private final String URI;
+    private final String className = this.getClass().getSimpleName();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static String keycloakToken;
 
     public TruckDriverPositionAndDataSenderAsyncTask(String URI) {
         this.URI = URI;
@@ -33,17 +37,41 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
     @Override
     protected Void doInBackground(Void... voids) {
 
-        String url = buildUrl();
-        try {
-            String string = getFullTruckDriverWayJson();
-            Request postRequest = buildRequest(url, string);
-            doPostRequest(postRequest);
-        } catch (PositionIsNotEstablishedYetException positionIsNotEstablishedYetException){
-            Log.e(className, positionIsNotEstablishedYetException.getMessage());
+        if (!KeycloakHelper.isConnected()) {
+
+            Log.d(className, "Connection with keycloak is to be established");
+
+            KeycloakHelper.connect(new Activity(), new Callback() {
+                @Override
+                public void onSuccess(Object token) {
+                    TruckDriverPositionAndDataSenderAsyncTask.keycloakToken = (String) token;
+                    sendCurrentPosition();
+
+                    Log.d(className, "Send position request has been successfully completed.");
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+                    Log.e(className, String.format("Error during sending position to remote access point. Exception: %s", exception.getMessage()));
+                }
+            });
+        } else {
+            Log.d(className, "Connection with Keycloak has been already established");
+            sendCurrentPosition();
         }
 
         return null;
+    }
 
+    private void sendCurrentPosition(){
+        String url = buildUrl();
+        try {
+            String string = getFullTruckDriverWayJson();
+            Request postRequest = buildRequest(url, string, keycloakToken);
+            doPostRequest(postRequest);
+        } catch (PositionIsNotEstablishedYetException positionIsNotEstablishedYetException) {
+            Log.e(className, positionIsNotEstablishedYetException.getMessage());
+        }
     }
 
     private String buildUrl() {
@@ -57,12 +85,12 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         return builtURL.toString();
     }
 
-    private Request buildRequest(String url, String json) {
+    private Request buildRequest(String url, String json, Object token) {
 
         RequestBody body = RequestBody.create(json, JSON);
 
         Headers headers = new Headers.Builder()
-                .add("Authorization", String.format("Bearer %s", LoginActivity.TOKEN))
+                .add("Authorization", String.format("Bearer %s", token))
                 .add("Content-Type", "application/json")
                 .build();
 
