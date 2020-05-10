@@ -27,7 +27,7 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
     private final String URI;
     private final String CATEGORY;
     private final String className = this.getClass().getSimpleName();
-    private static String keycloakToken;
+    public static String keycloakToken;
     private List<Mop> mopsData = new ArrayList<>();
 
     public MopDataRequestAsyncTask(String URI, String CATEGORY) {

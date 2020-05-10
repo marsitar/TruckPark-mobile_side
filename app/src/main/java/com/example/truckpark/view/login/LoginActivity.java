@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.truckpark.R;
+import com.example.truckpark.service.mopdata.MopDataRequestAsyncTask;
+import com.example.truckpark.service.positionsender.TruckDriverPositionAndDataSenderAsyncTask;
 import com.example.truckpark.util.KeycloakHelper;
 import com.example.truckpark.view.main.MainMenu;
 
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Object o) {
                     Log.d(className, "Successful connection to Keycloak. MainMenu Activity is to be opened.");
+                    TruckDriverPositionAndDataSenderAsyncTask.keycloakToken = (String) o;
+                    MopDataRequestAsyncTask.keycloakToken = (String) o;
                     Intent mainMenu = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(mainMenu);
                 }

@@ -28,7 +28,7 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
     private final String URI;
     private final String className = this.getClass().getSimpleName();
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static String keycloakToken;
+    public static String keycloakToken;
 
     public TruckDriverPositionAndDataSenderAsyncTask(String URI) {
         this.URI = URI;
