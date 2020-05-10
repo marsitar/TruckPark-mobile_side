@@ -8,90 +8,106 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/truck_white"
         android:label="@string/app_name"
         android:roundIcon="@drawable/truck_white"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.functionality.routescheduleform.RouteScheduleForm"></activity>
+
+        <activity android:name=".view.login.LoginActivity">
+            <intent-filter>
+                <data android:scheme="truckpark"
+                    android:host="authorizationpage" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".view.main.MainMenu">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.truckpark.view.login.LoginActivity" />
+        </activity>
+
+            <activity
+                android:name=".view.functionality.location.MapsActivityLocation"
+                android:label="@string/title_activity_maps">
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.example.truckpark.view.main.MainMenu" />
+
+            </activity>
+
+            <activity android:name=".view.functionality.navigation.NavigationMenu" >
+            </activity>
+
+                <activity
+                    android:name=".view.functionality.navigation.MapsActivityNavigation"
+                    android:label="@string/title_activity_maps_navigation">
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
+                </activity>
+
+            <activity
+                android:name=".view.functionality.pulloff.MapsActivityPullOff"
+                android:label="@string/title_activity_maps_pulloff">
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.example.truckpark.view.main.MainMenu" />
+            </activity>
+
+            <activity android:name=".view.functionality.routescheduleform.RouteScheduleForm">
+            </activity>
+
+                <activity android:name=".view.functionality.mop.FindMop">
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value="com.example.truckpark.view.main.MainMenu" />
+                </activity>
+
+                <activity android:name=".view.functionality.mop.FoundMopData">
+                    <meta-data
+                        android:name="android.support.PARENT_ACTIVITY"
+                        android:value="com.example.truckpark.view.functionality.mop.FindMop" />
+                </activity>
+
+            <activity android:name=".view.functionality.weather.FindWeather">
+            </activity>
+
+                <activity android:name=".view.functionality.weather.FoundWeatherData" >
+                </activity>
+
 
         <service
             android:name=".service.positionsender.TruckDriverPositionAndDataService"
             android:enabled="true"
             android:exported="true" />
+
         <service
             android:name=".service.mopdata.MopDataService"
             android:enabled="true"
             android:exported="true" />
+
         <service
             android:name=".service.optiomalizedriverstime.MainOptimizationDriversTimeService"
             android:enabled="true"
             android:exported="true" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".view.functionality.pulloff.MapsActivityPullOff"
-            android:label="@string/title_activity_maps_pulloff">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.main.MainMenu" />
-        </activity>
-        <activity
-            android:name=".view.functionality.navigation.MapsActivityNavigation"
-            android:label="@string/title_activity_maps_navigation">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.functionality.navigation.NavigationMenu" />
-        </activity>
-        <activity android:name=".view.functionality.weather.FoundWeatherData" />
-        <activity android:name=".view.functionality.weather.FindWeather" />
-        <activity android:name=".view.functionality.navigation.NavigationMenu" />
-        <activity android:name=".view.functionality.mop.FoundMopData">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.functionality.mop.FindMop" />
-        </activity>
-        <activity android:name=".view.functionality.mop.FindMop">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.main.MainMenu" />
-        </activity>
 
         <service
             android:name=".service.location.LocationDeviceService"
             android:enabled="true"
             android:exported="false" />
 
-        <activity
-            android:name=".view.functionality.location.MapsActivityLocation"
-            android:label="@string/title_activity_maps">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.main.MainMenu" />
-        </activity>
-        <activity android:name=".view.main.MainMenu">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.truckpark.view.login.LoginActivity" />
-        </activity>
-        <activity android:name=".view.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <service android:name="org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthzService"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>

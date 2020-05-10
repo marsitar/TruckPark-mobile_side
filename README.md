@@ -17,7 +17,7 @@
 
 ## Features
 ### User authentication
-> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: login and password. Currently, authentication data is mocked but eventually, the application will use the OAuth 2.0 protocol. After logging in, in the background working application the user's position and state are sent to the server application and saved in a database every 10 second.
+> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: username or email and password. Authentication and Authorization is provided by external Keycloak solution. Driver has specyfied Keycloak role(TRUCKPARK_DRIVER) which let him send it's postion to server, get mop points etc (by adding token to requests). Keycloak solution uses OAuth 2.0 and OpenId. 
 
 ![User authentication](./app/docs/user_authentication.jpg)
 
@@ -122,11 +122,15 @@ which let a user choose a specific functionality.
 * Hamcrest 1.3
 * Lombok 1.18
 * Esri Geometry Api 2.2.3
+* AeroGear Android Authorization 4.0.0
+* OkHttp 4.6.0
+* Apache Commons 2.6
 
 ## External Services	
 * GoogleMaps Map Service 
 * GoogleMaps Directions Rest Api
 * OpenWeatherMap Rest Api
+* Keycloak
 
 ## Status
 Project is: _in_progress_.

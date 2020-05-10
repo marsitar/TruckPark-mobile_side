@@ -1,27 +1,34 @@
 package com.example.truckpark.service.mopdata;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.truckpark.domain.json.mopapi.Mop;
 import com.example.truckpark.localdatamanagment.DataSaver;
 import com.example.truckpark.localdatamanagment.MopsDataManagement;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.example.truckpark.util.KeycloakHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.jboss.aerogear.android.core.Callback;
+
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
 
-    private String URI;
-    private String CATEGORY;
-    private String className = this.getClass().getSimpleName();
+    private final String URI;
+    private final String CATEGORY;
+    private final String className = this.getClass().getSimpleName();
+    public static String keycloakToken;
+    private List<Mop> mopsData = new ArrayList<>();
 
     public MopDataRequestAsyncTask(String URI, String CATEGORY) {
         this.URI = URI;
@@ -31,25 +38,38 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
     @Override
     protected List<Mop> doInBackground(Void... voids) {
 
-        ObjectMapper mapperJsonToClass = new ObjectMapper();
+        if (!KeycloakHelper.isConnected()) {
 
-        String url = buildUrl(CATEGORY);
-        List<Mop> mopsData = null;
-        try {
-            Mop[] mopsArrayData = mapperJsonToClass.readValue(new URL(url), Mop[].class);
-            mopsData = Arrays.asList(mopsArrayData);
-        } catch (JsonParseException | JsonMappingException jsonException) {
-            Log.e(className, String.format("Problem with json (parsing or mapping). Requested url=%s", url));
-        } catch (MalformedURLException malformedURLException) {
-            Log.e(className, String.format("Problem with malformed URL. Requested url=%s", url));
-        } catch (IOException ioexception) {
-            Log.e(className, String.format("Problem with access to data. Requested url=%s", url));
+            Log.d(className, "Connection with keycloak is to be established");
+
+            KeycloakHelper.connect(new Activity(), new Callback() {
+                @Override
+                public void onSuccess(Object token) {
+                    MopDataRequestAsyncTask.keycloakToken = token.toString();
+                    getMopsFromRemoteSource();
+
+                    Log.d(className, "Mops request has been successfully completed.");
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+
+                    Log.e(className, String.format("Error during getting mops from remote access point. Exception: %s", exception.getMessage()));
+                }
+            });
+        } else {
+            Log.d(className, "Connection with Keycloak has been already established");
+            getMopsFromRemoteSource();
         }
-
-        Log.d(className, String.format("Mops request has been successfully completed. Requested url=%s", url));
 
         setCurrentMopsInRepository(mopsData);
         return mopsData;
+    }
+
+    private void getMopsFromRemoteSource(){
+        String url = buildUrl(CATEGORY);
+        Request request = buildRequest(url, MopDataRequestAsyncTask.keycloakToken);
+        mopsData = doGetRequestAndMapResults(request);
     }
 
     private String buildUrl(String category) {
@@ -65,15 +85,42 @@ public class MopDataRequestAsyncTask extends AsyncTask<Void, Void, List<Mop>> {
         return builtURL.toString();
     }
 
+    private Request buildRequest(String url, Object token) {
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", String.format("Bearer %s", token))
+                .build();
+
+        Log.d(className, String.format(" Request(url=%s) - %s has been built.", url, request.toString()));
+
+        return request;
+    }
+
+    private List<Mop> doGetRequestAndMapResults(Request request) {
+
+        ObjectMapper mapperJsonToClass = new ObjectMapper();
+        OkHttpClient client = new OkHttpClient();
+
+        try (Response response = client.newCall(request).execute()) {
+            String responseString = response.body().string();
+            Mop[] mopsArrayData = mapperJsonToClass.readValue(responseString, Mop[].class);
+            return Arrays.asList(mopsArrayData);
+        } catch (IOException e) {
+            Log.e(className, String.format("Problem with access to data. Request =%s", request.toString()));
+            return new ArrayList<>();
+        }
+    }
+
     private void setCurrentMopsInRepository(List<Mop> mopsData) {
 
         Optional.ofNullable(mopsData)
-                .ifPresent(mops -> {
-                    DataSaver<List<Mop>> mopsDataManagement = new MopsDataManagement();
-                    mopsDataManagement.save(mopsData);
-                    Log.d(className, "New mops has been set in repository.");
+            .ifPresent(mops -> {
+                        DataSaver<List<Mop>> mopsDataManagement = new MopsDataManagement();
+                        mopsDataManagement.save(mopsData);
+                        Log.d(className, "New mops has been set in repository.");
                     }
-                );
+            );
     }
 
 }

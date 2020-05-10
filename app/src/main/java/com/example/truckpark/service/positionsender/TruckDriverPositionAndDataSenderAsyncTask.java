@@ -1,23 +1,34 @@
 package com.example.truckpark.service.positionsender;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.truckpark.domain.json.truckdriverwayapi.CoordinateDto;
+import com.example.truckpark.domain.json.truckdriverwayapi.TruckDriverWayDtoCreate;
+import com.example.truckpark.exception.PositionIsNotEstablishedYetException;
 import com.example.truckpark.repository.CurrentPosition;
+import com.example.truckpark.util.KeycloakHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.jboss.aerogear.android.core.Callback;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
+
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    private String URI;
-    private String className = this.getClass().getSimpleName();
+    private final String URI;
+    private final String className = this.getClass().getSimpleName();
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    public static String keycloakToken;
 
     public TruckDriverPositionAndDataSenderAsyncTask(String URI) {
         this.URI = URI;
@@ -26,31 +37,41 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
     @Override
     protected Void doInBackground(Void... voids) {
 
-            String httpAddress = buildUrl();
-        try {
-            URL url = new URL(httpAddress);
+        if (!KeycloakHelper.isConnected()) {
 
-            HttpURLConnection connectionToRest = getHttpURLConnection(url);
+            Log.d(className, "Connection with keycloak is to be established");
 
-            JSONObject truckDriverWayJSON = getFullTruckDriverWayJson();
-            DataOutputStream jsonOutputStream = new DataOutputStream(connectionToRest.getOutputStream());
-            String truckDriverWayJSONAsString = truckDriverWayJSON.toString();
-            jsonOutputStream.writeBytes(truckDriverWayJSONAsString);
+            KeycloakHelper.connect(new Activity(), new Callback() {
+                @Override
+                public void onSuccess(Object token) {
+                    TruckDriverPositionAndDataSenderAsyncTask.keycloakToken = token.toString();
+                    sendCurrentPosition();
 
-            String.valueOf(connectionToRest.getResponseCode());
+                    Log.d(className, "Send position request has been successfully completed.");
+                }
 
-            jsonOutputStream.flush();
-            connectionToRest.disconnect();
-
-            Log.i(className, "truckDriverWay successfully send to the server.");
-        } catch (JSONException jsonException) {
-            Log.e(className, String.format("Problem with json. Requested url=%s", httpAddress));
-        } catch (IOException ioexception) {
-            Log.e(className, String.format("Problem with access to data. Requested url=%s", httpAddress));
+                @Override
+                public void onFailure(Exception exception) {
+                    Log.e(className, String.format("Error during sending position to remote access point. Exception: %s", exception.getMessage()));
+                }
+            });
+        } else {
+            Log.d(className, "Connection with Keycloak has been already established");
+            sendCurrentPosition();
         }
 
         return null;
+    }
 
+    private void sendCurrentPosition(){
+        String url = buildUrl();
+        try {
+            String string = getFullTruckDriverWayJson();
+            Request postRequest = buildRequest(url, string, keycloakToken);
+            doPostRequest(postRequest);
+        } catch (PositionIsNotEstablishedYetException positionIsNotEstablishedYetException) {
+            Log.e(className, positionIsNotEstablishedYetException.getMessage());
+        }
     }
 
     private String buildUrl() {
@@ -64,55 +85,86 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         return builtURL.toString();
     }
 
-    private HttpURLConnection getHttpURLConnection(URL url) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(true);
-        conn.setDoInput(true);
+    private Request buildRequest(String url, String json, Object token) {
 
-        Log.d(className, String.format("Connection: %s has been created.", conn.toString()));
+        RequestBody body = RequestBody.create(json, JSON);
 
-        return conn;
+        Headers headers = new Headers.Builder()
+                .add("Authorization", String.format("Bearer %s", token))
+                .add("Content-Type", "application/json")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .headers(headers)
+                .post(body)
+                .build();
+
+        Log.d(className, String.format(" Request(url=%s) - %s has been built.", url, request.toString()));
+
+        return request;
     }
 
-    private JSONObject getFullTruckDriverWayJson() throws JSONException {
+    private void doPostRequest(Request request) {
 
-        JSONObject coordinateJSON = generateCoordinateJsonObject();
+        OkHttpClient client = new OkHttpClient();
 
-        JSONObject truckDriverWayJSON = generateTruckDriverJsonObject(coordinateJSON);
-
-        return truckDriverWayJSON;
+        try (Response response = client.newCall(request).execute()) {
+            if(response.isSuccessful()){
+                Log.d(className, String.format("PostRequest is successful. Response code=%d.", response.code()));
+                Log.i(className, "truckDriverWay successfully send to the server.");
+            } else {
+                Log.e(className, String.format("PostRequest is failure. Response code=%d.", response.code()));
+            }
+        } catch (IOException ioexception) {
+            Log.wtf(className, String.format("Something get wrong with PostRequest. Error - %s", ioexception));
+        }
     }
 
-    private JSONObject generateTruckDriverJsonObject(JSONObject coordinateJSON) throws JSONException {
+    private String getFullTruckDriverWayJson() throws PositionIsNotEstablishedYetException{
 
-        JSONObject truckDriverWayJSON = new JSONObject();
+        CoordinateDto coordinateDto = generateCoordinateObject();
 
-        truckDriverWayJSON.put("resultTime", LocalDateTime.now());
-        truckDriverWayJSON.put("distance", 0);
-        truckDriverWayJSON.put("fuel", 0);
-        truckDriverWayJSON.put("driverId", 1);
-        truckDriverWayJSON.put("truckId", 1);
-        truckDriverWayJSON.put("coordinateDto", coordinateJSON);
+        TruckDriverWayDtoCreate truckDriverWayDtoCreate = generateTruckDriverWayObject(coordinateDto);
 
-        Log.v(className, String.format("Json with all truck driver way information- %s, has been generated.",truckDriverWayJSON.toString()));
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        return truckDriverWayJSON;
+        try {
+            return objectMapper.writeValueAsString(truckDriverWayDtoCreate);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private JSONObject generateCoordinateJsonObject() throws JSONException {
+    private CoordinateDto generateCoordinateObject() throws PositionIsNotEstablishedYetException{
 
-        JSONObject coordinateJSON = new JSONObject();
+        CoordinateDto coordinateDto = new CoordinateDto();
 
-        coordinateJSON.put("id", null);
-        coordinateJSON.put("lat", CurrentPosition.getCurrentPositionInstance().getCurrentX());
-        coordinateJSON.put("lng", CurrentPosition.getCurrentPositionInstance().getCurrentY());
+        double lat = CurrentPosition.getCurrentPositionInstance().getCurrentLat();
+        double lng = CurrentPosition.getCurrentPositionInstance().getCurrentLng();
 
-        Log.v(className, String.format("Json with coordinates- %s, has been generated.", coordinateJSON.toString()));
+        if(lat == 0 || lng == 0){
+            throw new PositionIsNotEstablishedYetException();
+        }
 
-        return coordinateJSON;
+        coordinateDto.setLat(lat);
+        coordinateDto.setLng(lng);
+
+        return coordinateDto;
     }
 
+    private TruckDriverWayDtoCreate generateTruckDriverWayObject(CoordinateDto coordinateDto) throws PositionIsNotEstablishedYetException{
+
+        TruckDriverWayDtoCreate truckDriverWayDtoCreate = new TruckDriverWayDtoCreate();
+
+        String resulTime =LocalDateTime.now().toString();
+
+        truckDriverWayDtoCreate.setResultTime(resulTime);
+        truckDriverWayDtoCreate.setDistance(0.0);
+        truckDriverWayDtoCreate.setFuel(0.0);
+        truckDriverWayDtoCreate.setCoordinateDto(coordinateDto);
+
+        return truckDriverWayDtoCreate;
+    }
 }

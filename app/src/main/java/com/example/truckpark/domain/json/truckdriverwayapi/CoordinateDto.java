@@ -1,22 +1,18 @@
-package com.example.truckpark.domain.json.positionapi;
+package com.example.truckpark.domain.json.truckdriverwayapi;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public class CoordinateDto {
 
-public class Coordinate {
-
-    @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("lat")
     private Double lat;
 
-    @JsonProperty("lng")
     private Double lng;
 
-    public Coordinate() {
+    public CoordinateDto() {
     }
 
-    public Coordinate(Double lat, Double lng) {
+    public CoordinateDto(Long id, Double lat, Double lng) {
+        this.id = id;
         this.lat = lat;
         this.lng = lng;
     }
@@ -47,7 +43,7 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return "Coordinate{" +
+        return "CoordinateDto{" +
                 "id=" + id +
                 ", lat=" + lat +
                 ", lng=" + lng +
