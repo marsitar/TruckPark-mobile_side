@@ -163,8 +163,6 @@ public class TruckDriverPositionAndDataSenderAsyncTask extends AsyncTask<Void, V
         truckDriverWayDtoCreate.setResultTime(resulTime);
         truckDriverWayDtoCreate.setDistance(0.0);
         truckDriverWayDtoCreate.setFuel(0.0);
-        truckDriverWayDtoCreate.setDriverId(1L);
-        truckDriverWayDtoCreate.setTruckId(1L);
         truckDriverWayDtoCreate.setCoordinateDto(coordinateDto);
 
         return truckDriverWayDtoCreate;
