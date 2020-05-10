@@ -17,7 +17,7 @@
 
 ## Features
 ### User authentication
-> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. Logging view consists of two inputs: username or email and password. Authentication and Authorization is provided by external Keycloak solution. Driver has specyfied Keycloak role(TRUCKPARK_DRIVER) which let him send it's postion to server, get mop points etc (by adding token to requests). Keycloak solution uses OAuth 2.0 and OpenId. 
+> User authentication is the first view after opening an application. This security view was implemented due to provide access to the application only for already-registered users. The authentication view consists of two inputs: username or email and password. Authentication and authorization are provided by external Keycloak solution. The driver has specified Keycloak role(TRUCKPARK_DRIVER) which lets him send own position and data to the server application, get mop points (by adding the token to requests). Keycloak solution uses OAuth 2.0 and OpenId. 
 
 ![User authentication](./app/docs/user_authentication.jpg)
 
