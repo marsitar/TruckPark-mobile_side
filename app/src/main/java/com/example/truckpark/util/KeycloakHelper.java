@@ -25,7 +25,7 @@ public class KeycloakHelper {
                     .setClientId(KeycloakConst.AUTHZ_CLIENT_ID)
                     .setRedirectURL(KeycloakConst.AUTHZ_REDIRECT_URL)
                     .asModule();
-
+            Log.i(KeycloakHelper.class.getName(), String.format("%s has been configured in AuthorizationManager.", KeycloakConst.AUTHZ_MODULE_NAME));
         } catch (MalformedURLException e) {
             Log.e(KeycloakHelper.class.getName(), String.format("There is a problem with MalformedURLException. Reason url: %s", KeycloakConst.AUTHZ_URL));
         }
